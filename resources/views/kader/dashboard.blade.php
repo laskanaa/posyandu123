@@ -10,11 +10,16 @@
         <div class="sidebar">
             <h2>Admin Kader</h2>
             <ul>
-                <li class="active">Dashboard</li>
-                <li>Data Balita</li>
-                <li>Data Orang Tua</li>
-                <li>Slider</li>
-                <li>Logout</li>
+                <li class="active"><a href="{{ route('dashboard.kader') }}">Dashboard</a></li>
+                <li><a href="{{ route('balita.index') }}">Data Balita</a></li>
+                <li><a href="#">Data Orang Tua</a></li>
+                <li><a href="#">Slider</a></li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </li>
             </ul>
         </div>
 
@@ -47,7 +52,6 @@
 
     </div>
 
-
     <style>
         .dashboard-container {
             display: flex;
@@ -73,15 +77,32 @@
         }
 
         .sidebar ul li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar ul li a,
+        .sidebar ul li .logout-btn {
+            display: block;
             padding: 12px 10px;
             border-radius: 6px;
-            margin-bottom: 8px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active,
+        .sidebar ul li .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
             cursor: pointer;
         }
 
-        .sidebar ul li:hover,
-        .sidebar ul li.active {
-            background: rgba(255, 255, 255, 0.2);
+        .logout-btn {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            color: white;
+            padding: 12px 10px;
         }
 
         /* Main */

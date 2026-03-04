@@ -1,19 +1,22 @@
-<h2>Tambah Balita Stunting</h2>
+@extends('layouts.app')
 
-<form action="{{ route('balita.store') }}" method="POST">
-    @csrf
+@section('content')
+    <h1>Tambah Balita</h1>
 
-    <input type="text" name="nik" placeholder="NIK Balita"><br>
-    <input type="text" name="nama_balita" placeholder="Nama Balita"><br>
-    <input type="date" name="tanggal_lahir"><br>
+    <form action="{{ route('balita.store') }}" method="POST">
+        @csrf
+        <label>Nama Balita:</label><br>
+        <input type="text" name="nama" required><br><br>
 
-    <select name="jenis_kelamin">
-        <option value="L">Laki-laki</option>
-        <option value="P">Perempuan</option>
-    </select><br>
+        <label>Umur (bulan):</label><br>
+        <input type="number" name="umur" required><br><br>
 
-    <input type="text" name="nama_ibu" placeholder="Nama Ibu"><br>
-    <input type="text" name="no_hp" placeholder="No HP"><br>
+        <label>Berat Badan (kg):</label><br>
+        <input type="number" step="0.1" name="berat" required><br><br>
 
-    <button type="submit">Simpan</button>
-</form>
+        <label>Tinggi Badan (cm):</label><br>
+        <input type="number" step="0.1" name="tinggi" required><br><br>
+
+        <button type="submit">Simpan</button>
+    </form>
+@endsection
