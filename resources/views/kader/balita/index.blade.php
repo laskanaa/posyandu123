@@ -74,16 +74,26 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('balita.show', $balita->id) }}" class="btn btn-info">Lihat</a>
+
+                                    <a href="{{ route('balita.show', $balita->id) }}" class="btn btn-info btn-sm">
+                                        Lihat
+                                    </a>
+
+                                    <a href="{{ route('balita.edit', $balita->id) }}" class="btn btn-warning btn-sm">
+                                        Edit
+                                    </a>
 
                                     <form action="{{ route('balita.destroy', $balita->id) }}" method="POST"
                                         style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-danger" onclick="return confirm('Yakin mau hapus?')">
+
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Yakin mau hapus data balita ini?')">
                                             Hapus
                                         </button>
                                     </form>
+
                                 </td>
                             </tr>
                         @endforeach

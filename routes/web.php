@@ -32,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kader/balita/create', [BalitaController::class, 'create'])
         ->name('balita.create');
 
+    Route::resource('kader/balita', BalitaController::class);
+        
     Route::post('/kader/balita/store', [BalitaController::class, 'store'])
         ->name('balita.store');
 
