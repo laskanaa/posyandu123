@@ -24,6 +24,7 @@
 
         <!-- Main Content -->
         <div class="main-content">
+
             <div class="topbar">
                 <h3>Data Balita</h3>
                 <span>Selamat Datang, Kader 👋</span>
@@ -37,42 +38,62 @@
             </div>
 
             <div class="table-container">
-                <a href="{{ route('balita.create') }}" class="btn-add">+ Tambah Balita</a>
+
+                <!-- Tambah dan Search -->
+                <div class="table-actions">
+                    <a href="{{ route('balita.create') }}" class="btn-add">+ Tambah Balita</a>
+
+                    <form method="GET" action="{{ route('balita.index') }}" class="search-form">
+                        <input type="text" name="search" placeholder="Cari nama balita / nama ibu..."
+                            value="{{ request('search') }}">
+                        <button type="submit">Cari</button>
+                    </form>
+                </div>
 
                 <table>
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama</th>
+                            <th>Nama Balita</th>
                             <th>NIK</th>
-                            <th>TTL</th>
+                            <th>Umur</th>
                             <th>Nama Ibu</th>
                             <th>Kondisi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach($balitas as $index => $balita)
                             <tr>
+
                                 <td>{{ $index + 1 }}</td>
+
                                 <td>{{ $balita->nama }}</td>
-                                <td>{{ $balita->nik }}</td>
-                                <td>
-                                    {{ $balita->tempat_lahir }},
-                                    {{ \Carbon\Carbon::parse($balita->tanggal_lahir)->format('d M Y') }}
+
+                                <td class="nik">
+                                    {{ $balita->nik }}
                                 </td>
+
+                                <td>
+                                    {{ \Carbon\Carbon::parse($balita->tanggal_lahir)->diffInMonths(\Carbon\Carbon::now()) }}
+                                    Bulan
+                                </td>
+
                                 <td>{{ $balita->nama_ibu }}</td>
+
                                 <td>
                                     @if($balita->kondisi == 'Stunting' || $balita->kondisi == 'Stunting Berat')
-                                        <span style="color:red;font-weight:bold;">
+                                        <span class="status-stunting">
                                             {{ $balita->kondisi }}
                                         </span>
                                     @else
-                                        <span style="color:green;font-weight:bold;">
+                                        <span class="status-normal">
                                             {{ $balita->kondisi }}
                                         </span>
                                     @endif
                                 </td>
+
                                 <td class="action-buttons">
 
                                     <a href="{{ route('balita.show', $balita->id) }}" class="btn btn-view">
@@ -83,8 +104,7 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('balita.destroy', $balita->id) }}" method="POST"
-                                        style="display:inline;">
+                                    <form action="{{ route('balita.destroy', $balita->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
 
@@ -92,19 +112,22 @@
                                             onclick="return confirm('Yakin ingin menghapus data balita ini?')">
                                             Hapus
                                         </button>
+
                                     </form>
 
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
             </div>
+
         </div>
     </div>
 
     <style>
-        /* CSS kamu tetap sama, tidak aku ubah */
         .dashboard-container {
             display: flex;
             min-height: 80vh;
@@ -160,7 +183,6 @@
         .topbar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-bottom: 20px;
         }
 
@@ -179,7 +201,6 @@
         }
 
         .card h4 {
-            margin-bottom: 10px;
             font-size: 14px;
             color: #666;
         }
@@ -197,9 +218,14 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .table-container .btn-add {
-            display: inline-block;
+        .table-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
+        }
+
+        .btn-add {
             padding: 8px 15px;
             background: #0d4f4d;
             color: white;
@@ -207,42 +233,73 @@
             text-decoration: none;
         }
 
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
+        .search-form {
+            display: flex;
+            gap: 5px;
         }
 
-        .table-container th,
-        .table-container td {
+        .search-form input {
+            padding: 7px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .search-form button {
+            padding: 7px 12px;
+            background: #0d4f4d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
         }
 
-        .table-container th {
+        th {
             background: #0d4f4d;
             color: white;
         }
 
-        .table-container td .btn-detail {
-            padding: 5px 10px;
-            background: #0d4f4d;
-            color: white;
-            border-radius: 4px;
-            text-decoration: none;
+        /* Lebarin kolom nama */
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 220px;
+        }
+
+        /* NIK tidak turun */
+        .nik {
+            white-space: nowrap;
+            width: 150px;
+        }
+
+        /* Kolom aksi kecil */
+        th:last-child,
+        td:last-child {
+            width: 170px;
         }
 
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn {
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 6px;
             font-size: 13px;
-            text-decoration: none;
             color: white;
+            text-decoration: none;
             border: none;
             cursor: pointer;
         }
@@ -251,25 +308,23 @@
             background: #27ae60;
         }
 
-        .btn-view:hover {
-            background: #1e874b;
-        }
-
         .btn-edit {
             background: #f1c40f;
             color: #333;
-        }
-
-        .btn-edit:hover {
-            background: #d4ac0d;
         }
 
         .btn-delete {
             background: #e74c3c;
         }
 
-        .btn-delete:hover {
-            background: #c0392b;
+        .status-stunting {
+            color: red;
+            font-weight: bold;
+        }
+
+        .status-normal {
+            color: green;
+            font-weight: bold;
         }
     </style>
 

@@ -45,6 +45,21 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('penimbangan', PenimbanganController::class);
 });
 
+// halaman orang tua
+Route::get('/dashboard-ortu', function () {
+    return "Login orang tua berhasil";
+})->name('dashboard.orangtua');
+
+Route::get('/dashboard-ortu', function () {
+    return view('orangtua.dashboard');
+})->name('dashboard.orangtua');
+
+use App\Http\Controllers\OrangtuaController;
+
+Route::get('/dashboard-ortu', [OrangtuaController::class, 'dashboard'])
+    ->name('dashboard.orangtua')
+    ->middleware('auth');
+
 // =====================
 // HOME ROUTE
 // =====================

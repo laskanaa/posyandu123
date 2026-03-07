@@ -20,6 +20,17 @@ public function index()
 {
     $balitas = Balita::orderBy('nama','asc')->get();
     return view('kader.balita.index', compact('balitas'));
+
+    $search = $request->search;
+
+    $balitas = Balita::when($search, function ($query) use ($search) {
+        $query->where('nama','like',"%$search%")
+              ->orWhere('nama_ibu','like',"%$search%");
+    })
+    ->orderBy('nama','asc')
+    ->get();
+
+    return view('kader.balita.index', compact('balitas'));
 }
 
 
