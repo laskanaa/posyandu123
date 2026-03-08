@@ -7,30 +7,7 @@
     <div class="dashboard-container">
 
         {{-- SIDEBAR --}}
-        <div class="sidebar">
-
-            <h2>Admin Kader</h2>
-
-            <ul>
-                <li><a href="{{ route('dashboard.kader') }}">Dashboard</a></li>
-
-                <li class="active">
-                    <a href="{{ route('balita.index') }}">Data Balita</a>
-                </li>
-
-                <li>Data Orang Tua</li>
-
-                <li>Slider</li>
-
-                <li>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit">Logout</button>
-                    </form>
-                </li>
-            </ul>
-
-        </div>
+        @include('partials.sidebar_kader')
 
 
 

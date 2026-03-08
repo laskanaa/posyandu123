@@ -3,30 +3,19 @@
 @section('title', 'Home')
 
 @section('content')
+
+    @foreach($sliders as $slider)
+
+        <img src="{{ asset('slider/' . $slider->gambar) }}" width="100%">
+
+        <h2>{{ $slider->judul }}</h2>
+        <p>{{ $slider->deskripsi }}</p>
+
+    @endforeach
+
     <div class="home-container">
         <h1>Selamat Datang</h1>
         <p>Ini halaman home.</p>
     </div>
 
-    <style>
-        .home-container {
-            max-width: 1000px;
-            margin: auto;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-        }
-
-        body {
-            background-color: #e3f2fd;
-        }
-    </style>
 @endsection

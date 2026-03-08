@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 
+<script src="{{ asset('js/bootstrap.js') }}"></script>
+
 <head>
     <title>@yield('title')</title>
     <meta charset="UTF-8">
