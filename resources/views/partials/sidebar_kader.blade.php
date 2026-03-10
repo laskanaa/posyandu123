@@ -16,6 +16,20 @@
             <a href="{{ route('kader.slider.index') }}">Slider</a>
         </li>
 
+        <li class="{{ request()->routeIs('kader.tentang.*') ? 'active' : '' }}">
+            <a href="{{ route('kader.tentang.index') }}">Tentang Posyandu</a>
+        </li>
+
+        <li class="{{ request()->routeIs('kader.layanan.*') ? 'active' : '' }}">
+            <a href="{{ route('kader.layanan.index') }}">Layanan</a>
+        </li>
+
+        <li class="{{ request()->routeIs('kader.spm.*') ? 'active' : '' }}">
+            <a href="{{ route('kader.spm.index') }}">SPM</a>
+        </li>
+
+
+
         <li>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -31,19 +45,17 @@
         background: #0d4f4d;
         color: white;
         padding: 20px;
-        box-sizing: border-box;
-        font-family: sans-serif;
+        min-height: 100vh;
     }
 
     .sidebar h2 {
-        margin: 0 0 20px 0;
+        margin-bottom: 25px;
         font-size: 18px;
     }
 
     .sidebar ul {
         list-style: none;
         padding: 0;
-        margin: 0;
     }
 
     .sidebar ul li {
@@ -51,21 +63,21 @@
     }
 
     .sidebar ul li a,
-    .sidebar ul li form button {
-        color: white;
-        text-decoration: none;
+    .sidebar ul li button {
         display: block;
         width: 100%;
         padding: 10px;
+        color: white;
+        text-decoration: none;
         border-radius: 6px;
         background: transparent;
         border: none;
-        cursor: pointer;
         text-align: left;
+        cursor: pointer;
     }
 
     .sidebar ul li a:hover,
-    .sidebar ul li form button:hover,
+    .sidebar ul li button:hover,
     .sidebar ul li.active a {
         background: rgba(255, 255, 255, 0.2);
     }

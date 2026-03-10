@@ -5,65 +5,44 @@
 @section('content')
 
     {{-- ================= SLIDER ================= --}}
-
     @if ($sliders->count() > 0)
-
         <section id="beranda" class="relative overflow-hidden">
-
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel"
                 data-bs-interval="5000">
-
                 <div class="carousel-inner">
-
                     @foreach ($sliders as $key => $slider)
-
                         <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-
-                            <img src="{{ asset('storage/sliders/' . $slider->gambar) }}" class="d-block w-100"
+                            {{-- Gambar --}}
+                            <img src="{{ asset('slider/' . $slider->gambar) }}" class="d-block w-100"
                                 style="height:90vh; object-fit:cover;">
-
-                            <div class="carousel-caption text-center">
-
-                                <h2 style="font-size:50px; font-weight:bold;">
+                            {{-- Overlay gelap --}}
+                            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center"
+                                style="background: rgba(0,0,0,0.35); padding: 30px; border-radius: 12px;">
+                                <h2 style="font-size:50px; font-weight:bold; text-shadow:2px 2px 6px rgba(0,0,0,0.7);">
                                     {{ $slider->judul }}
                                 </h2>
-
-                                <p style="font-size:20px;">
+                                <p style="font-size:20px; text-shadow:1px 1px 3px rgba(0,0,0,0.5); max-width:700px;">
                                     {{ $slider->deskripsi }}
                                 </p>
-
                             </div>
-
                         </div>
-
                     @endforeach
-
                 </div>
 
+                {{-- Controls --}}
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
                     data-bs-slide="prev">
-
                     <span class="carousel-control-prev-icon"></span>
-
                 </button>
-
                 <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
                     data-bs-slide="next">
-
                     <span class="carousel-control-next-icon"></span>
-
                 </button>
-
             </div>
-
         </section>
-
     @endif
 
-
-
-    {{-- ================= STYLE SECTION ================= --}}
-
+    {{-- ================= STYLE GLOBAL ================= --}}
     <style>
         .section-padding {
             padding: 80px 0;
@@ -73,341 +52,131 @@
             font-size: 36px;
             font-weight: 700;
             color: #1e3a8a;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #0d4f4d;
+            margin: 12px auto 0 auto;
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .section-subtitle {
             color: #64748b;
-            margin-top: 10px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
         }
 
         .layanan-section {
             background: linear-gradient(to bottom, #ffffff, #f3f7ff);
-            padding: 80px 0;
+            padding: 60px 20px;
         }
 
         .layanan-card {
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
-            transition: 0.3s;
-            height: 100%;
+            transition: all 0.3s;
+            width: 280px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            background: #fff;
         }
 
         .layanan-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-kesehatan {
-            background: #ffe4ec;
-        }
-
-        .card-pendidikan {
-            background: #fffbe6;
-        }
-
-        .card-pu {
-            background: #e8f8ec;
-        }
-
-        .card-perumahan {
-            background: #e8f1ff;
-        }
-
-        .card-keamanan {
-            background: #f3e8ff;
-        }
-
-        .card-sosial {
-            background: #ffeede;
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
         }
 
         .layanan-icon {
-            font-size: 32px;
+            font-size: 36px;
             margin-bottom: 12px;
         }
 
         .layanan-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            color: #0d4f4d;
         }
 
         .layanan-desc {
             font-size: 14px;
             color: #555;
+            line-height: 1.6;
+        }
+
+        .tentang-section {
+            background: #f9fafc;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .tentang-section img {
+            max-width: 80%;
+            margin-top: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
     </style>
 
-
-
     {{-- ================= TENTANG POSYANDU ================= --}}
+    @if($tentang)
+        <section class="tentang-section section-padding text-center">
+            <h2 class="section-title">Tentang Posyandu</h2>
+            <p>{{ $tentang->deskripsi1 }}</p>
+        </section>
+    @endif
 
-    <section class="section-padding">
-
-        <div class="container">
-
-            <div class="row align-items-center">
-
-                <div class="col-md-6">
-
-                    <h2 class="section-title">
-                        Tentang Posyandu
-                    </h2>
-
-                    <p style="line-height:1.8; color:#555;">
-
-                        Posyandu (Pos Pelayanan Terpadu) merupakan salah satu bentuk
-                        upaya kesehatan berbasis masyarakat yang diselenggarakan
-                        untuk memberikan kemudahan kepada masyarakat dalam
-                        memperoleh pelayanan kesehatan dasar.
-
-                    </p>
-
-                    <p style="line-height:1.8; color:#555;">
-
-                        Melalui Posyandu masyarakat dapat memperoleh pelayanan
-                        kesehatan ibu dan anak, pemantauan pertumbuhan balita,
-                        imunisasi, pelayanan gizi, serta berbagai program kesehatan
-                        lainnya secara terpadu.
-
-                    </p>
-
-                </div>
-
-                <div class="col-md-6 text-center">
-
-                    <img src="{{ asset('images/posyandu.png') }}" style="max-width:80%;">
-
-                </div>
-
+    {{-- ================= SPM ================= --}}
+    @if($spm->count() > 0)
+        <section class="layanan-section section-padding">
+            <h2 class="section-title">Standar Pelayanan Minimal (SPM)</h2>
+            <div class="card-container">
+                @foreach($spm as $item)
+                    <div class="layanan-card">
+                        <div class="layanan-icon">{!! $item->icon !!}</div>
+                        <div class="layanan-title">{{ $item->judul }}</div>
+                        <p class="layanan-desc">{{ $item->deskripsi }}</p>
+                    </div>
+                @endforeach
             </div>
-
-        </div>
-
-    </section>
-
-
-
-    {{-- ================= 6 SPM ================= --}}
-
-    <section style="background:#f8fafc;" class="section-padding">
-
-        <div class="container">
-
-            <div class="text-center mb-5">
-
-                <h2 class="section-title">
-                    6 Standar Pelayanan Minimal
-                </h2>
-
-                <p class="section-subtitle">
-                    Program pelayanan dasar untuk meningkatkan kesejahteraan masyarakat
-                </p>
-
-            </div>
-
-            <div class="row g-4">
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-kesehatan">
-
-                        <div class="layanan-icon">🩺</div>
-
-                        <div class="layanan-title">Kesehatan</div>
-
-                        <p class="layanan-desc">
-                            Pelayanan kesehatan ibu dan anak, imunisasi,
-                            serta pemantauan gizi balita.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-pendidikan">
-
-                        <div class="layanan-icon">📚</div>
-
-                        <div class="layanan-title">Pendidikan</div>
-
-                        <p class="layanan-desc">
-                            Peningkatan pendidikan masyarakat
-                            dan pendidikan anak usia dini.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-pu">
-
-                        <div class="layanan-icon">🚰</div>
-
-                        <div class="layanan-title">Pekerjaan Umum</div>
-
-                        <p class="layanan-desc">
-                            Penyediaan air bersih dan sanitasi
-                            untuk lingkungan sehat.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-perumahan">
-
-                        <div class="layanan-icon">🏠</div>
-
-                        <div class="layanan-title">Perumahan</div>
-
-                        <p class="layanan-desc">
-                            Mendorong rumah layak huni
-                            dan lingkungan sehat.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-keamanan">
-
-                        <div class="layanan-icon">🛡️</div>
-
-                        <div class="layanan-title">Ketertiban</div>
-
-                        <p class="layanan-desc">
-                            Mewujudkan keamanan dan ketertiban
-                            masyarakat.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-sosial">
-
-                        <div class="layanan-icon">🤝</div>
-
-                        <div class="layanan-title">Sosial</div>
-
-                        <p class="layanan-desc">
-                            Perlindungan sosial bagi masyarakat
-                            dan keluarga rentan.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
+        </section>
+    @endif
 
     {{-- ================= LAYANAN POSYANDU ================= --}}
-
-    <section class="layanan-section">
-
-        <div class="container">
-
-            <div class="text-center mb-5">
-
-                <h2 class="section-title">
-                    Layanan Posyandu
-                </h2>
-
-                <p class="section-subtitle">
-                    Beberapa layanan utama yang tersedia pada sistem Posyandu
-                </p>
-
+    @if($layanan->count() > 0)
+        <section class="layanan-section section-padding">
+            <h2 class="section-title">Layanan Posyandu</h2>
+            <div class="card-container">
+                @foreach($layanan as $item)
+                    <div class="layanan-card">
+                        <div class="layanan-icon">{!! $item->icon !!}</div>
+                        <div class="layanan-title">{{ $item->judul }}</div>
+                        <p class="layanan-desc">{{ $item->deskripsi }}</p>
+                    </div>
+                @endforeach
             </div>
-
-            <div class="row g-4">
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-kesehatan">
-
-                        <div class="layanan-icon">👶</div>
-
-                        <div class="layanan-title">Data Balita</div>
-
-                        <p class="layanan-desc">
-                            Pencatatan data balita secara digital
-                            untuk memudahkan pemantauan kesehatan.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-pendidikan">
-
-                        <div class="layanan-icon">⚖️</div>
-
-                        <div class="layanan-title">Penimbangan</div>
-
-                        <p class="layanan-desc">
-                            Pencatatan hasil penimbangan berat
-                            dan tinggi badan balita.
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="layanan-card card-pu">
-
-                        <div class="layanan-icon">💉</div>
-
-                        <div class="layanan-title">Imunisasi</div>
-
-                        <p class="layanan-desc">
-                            Pendataan imunisasi yang diterima
-                            oleh balita.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
+        </section>
+    @endif
 
     {{-- ================= WELCOME ================= --}}
-
-    <div class="container text-center mt-5">
-
+    <div class="container text-center mt-5 mb-5">
         <h1>Selamat Datang</h1>
-
-        <p>
-            Ini halaman home sistem informasi Posyandu.
-        </p>
-
+        <p>Ini halaman home sistem informasi Posyandu.</p>
     </div>
 
 @endsection
