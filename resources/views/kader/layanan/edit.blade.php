@@ -14,7 +14,7 @@
                 <h3>Edit Layanan</h3>
             </div>
 
-            <form action="{{ route('kader.layanan.update', $layanan->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('kader.layanan.update', $layanan->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -24,20 +24,15 @@
 
                     <div class="form-grid">
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Icon Saat Ini</label>
                             <div class="current-icon">
                                 @if($layanan->icon)
-                                    <img src="{{ asset('storage/' . $layanan->icon) }}" alt="icon layanan" width="80">
+                                    {{ $layanan->icon }}
                                 @else
                                     <span class="placeholder-icon">❔</span>
                                 @endif
                             </div>
-                        </div>
-
-                        {{-- {{-- <div class="form-group">
-                            <label>Ganti Icon</label>
-                            <input type="file" name="icon">
                         </div> --}}
 
                         <div class="form-group">
@@ -45,16 +40,16 @@
                             <input type="text" name="judul" value="{{ $layanan->judul }}" readonly class="locked-input">
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Deskripsi</label>
                             <textarea name="deskripsi" rows="3">{{ $layanan->deskripsi }}</textarea>
-                        </div>
+                        </div> --}}
 
                     </div>
 
-                </div>
+                    <button class="btn-save">Update Layanan</button>
 
-                <button class="btn-save">Update Layanan</button>
+                </div>
 
             </form>
 
@@ -65,7 +60,6 @@
 @endsection
 
 <style>
-    /* ===== Layout ===== */
     .dashboard-container {
         display: flex;
         min-height: 100vh;
@@ -79,7 +73,6 @@
         box-sizing: border-box;
     }
 
-    /* ===== Topbar ===== */
     .topbar {
         margin-bottom: 30px;
     }
@@ -90,7 +83,6 @@
         color: #0d4f4d;
     }
 
-    /* ===== Card Form ===== */
     .card-form {
         background: white;
         padding: 35px;
@@ -105,14 +97,12 @@
         color: #0d4f4d;
     }
 
-    /* ===== Form Grid ===== */
     .form-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 20px;
     }
 
-    /* ===== Form Group ===== */
     .form-group {
         display: flex;
         flex-direction: column;
@@ -146,12 +136,12 @@
         cursor: not-allowed;
     }
 
-    /* ===== Current Icon ===== */
     .current-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 36px;
+        font-size: 48px;
+        /* emoji besar */
         padding: 10px;
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -159,11 +149,10 @@
     }
 
     .placeholder-icon {
-        font-size: 36px;
+        font-size: 48px;
         color: #bbb;
     }
 
-    /* ===== Button ===== */
     .btn-save {
         margin-top: 25px;
         background: #0d4f4d;

@@ -14,7 +14,7 @@
                 <h3>Edit SPM</h3>
             </div>
 
-            <form action="{{ route('kader.spm.update', $spm->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('kader.spm.update', $spm->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -24,34 +24,34 @@
 
                     <div class="form-grid">
 
-                        <div class="form-group">
-                            <label>Logo Sekarang</label>
-                            <br>
-                            <img src="{{ asset('storage/' . $spm->logo) }}" width="100">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Ganti Logo</label>
-                            <input type="file" name="logo">
-                        </div>
+                        {{-- <div class="form-group">
+                            <label>Icon / Logo</label>
+                            <div class="current-icon">
+                                @if($spm->logo)
+                                    {{ $spm->logo }}
+                                @else
+                                    <span class="placeholder-icon">❔</span>
+                                @endif
+                            </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <label>Judul</label>
-                            <input type="text" name="judul" value="{{ $spm->judul }}">
+                            <input type="text" name="judul" value="{{ $spm->judul }}" class="input-text" readonly>
                         </div>
 
                         <div class="form-group">
                             <label>Deskripsi</label>
-                            <input type="text" name="deskripsi" value="{{ $spm->deskripsi }}">
+                            <textarea name="deskripsi" class="input-textarea">{{ $spm->deskripsi }}</textarea>
                         </div>
 
                     </div>
 
-                </div>
+                    <button class="btn-save">
+                        Update SPM
+                    </button>
 
-                <button class="btn-save">
-                    Update SPM
-                </button>
+                </div>
 
             </form>
 
@@ -61,71 +61,125 @@
 
 @endsection
 
-
 <style>
     .dashboard-container {
         display: flex;
         min-height: 100vh;
-        font-family: sans-serif;
+        font-family: 'Segoe UI', sans-serif;
+        background: #f4f6fb;
     }
 
+    /* MAIN CONTENT full width */
     .main-content {
         flex: 1;
-        padding: 30px;
-        background: #f4f6f9;
+        padding: 40px;
     }
 
+    /* Topbar */
     .topbar {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
     }
 
-    .btn-add {
+    .topbar h3 {
+        font-size: 28px;
+        font-weight: 600;
+        color: #0d4f4d;
+    }
+
+    /* Card Form full width */
+    .card-form {
+        background: #fff;
+        padding: 40px;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Form Grid */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    /* Input & Textarea */
+    .input-text,
+    .input-textarea {
+        padding: 14px 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.2s;
+    }
+
+    .input-text:focus,
+    .input-textarea:focus {
+        outline: none;
+        border-color: #0d4f4d;
+        box-shadow: 0 0 0 3px rgba(13, 79, 77, 0.1);
+    }
+
+    .input-text[readonly] {
+        background-color: #f0f0f0;
+        cursor: not-allowed;
+    }
+
+    /* Textarea */
+    .input-textarea {
+        resize: vertical;
+        min-height: 140px;
+    }
+
+    /* Icon preview seperti Layanan */
+    .current-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 64px;
+        /* besar seperti layanan */
+        padding: 15px;
+        border-radius: 12px;
+        background: #fafafa;
+        border: 1px solid #ddd;
+    }
+
+    .placeholder-icon {
+        font-size: 64px;
+        color: #bbb;
+    }
+
+    /* Save Button */
+    .btn-save {
+        margin-top: 30px;
         background: #0d4f4d;
         color: white;
-        padding: 10px 18px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 14px;
-    }
-
-    .card-table {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table th,
-    table td {
-        padding: 12px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .aksi {
-        display: flex;
-        gap: 10px;
-    }
-
-    .btn-edit {
-        background: #ffc107;
-        padding: 6px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-    }
-
-    .btn-delete {
-        background: #dc3545;
-        color: white;
         border: none;
-        padding: 6px 10px;
-        border-radius: 4px;
+        padding: 14px 26px;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-save:hover {
+        background: #0a3c3a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     }
 </style>

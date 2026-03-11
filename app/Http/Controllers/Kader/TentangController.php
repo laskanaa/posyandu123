@@ -22,42 +22,58 @@ class TentangController extends Controller
     }
 
     // Simpan data
-    public function store(Request $request)
-    {
-        $request->validate([
-            'deskripsi1' => 'required',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'deskripsi1' => 'required',
+        'gambar' => 'image|mimes:jpg,jpeg,png|max:2048'
+    ]);
 
-        TentangPosyandu::create([
-            'deskripsi1' => $request->deskripsi1,
-        ]);
+    $data = [
+        'deskripsi1' => $request->deskripsi1
+    ];
 
-        return redirect()->route('kader.tentang.index')
-                         ->with('success', 'Data berhasil disimpan!');
+    if ($request->hasFile('gambar')) {
+        $path = $request->file('gambar')->store('tentang', 'public');
+        $data['gambar'] = $path;
     }
+
+    TentangPosyandu::create($data);
+
+    return redirect()->route('kader.tentang.index')
+        ->with('success', 'Data berhasil disimpan!');
+}
 
     // Form edit
-    public function edit($id)
-    {
-        $tentang = TentangPosyandu::findOrFail($id);
-        return view('kader.tentang.edit', compact('tentang'));
-    }
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'deskripsi1' => 'required',
+        'gambar' => 'image|mimes:jpg,jpeg,png|max:2048'
+    ]);
 
-    // Update data
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'deskripsi1' => 'required',
-        ]);
+    $tentang = TentangPosyandu::findOrFail($id);
 
-        $tentang = TentangPosyandu::findOrFail($id);
-        $tentang->update([
-            'deskripsi1' => $request->deskripsi1,
-        ]);
+    $data = [
+        'deskripsi1' => $request->deskripsi1
+    ];
 
-        return redirect()->route('kader.tentang.index')
-                         ->with('success', 'Data berhasil diperbarui!');
-    }
+if ($request->hasFile('gambar')) {
+    $path = $request->file('gambar')->store('tentang', 'public');
+    $data['gambar'] = $path;
+}
+
+    $tentang->update($data);
+
+    return redirect()->route('kader.tentang.index')
+        ->with('success', 'Data berhasil diperbarui!');
+}
+
+public function edit($id)
+{
+    $tentang = TentangPosyandu::findOrFail($id);
+    return view('kader.tentang.edit', compact('tentang'));
+}
 
     // Hapus data
     public function destroy($id)

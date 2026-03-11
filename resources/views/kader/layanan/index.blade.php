@@ -24,7 +24,7 @@
                             <th>No</th>
                             <th>Icon</th>
                             <th>Judul</th>
-                            <th>Deskripsi</th>
+                            {{-- <th>Deskripsi</th> --}}
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -33,18 +33,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td class="icon-cell">
-                                    @if($layanan->icon && preg_match('/[\x{1F300}-\x{1FAFF}]/u', $layanan->icon))
-                                        {{-- Emoji --}}
+                                    {{-- Revisi: langsung tampilkan emoji --}}
+                                    @if($layanan->icon)
                                         <span class="emoji-icon">{{ $layanan->icon }}</span>
-                                    @elseif($layanan->icon)
-                                        {{-- File gambar --}}
-                                        <img src="{{ asset('storage/' . $layanan->icon) }}" class="img-icon">
                                     @else
                                         <span class="placeholder-icon">❔</span>
                                     @endif
                                 </td>
                                 <td>{{ $layanan->judul }}</td>
-                                <td>{{ $layanan->deskripsi }}</td>
+                                {{-- <td>{{ $layanan->deskripsi }}</td> --}}
                                 <td class="aksi">
                                     <a href="{{ route('kader.layanan.edit', $layanan->id) }}" class="btn-edit">Edit</a>
                                     <form action="{{ route('kader.layanan.destroy', $layanan->id) }}" method="POST">
@@ -129,13 +126,6 @@
 
     .emoji-icon {
         font-size: 32px;
-    }
-
-    .img-icon {
-        width: 60px;
-        height: 60px;
-        object-fit: contain;
-        border-radius: 8px;
     }
 
     .aksi {

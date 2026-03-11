@@ -19,6 +19,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Gambar</th>
                             <th>Deskripsi</th>
                             <th>Aksi</th>
                         </tr>
@@ -27,7 +28,20 @@
                         @if($tentang)
                             <tr>
                                 <td>1</td>
-                                <td>{{ $tentang->deskripsi1 }}</td>
+                                <td>
+                                    @if($tentang->gambar)
+                                        <img src="{{ asset('storage/' . $tentang->gambar) }}" width="100"
+                                            style="border-radius:8px;">
+                                    @else
+                                        <span class="placeholder-icon">❔</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <p>{{ $tentang->deskripsi1 }}</p>
+                                    @if($tentang->deskripsi2)
+                                        <p>{{ $tentang->deskripsi2 }}</p>
+                                    @endif
+                                </td>
                                 <td class="aksi">
                                     <a href="{{ route('kader.tentang.edit', $tentang->id) }}" class="btn-edit">Edit</a>
                                     <form action="{{ route('kader.tentang.destroy', $tentang->id) }}" method="POST"
@@ -93,11 +107,12 @@
     table td {
         padding: 12px;
         border-bottom: 1px solid #eee;
-        text-align: left;
+        vertical-align: middle;
     }
 
     table th {
         background: #f7f7f7;
+        text-align: left;
     }
 
     .aksi {
@@ -120,5 +135,10 @@
         padding: 6px 10px;
         border-radius: 4px;
         cursor: pointer;
+    }
+
+    .placeholder-icon {
+        font-size: 36px;
+        color: #bbb;
     }
 </style>

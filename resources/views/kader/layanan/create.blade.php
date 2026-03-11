@@ -44,10 +44,10 @@
                         <input type="text" id="judul" name="judul" readonly class="locked-input">
                     </div>
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label>Deskripsi</label>
                         <textarea name="deskripsi" rows="3" placeholder="Isi deskripsi layanan"></textarea>
-                    </div>
+                    </div> --}}
 
                 </div>
 

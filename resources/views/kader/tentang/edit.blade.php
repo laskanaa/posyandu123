@@ -12,11 +12,15 @@
                 <h3>Edit Tentang Posyandu</h3>
             </div>
 
-            <form action="{{ route('kader.tentang.update', $tentang->id) }}" method="POST">
+            <form action="{{ route('kader.tentang.update', $tentang->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="card-form">
                     <h4>Data Tentang</h4>
+                    <div class="form-group">
+                        <label>Gambar</label>
+                        <input type="file" name="gambar">
+                    </div>
                     <div class="form-group">
                         <label>Deskripsi</label>
                         <textarea name="deskripsi1" required>{{ old('deskripsi1', $tentang->deskripsi1) }}</textarea>
