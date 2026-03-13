@@ -62,8 +62,6 @@
 
                 </div>
 
-
-                <!-- PENIMBANGAN -->
                 <div class="card-form">
 
                     <h4>Penimbangan Pertama</h4>
@@ -110,7 +108,6 @@
 
 
     <style>
-        /* Layout */
 
         .dashboard-container {
             display: flex;
