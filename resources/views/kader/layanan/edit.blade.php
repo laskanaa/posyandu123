@@ -10,6 +10,7 @@
 
         <div class="main-content">
 
+            {{-- HEADER + HAMBURGER --}}
             <div class="topbar">
                 <h3>Edit Layanan</h3>
             </div>
@@ -24,26 +25,10 @@
 
                     <div class="form-grid">
 
-                        {{-- <div class="form-group">
-                            <label>Icon Saat Ini</label>
-                            <div class="current-icon">
-                                @if($layanan->icon)
-                                    {{ $layanan->icon }}
-                                @else
-                                    <span class="placeholder-icon">❔</span>
-                                @endif
-                            </div>
-                        </div> --}}
-
                         <div class="form-group">
                             <label>Judul</label>
                             <input type="text" name="judul" value="{{ $layanan->judul }}" readonly class="locked-input">
                         </div>
-
-                        {{-- <div class="form-group">
-                            <label>Deskripsi</label>
-                            <textarea name="deskripsi" rows="3">{{ $layanan->deskripsi }}</textarea>
-                        </div> --}}
 
                     </div>
 
@@ -57,7 +42,22 @@
 
     </div>
 
+    <script>
+        function toggleSidebar() {
+
+            const sidebar = document.querySelector('.sidebar')
+
+            if (sidebar.style.display === 'none') {
+                sidebar.style.display = 'block'
+            } else {
+                sidebar.style.display = 'none'
+            }
+
+        }
+    </script>
+
 @endsection
+
 
 <style>
     .dashboard-container {
@@ -73,8 +73,28 @@
         box-sizing: border-box;
     }
 
+    /* TOPBAR */
+
     .topbar {
+        display: flex;
+        align-items: center;
         margin-bottom: 30px;
+    }
+
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .hamburger {
+        font-size: 20px;
+        background: #0d4f4d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
     }
 
     .topbar h3 {
@@ -82,6 +102,8 @@
         font-weight: 600;
         color: #0d4f4d;
     }
+
+    /* CARD */
 
     .card-form {
         background: white;
@@ -115,42 +137,16 @@
         font-weight: 500;
     }
 
-    .form-group input,
-    .form-group textarea {
+    .form-group input {
         padding: 10px 12px;
         border: 1px solid #ddd;
         border-radius: 8px;
         font-size: 14px;
-        transition: all .2s;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-        outline: none;
-        border-color: #0d4f4d;
-        box-shadow: 0 0 0 2px rgba(13, 79, 77, 0.1);
     }
 
     .locked-input {
         background: #e9ecef;
         cursor: not-allowed;
-    }
-
-    .current-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 48px;
-        /* emoji besar */
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background: #fafafa;
-    }
-
-    .placeholder-icon {
-        font-size: 48px;
-        color: #bbb;
     }
 
     .btn-save {
@@ -162,7 +158,6 @@
         font-size: 14px;
         border-radius: 8px;
         cursor: pointer;
-        transition: 0.2s;
     }
 
     .btn-save:hover {

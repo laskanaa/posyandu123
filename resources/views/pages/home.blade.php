@@ -4,252 +4,622 @@
 
 @section('content')
 
-    {{-- ================= SLIDER ================= --}}
-    @if ($sliders->count() > 0)
-        <section id="beranda" class="relative overflow-hidden">
-            <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel"
-                data-bs-interval="5000">
-                <div class="carousel-inner">
-                    @foreach ($sliders as $key => $slider)
-                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-                            <img src="{{ asset('slider/' . $slider->gambar) }}" class="d-block w-100"
-                                style="height:90vh; object-fit:cover;">
-
-                            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center"
-                                style="background: rgba(0,0,0,0.35); padding: 30px; border-radius: 12px;">
-                                <h2 style="font-size:50px; font-weight:bold; text-shadow:2px 2px 6px rgba(0,0,0,0.7);">
-                                    {{ $slider->judul }}
-                                </h2>
-                                <p style="font-size:20px; text-shadow:1px 1px 3px rgba(0,0,0,0.5); max-width:700px;">
-                                    {{ $slider->deskripsi }}
-                                </p>
-                            </div>
-
-                        </div>
-                    @endforeach
-                </div>
-
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
-            </div>
-        </section>
-    @endif
-
-
-    {{-- ================= STYLE ================= --}}
     <style>
-        .section-padding {
-            padding: 80px 0;
+        .homepage {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
         }
 
-        .section-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: #1e3a8a;
-            margin-bottom: 20px;
-            text-align: center;
+        /* HERO */
+
+        .hero-slider {
+            height: 100vh
+        }
+
+        .carousel-item {
+            height: 100vh;
             position: relative;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: #0d4f4d;
-            margin: 12px auto 0 auto;
-            border-radius: 2px;
+        .slider-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            justify-content: center;
+        .slider-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0, 0, 0, .75), transparent);
         }
 
-        .layanan-section {
-            background: linear-gradient(to bottom, #ffffff, #f3f7ff);
-            padding: 60px 20px;
-        }
-
-        .layanan-card {
-            border-radius: 20px;
-            padding: 25px;
+        .slider-caption {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            transition: all 0.3s;
-            width: 280px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-            background: #fff;
+            color: white;
+            max-width: 720px;
         }
 
-        .layanan-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
-        }
-
-        .layanan-icon {
-            font-size: 36px;
-            margin-bottom: 12px;
-        }
-
-        .layanan-title {
-            font-size: 20px;
+        .slider-caption h1 {
+            font-size: 38px;
             font-weight: 600;
-            margin-bottom: 10px;
-            color: #0d4f4d;
         }
 
-        .layanan-desc {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.6;
+        .slider-caption p {
+            font-size: 15px;
+            opacity: .9;
         }
 
+        /* CONTAINER */
 
-        /* ================= TENTANG POSYANDU ================= */
+        .container-home {
+            max-width: 1400px;
+            margin: auto;
+            padding: 0 40px;
+        }
+
+        /* TITLE */
+
+        .section-title {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 60px;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* TENTANG */
 
         .tentang-section {
-            background: #f9fafc;
-            padding: 60px 20px;
+            padding: 110px 0;
         }
 
-        .tentang-section .container {
+        .tentang-wrapper {
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
-            gap: 40px;
+            gap: 60px;
         }
 
         .tentang-img {
             flex: 1;
-            min-width: 280px;
+            height: 380px;
+            border-radius: 20px;
+            overflow: hidden;
+
+            opacity: 0;
+            transform: translateX(-80px);
+            transition: .9s;
+        }
+
+        .tentang-img.show {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .tentang-img img {
             width: 100%;
-            height: 350px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 14px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
 
         .tentang-text {
-            flex: 2;
-            min-width: 280px;
+            flex: 1;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #475569;
             text-align: center;
+
+            opacity: 0;
+            transform: translateX(80px);
+            transition: .9s;
         }
 
-        .tentang-text p {
-            font-size: 17px;
-            line-height: 1.9;
-            color: #444;
-            max-width: 600px;
-            margin: auto;
+        .tentang-text.show {
+            opacity: 1;
+            transform: translateX(0);
         }
 
-        @media screen and (max-width:768px) {
+        /* INFORMASI */
 
-            .tentang-section .container {
+        .info-section {
+            padding: 100px 0;
+            background: #f1f5f9;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            text-align: center;
+
+            opacity: 0;
+            transform: translateY(60px);
+
+            transition: .6s;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+        }
+
+        .info-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-number {
+            font-size: 34px;
+            font-weight: 600;
+            color: #0ea5e9;
+        }
+
+        .info-title {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* LAYANAN */
+
+        .layanan-section {
+            padding: 110px 0;
+            background: #f8fafc;
+        }
+
+        .layanan-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            justify-items: center;
+        }
+
+        .layanan-card {
+            width: 100%;
+            max-width: 220px;
+
+            background: white;
+            padding: 28px 16px;
+
+            border-radius: 16px;
+            text-align: center;
+
+            opacity: 0;
+            transform: translateY(60px);
+
+            transition: all .5s ease;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+        }
+
+        .layanan-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .layanan-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, .12);
+            background: #f0fdfa;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            background: #ecfeff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin: 0 auto 10px;
+        }
+
+        .layanan-card h3 {
+            font-size: 14px;
+        }
+
+        /* SPM */
+
+        .spm-section {
+            padding: 110px 0;
+        }
+
+        .spm-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .spm-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+
+            opacity: 0;
+            transform: translateX(-60px);
+
+            transition: .6s;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+        }
+
+        .spm-card.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .spm-card:hover {
+            transform: translateY(-6px) scale(1.04);
+            background: #ecfeff;
+        }
+
+        .spm-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin: 0 auto 10px;
+        }
+
+        .spm-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 8px;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+
+        .spm-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #64748b;
+        }
+
+        /* GALERI */
+
+        .galeri-section {
+            padding: 110px 0;
+            background: #f8fafc;
+        }
+
+        .galeri-slider {
+            display: flex;
+            gap: 25px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+        }
+
+        .galeri-item {
+            flex: 0 0 32%;
+            scroll-snap-align: start;
+            border-radius: 16px;
+            overflow: hidden;
+
+            opacity: 0;
+            transform: translateY(60px);
+            transition: .6s;
+        }
+
+        .galeri-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .galeri-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .galeri-btn {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-galeri {
+            background: #0d4f4d;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: .3s;
+        }
+
+        .btn-galeri:hover {
+            background: #0f766e;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:1024px) {
+
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .layanan-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .tentang-wrapper {
                 flex-direction: column;
+            }
+
+        }
+
+        @media(max-width:768px) {
+
+            .layanan-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .spm-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .galeri-item {
+                flex: 0 0 80%;
             }
 
         }
     </style>
 
+    <div class="homepage">
 
-    {{-- ================= TENTANG POSYANDU ================= --}}
-    @if($tentang)
-        <section class="tentang-section section-padding">
-            <div class="container">
+        @if($sliders->count())
 
-                @if($tentang->gambar)
-                    <div class="tentang-img">
-                        <img src="{{ asset('storage/' . $tentang->gambar) }}" alt="Tentang Posyandu">
+            <section class="hero-slider">
+
+                <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+                    <div class="carousel-inner">
+
+                        @foreach($sliders as $key => $slider)
+
+                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+
+                                <img src="{{ asset('slider/' . $slider->gambar) }}" class="slider-img">
+
+                                <div class="slider-overlay"></div>
+
+                                <div class="slider-caption">
+                                    <h1>{{ $slider->judul }}</h1>
+                                    <p>{{ $slider->deskripsi }}</p>
+                                </div>
+
+                            </div>
+
+                        @endforeach
+
                     </div>
-                @endif
 
-                <div class="tentang-text">
+                </div>
+
+            </section>
+        @endif
+
+        @if($tentang)
+
+            <section class="tentang-section">
+
+                <div class="container-home">
+
                     <h2 class="section-title">Tentang Posyandu</h2>
-                    <p>
-                        {{ $tentang->deskripsi1 }}
-                    </p>
+
+                    <div class="tentang-wrapper">
+
+                        <div class="tentang-img animate">
+                            <img src="{{ asset('storage/' . $tentang->gambar) }}">
+                        </div>
+
+                        <div class="tentang-text animate">
+                            <p>{{ $tentang->deskripsi1 }}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+        @endif
+
+        <section class="info-section">
+
+            <div class="container-home">
+
+                <h2 class="section-title">Informasi Posyandu</h2>
+
+                <div class="info-grid">
+
+                    <div class="info-card animate">
+                        <div class="info-number counter" data-target="120">0</div>
+                        <div class="info-title">Jumlah Balita</div>
+                    </div>
+
+                    <div class="info-card animate">
+                        <div class="info-number counter" data-target="15">0</div>
+                        <div class="info-title">Balita Stunting</div>
+                    </div>
+
+                    <div class="info-card animate">
+                        <div class="info-number counter" data-target="8">0</div>
+                        <div class="info-title">Jumlah Posyandu</div>
+                    </div>
+
+                    <div class="info-card animate">
+                        <div class="info-number counter" data-target="20">0</div>
+                        <div class="info-title">Jumlah Kader</div>
+                    </div>
+
                 </div>
 
             </div>
-        </section>
-    @endif
-
-
-    {{-- ================= SPM ================= --}}
-    @if($spm->count() > 0)
-        <section class="layanan-section section-padding">
-            <h2 class="section-title">Standar Pelayanan Minimal (SPM)</h2>
-
-            <div class="card-container">
-                @foreach($spm as $item)
-                    <div class="layanan-card">
-
-                        <div class="layanan-icon">{!! $item->icon !!}</div>
-
-                        <div class="layanan-title">
-                            {{ $item->judul }}
-                        </div>
-
-                        <p class="layanan-desc">
-                            {{ $item->deskripsi }}
-                        </p>
-
-                    </div>
-                @endforeach
-            </div>
 
         </section>
-    @endif
 
+        @if($layanan->count())
 
-    {{-- ================= LAYANAN POSYANDU ================= --}}
-    @if($layanan->count() > 0)
-        <section class="layanan-section section-padding">
+            <section class="layanan-section">
 
-            <h2 class="section-title">Layanan Posyandu</h2>
+                <div class="container-home">
 
-            <div class="card-container">
-                @foreach($layanan as $item)
+                    <h2 class="section-title">Layanan Posyandu</h2>
 
-                    <div class="layanan-card">
+                    <div class="layanan-grid">
 
-                        <div class="layanan-icon">{!! $item->icon !!}</div>
+                        @foreach($layanan as $item)
 
-                        <div class="layanan-title">
-                            {{ $item->judul }}
-                        </div>
+                            <div class="layanan-card animate">
 
-                        {{-- <p class="layanan-desc">
-                            {{ $item->deskripsi }}
-                        </p> --}}
+                                <div class="icon-circle">{!! $item->icon !!}</div>
+
+                                <h3>{{ $item->judul }}</h3>
+
+                            </div>
+
+                        @endforeach
 
                     </div>
 
-                @endforeach
+                </div>
+
+            </section>
+        @endif
+
+        @if($spm->count())
+
+            <section class="spm-section">
+
+                <div class="container-home">
+
+                    <h2 class="section-title">Standar Pelayanan Minimal</h2>
+
+                    <div class="spm-grid">
+
+                        @foreach($spm as $item)
+
+                            <div class="spm-card animate">
+
+                                <div class="spm-icon">{!! $item->icon !!}</div>
+
+                                <h3>{{ $item->judul }}</h3>
+
+                                <p>{{ $item->deskripsi }}</p>
+
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+                </div>
+
+            </section>
+        @endif
+
+        <section class="galeri-section">
+
+            <div class="container-home">
+
+                <h2 class="section-title">Galeri Kegiatan</h2>
+
+                <div class="galeri-slider">
+
+                    <div class="galeri-item animate">
+                        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309">
+                    </div>
+
+                    <div class="galeri-item animate">
+                        <img src="https://images.unsplash.com/photo-1580281657521-43c2f6f2a48d">
+                    </div>
+
+                    <div class="galeri-item animate">
+                        <img src="https://images.unsplash.com/photo-1581595219315-a187dd40c322">
+                    </div>
+
+                    <div class="galeri-item animate">
+                        <img src="https://images.unsplash.com/photo-1576765607924-b3d7b3d5b2b2">
+                    </div>
+
+                </div>
+
+                <div class="galeri-btn">
+                    <a href="#" class="btn-galeri">Lihat Semua</a>
+                </div>
+
             </div>
 
         </section>
-    @endif
 
-
-    {{-- ================= WELCOME ================= --}}
-    <div class="container text-center mt-5 mb-5">
-        <h1>Selamat Datang</h1>
-        <p>Ini halaman home sistem informasi Posyandu.</p>
     </div>
+
+    <script>
+
+        function reveal() {
+
+            let anim = document.querySelectorAll('.animate')
+
+            anim.forEach(el => {
+
+                let top = el.getBoundingClientRect().top
+                let win = window.innerHeight
+
+                if (top < win - 100) {
+                    el.classList.add("show")
+                }
+
+            })
+
+        }
+
+        window.addEventListener("scroll", reveal)
+        reveal()
+
+
+
+        const counters = document.querySelectorAll(".counter")
+
+        counters.forEach(counter => {
+
+            counter.innerText = '0'
+
+            const update = () => {
+
+                const target = +counter.getAttribute("data-target")
+                const c = +counter.innerText
+                const inc = target / 100
+
+                if (c < target) {
+                    counter.innerText = Math.ceil(c + inc)
+                    setTimeout(update, 20)
+                } else {
+                    counter.innerText = target
+                }
+
+            }
+
+            update()
+
+        })
+
+    </script>
 
 @endsection

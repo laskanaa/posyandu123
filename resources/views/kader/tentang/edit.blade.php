@@ -1,77 +1,115 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Tentang')
+@section('title', 'Edit Layanan')
 
 @section('content')
+
     <div class="dashboard-container">
 
         @include('partials.sidebar_kader')
 
         <div class="main-content">
+
             <div class="topbar">
-                <h3>Edit Tentang Posyandu</h3>
+                <h3>Edit Layanan</h3>
             </div>
 
-            <form action="{{ route('kader.tentang.update', $tentang->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('kader.layanan.update', $layanan->id) }}" method="POST">
+
                 @csrf
                 @method('PUT')
+
                 <div class="card-form">
-                    <h4>Data Tentang</h4>
-                    <div class="form-group">
-                        <label>Gambar</label>
-                        <input type="file" name="gambar">
+
+                    <h4>Edit Data Layanan</h4>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Judul</label>
+                            <input type="text" name="judul" value="{{ $layanan->judul }}" readonly class="locked-input">
+                        </div>
+
                     </div>
-                    <div class="form-group">
-                        <label>Deskripsi</label>
-                        <textarea name="deskripsi1" required>{{ old('deskripsi1', $tentang->deskripsi1) }}</textarea>
-                    </div>
-                    <button type="submit" class="btn-save">Update</button>
+
+                    <button class="btn-save">Update Layanan</button>
+
                 </div>
+
             </form>
 
         </div>
+
     </div>
+
 @endsection
+
 
 <style>
     .dashboard-container {
         display: flex;
         min-height: 100vh;
-        font-family: sans-serif;
+        font-family: 'Segoe UI', sans-serif;
+        background: #f4f6fb;
     }
 
     .main-content {
         flex: 1;
-        padding: 30px;
-        background: #f4f6f9;
+        padding: 40px;
     }
 
     .topbar {
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+    }
+
+    .topbar h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #0d4f4d;
     }
 
     .card-form {
         background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 35px;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
     }
 
-    textarea {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        width: 100%;
-        min-height: 120px;
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #555;
+    }
+
+    .form-group input {
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .locked-input {
+        background: #e9ecef;
+        cursor: not-allowed;
     }
 
     .btn-save {
-        margin-top: 15px;
+        margin-top: 25px;
         background: #0d4f4d;
         color: white;
-        padding: 10px 20px;
         border: none;
-        border-radius: 6px;
+        padding: 12px 22px;
+        border-radius: 8px;
         cursor: pointer;
     }
 </style>

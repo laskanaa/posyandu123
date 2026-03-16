@@ -11,10 +11,16 @@
         <div class="main-content">
 
             <div class="topbar">
-                <h3>Layanan Posyandu</h3>
+
+                <div class="topbar-left">
+                    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+                    <h3>Layanan Posyandu</h3>
+                </div>
+
                 <a href="{{ route('kader.layanan.create') }}" class="btn-add">
                     + Tambah Layanan
                 </a>
+
             </div>
 
             <div class="card-table">
@@ -81,10 +87,20 @@
         margin-bottom: 25px;
     }
 
-    .topbar h3 {
-        font-size: 22px;
-        font-weight: 600;
-        color: #333;
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .hamburger {
+        font-size: 20px;
+        background: #0d4f4d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
     }
 
     .btn-add {
@@ -161,3 +177,15 @@
         background: #b02a37;
     }
 </style>
+
+<script>
+
+    function toggleSidebar() {
+
+        const sidebar = document.querySelector('.sidebar')
+
+        sidebar.classList.toggle('active')
+
+    }
+
+</script>

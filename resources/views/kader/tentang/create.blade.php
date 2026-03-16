@@ -1,91 +1,143 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Tentang Posyandu')
+@section('title', 'Tambah Layanan')
 
 @section('content')
+
     <div class="dashboard-container">
 
         @include('partials.sidebar_kader')
 
         <div class="main-content">
 
-            <div class="topbar">
-                <h3>Tambah Data Tentang Posyandu</h3>
-            </div>
+            <h3 class="page-header">Tambah Layanan</h3>
 
-            <form action="{{ route('kader.tentang.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+            <div class="card-form">
 
-                <div class="card-form">
+                <form action="{{ route('kader.layanan.store') }}" method="POST">
 
-                    <h4>Data Tentang Posyandu</h4>
+                    @csrf
 
                     <div class="form-grid">
 
                         <div class="form-group">
-                            <label>Gambar Tentang Posyandu</label>
-                            <input type="file" name="gambar" accept="image/*">
-                            @error('gambar')
-                                <span class="text-error">{{ $message }}</span>
-                            @enderror
-                        </div>
+                            <label>Pilih Layanan</label>
 
-                        {{-- <form action="{{ route('kader.tentang.store') }}" method="POST" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label>Gambar</label>
-                                <input type="file" name="gambar">
-                            </div>
-                        </form> --}}
+                            <select id="layananSelect" onchange="setLayananData()" required>
+
+                                <option value="">-- Pilih Layanan --</option>
+
+                                <option value="penimbangan">⚖️ Penimbangan Berat Badan</option>
+                                <option value="pengukuran">📏 Pengukuran Tinggi Badan</option>
+                                <option value="imunisasi">💉 Imunisasi</option>
+                                <option value="pmt">🥣 Pemberian Makanan Tambahan (PMT)</option>
+                                <option value="vitamin">💊 Vitamin A</option>
+                                <option value="kb">🍼 KB</option>
+                                <option value="konseling">🩺 Konseling Kesehatan</option>
+
+                            </select>
+
+                        </div>
 
                         <div class="form-group">
-                            <label>Deskripsi</label>
-                            <textarea name="deskripsi1" required>{{ old('deskripsi1') }}</textarea>
-                            @error('deskripsi1')
-                                <span class="text-error">{{ $message }}</span>
-                            @enderror
+                            <label>Icon</label>
+                            <input type="text" id="icon" name="icon" readonly class="locked-input">
                         </div>
 
-                        {{-- <div class="form-group">
-                            <label>Deskripsi 2</label>
-                            <textarea name="deskripsi2">{{ old('deskripsi2') }}</textarea>
-                            @error('deskripsi2')
-                            <span class="text-error">{{ $message }}</span>
-                            @enderror
-                        </div> --}}
+                        <div class="form-group">
+                            <label>Judul Layanan</label>
+                            <input type="text" id="judul" name="judul" readonly class="locked-input">
+                        </div>
 
                     </div>
 
-                    <button type="submit" class="btn-save">Simpan</button>
+                    <button class="btn-save">Simpan Layanan</button>
 
-                </div>
-            </form>
+                </form>
+
+            </div>
 
         </div>
 
     </div>
+
+
+    <script>
+
+        function setLayananData() {
+
+            const select = document.getElementById('layananSelect').value
+            const icon = document.getElementById('icon')
+            const judul = document.getElementById('judul')
+
+            switch (select) {
+
+                case 'penimbangan':
+                    icon.value = '⚖️'
+                    judul.value = 'Penimbangan Berat Badan'
+                    break
+
+                case 'pengukuran':
+                    icon.value = '📏'
+                    judul.value = 'Pengukuran Tinggi Badan'
+                    break
+
+                case 'imunisasi':
+                    icon.value = '💉'
+                    judul.value = 'Imunisasi'
+                    break
+
+                case 'pmt':
+                    icon.value = '🥣'
+                    judul.value = 'Pemberian Makanan Tambahan (PMT)'
+                    break
+
+                case 'vitamin':
+                    icon.value = '💊'
+                    judul.value = 'Vitamin A'
+                    break
+
+                case 'kb':
+                    icon.value = '🍼'
+                    judul.value = 'KB'
+                    break
+
+                case 'konseling':
+                    icon.value = '🩺'
+                    judul.value = 'Konseling Kesehatan'
+                    break
+
+                default:
+                    icon.value = ''
+                    judul.value = ''
+
+            }
+
+        }
+
+    </script>
+
 @endsection
+
 
 <style>
     .dashboard-container {
         display: flex;
         min-height: 100vh;
         font-family: 'Segoe UI', sans-serif;
+        background: #f4f6fb;
     }
 
     .main-content {
         flex: 1;
         padding: 40px;
-        background: #f4f6fb;
     }
 
-    .topbar {
-        margin-bottom: 30px;
-    }
-
-    .topbar h3 {
-        font-size: 28px;
+    .page-header {
+        font-size: 24px;
         font-weight: 600;
         color: #0d4f4d;
+        margin-bottom: 25px;
     }
 
     .card-form {
@@ -93,14 +145,6 @@
         padding: 35px;
         border-radius: 14px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .card-form h4 {
-        margin-bottom: 25px;
-        font-size: 22px;
-        color: #0d4f4d;
     }
 
     .form-grid {
@@ -118,28 +162,18 @@
         font-size: 14px;
         margin-bottom: 6px;
         color: #555;
-        font-weight: 500;
     }
 
     .form-group input,
-    .form-group textarea {
+    select {
         padding: 10px 12px;
         border: 1px solid #ddd;
         border-radius: 8px;
-        font-size: 14px;
-        transition: all 0.2s;
     }
 
-    .form-group input:focus,
-    .form-group textarea:focus {
-        outline: none;
-        border-color: #0d4f4d;
-        box-shadow: 0 0 0 2px rgba(13, 79, 77, 0.1);
-    }
-
-    textarea {
-        resize: vertical;
-        min-height: 100px;
+    .locked-input {
+        background: #f0f0f0;
+        cursor: not-allowed;
     }
 
     .btn-save {
@@ -148,21 +182,7 @@
         color: white;
         border: none;
         padding: 12px 22px;
-        font-size: 14px;
         border-radius: 8px;
         cursor: pointer;
-        transition: 0.2s;
-    }
-
-    .btn-save:hover {
-        background: #0a3c3a;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .text-error {
-        color: #dc3545;
-        font-size: 13px;
-        margin-top: 4px;
     }
 </style>

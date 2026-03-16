@@ -4,15 +4,20 @@
 
 @section('content')
 
-    <div class="dashboard-container">
+    <div class="wrapper">
 
+        <!-- SIDEBAR -->
         @include('partials.sidebar_kader')
 
-        <div class="main-content">
+        <!-- MAIN -->
+        <div class="main">
 
             <div class="topbar">
 
-                <h3>Standar Pelayanan Minimal</h3>
+                <div class="left">
+                    <button id="toggleSidebar" class="hamburger">☰</button>
+                    <h3>Standar Pelayanan Minimal</h3>
+                </div>
 
                 <a href="{{ route('kader.spm.create') }}" class="btn-add">
                     + Tambah SPM
@@ -25,17 +30,13 @@
                 <table>
 
                     <thead>
-
                         <tr>
-
                             <th>No</th>
                             <th>Logo</th>
                             <th>Judul</th>
                             <th>Deskripsi</th>
                             <th>Aksi</th>
-
                         </tr>
-
                     </thead>
 
                     <tbody>
@@ -46,9 +47,7 @@
 
                                 <td>{{ $loop->iteration }}</td>
 
-                                <td class="logo">
-                                    {{ $spm->icon }}
-                                </td>
+                                <td class="logo">{{ $spm->icon }}</td>
 
                                 <td>{{ $spm->judul }}</td>
 
@@ -61,14 +60,9 @@
                                     </a>
 
                                     <form action="{{ route('kader.spm.destroy', $spm->id) }}" method="POST">
-
                                         @csrf
                                         @method('DELETE')
-
-                                        <button class="btn-delete">
-                                            Hapus
-                                        </button>
-
+                                        <button class="btn-delete">Hapus</button>
                                     </form>
 
                                 </td>
@@ -87,24 +81,56 @@
 
     </div>
 
+    <div class="overlay" id="overlay"></div>
+
+    <script>
+
+        const toggle = document.getElementById("toggleSidebar");
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+
+        toggle.onclick = function () {
+            sidebar.classList.toggle("active");
+            overlay.classList.toggle("active");
+        }
+
+        overlay.onclick = function () {
+            sidebar.classList.remove("active");
+            overlay.classList.remove("active");
+        }
+
+    </script>
+
 @endsection
 
+
 <style>
-    .dashboard-container {
+    .wrapper {
         display: flex;
         min-height: 100vh;
         font-family: sans-serif;
+        background: #f4f6f9;
     }
 
-    .logo {
-        font-size: 35px;
-        text-align: center;
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        width: 260px;
+        height: 100%;
+        background: #0d4f4d;
+        transition: 0.3s;
+        z-index: 1000;
     }
 
-    .main-content {
+    .sidebar.active {
+        left: 0;
+    }
+
+    .main {
         flex: 1;
         padding: 30px;
-        background: #f4f6f9;
+        width: 100%;
     }
 
     .topbar {
@@ -112,6 +138,22 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 25px;
+    }
+
+    .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .hamburger {
+        background: #0d4f4d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        font-size: 18px;
+        border-radius: 6px;
+        cursor: pointer;
     }
 
     .btn-add {
@@ -141,6 +183,11 @@
         border-bottom: 1px solid #eee;
     }
 
+    .logo {
+        font-size: 30px;
+        text-align: center;
+    }
+
     .aksi {
         display: flex;
         gap: 10px;
@@ -159,5 +206,20 @@
         border: none;
         padding: 6px 10px;
         border-radius: 4px;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+        z-index: 900;
+    }
+
+    .overlay.active {
+        display: block;
     }
 </style>
