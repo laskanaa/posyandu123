@@ -10,4 +10,5 @@ class TentangPosyandu extends Model
         'deskripsi1',
         'gambar'
     ];
+    protected $table = 'tentang_posyandu';
 }
