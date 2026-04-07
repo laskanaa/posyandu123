@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('tentang_posyandus', function (Blueprint $table) {
+        Schema::table('tentang_posyandu', function (Blueprint $table) {
             $table->string('gambar')->nullable()->after('deskripsi1');
         });
     }
 
     public function down(): void
     {
-        Schema::table('tentang_posyandus', function (Blueprint $table) {
+        Schema::table('tentang_posyandu', function (Blueprint $table) {
             $table->dropColumn('gambar');
         });
     }

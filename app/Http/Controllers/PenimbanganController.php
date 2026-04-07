@@ -12,43 +12,31 @@ class PenimbanganController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'balita_id' => 'required',
-            'berat_badan' => 'required',
-            'tinggi_badan' => 'required',
-            'tanggal_penimbangan' => 'required'
+            'balita_id'      => 'required|exists:balitas,id',
+            'berat_badan'    => 'required|numeric|min:0',
+            'tinggi_badan'   => 'required|numeric|min:0',
+            'lingkar_kepala' => 'nullable|numeric|min:0',
+            // tambahkan field lain kalau ada di form kamu
         ]);
 
         $balita = Balita::findOrFail($request->balita_id);
 
-        // hitung umur saat penimbangan
-        $umur = Carbon::parse($balita->tanggal_lahir)
-            ->diffInMonths($request->tanggal_penimbangan);
+        $data = $request->all();
 
-        // contoh logika status sederhana
-        if ($request->berat_badan < 5) {
-            $status = "Berat badan kurang";
-        } elseif ($request->berat_badan >= 5 && $request->berat_badan <= 8) {
-            $status = "Normal";
-        } else {
-            $status = "Berat badan lebih";
+        // ================== FIX UTAMA ==================
+        // Penimbangan PERTAMA otomatis pakai tanggal lahir
+        if ($balita->penimbangans()->count() === 0) {
+            $data['tanggal'] = $balita->tanggal_lahir;   // paksa tanggal lahir
+        } 
+        // Penimbangan berikutnya pakai tanggal yang diinput
+        else {
+            $data['tanggal'] = $request->tanggal ?? now()->format('Y-m-d');
         }
 
-        // simpan penimbangan
-        Penimbangan::create([
-            'balita_id' => $request->balita_id,
-            'berat_badan' => $request->berat_badan,
-            'tinggi_badan' => $request->tinggi_badan,
-            'tanggal_penimbangan' => $request->tanggal_penimbangan,
-            'umur' => $umur,
-            'status' => $status
-        ]);
+        Penimbangan::create($data);
 
-        // update kondisi terakhir balita
-        $balita->update([
-            'kondisi' => $status
-        ]);
-
-        return back()->with('success','Data penimbangan ditambahkan');
+        return redirect()->route('penimbangan.index')
+                        ->with('success', 'Penimbangan berhasil ditambahkan! Tanggal pertama otomatis sesuai lahir.');
     }
 
     public function update(Request $request, $id)

@@ -23,12 +23,13 @@ class BalitaController extends Controller
     {
         $search = $request->search;
 
-        $balitas = Balita::when($search, function ($query) use ($search) {
-            $query->where('nama', 'like', "%$search%")
-                  ->orWhere('nama_ibu', 'like', "%$search%");
-        })
-        ->orderBy('nama','asc')
-        ->get();
+        $balitas = Balita::with('penimbangans')   // ← BARIS INI YANG BARU
+            ->when($search, function ($query) use ($search) {
+                $query->where('nama', 'like', "%$search%")
+                    ->orWhere('nama_ibu', 'like', "%$search%");
+            })
+            ->orderBy('nama','asc')
+            ->get();
 
         return view('kader.balita.index', compact('balitas'));
     }
@@ -36,11 +37,11 @@ class BalitaController extends Controller
 
     // DASHBOARD ORANG TUA
     public function dashboard()
-{
+    {
     $balita = Balita::where('user_id', Auth::id())->first();
 
     return view('orangtua.dashboard', compact('balita'));
-}
+    }
 
     // =========================
     // CREATE
@@ -64,193 +65,101 @@ class BalitaController extends Controller
     }
 
     // =========================
-    // UPDATE
+    // UPDATE (SUDAH DISESUAIKAN - VERSI BARU)
     // =========================
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama'=>'required',
-            'nik'=>'required',
-            'tempat_lahir'=>'required',
-            'tanggal_lahir'=>'required',
-            'jenis_kelamin'=>'required',
-            'nama_ibu'=>'required',
-            'berat_badan'=>'required',
-            'tinggi_badan'=>'required',
-            'lila'=>'required',
-            'lika'=>'required',
+            'nama'          => 'required',
+            'nik'           => 'required',
+            'tempat_lahir'  => 'required',
+            'tanggal_lahir' => 'required|date',
+            'jenis_kelamin' => 'required|in:L,P',
+            'nama_ibu'      => 'required',
+            'berat_badan'   => 'required|numeric',
+            'tinggi_badan'  => 'required|numeric',
+            'lila'          => 'required|numeric',
+            'lika'          => 'required|numeric',
         ]);
 
         $balita = Balita::findOrFail($id);
 
-        // =========================
-        // UPDATE BIODATA
-        // =========================
+        // UPDATE BIODATA SAJA
         $balita->update([
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'tempat_lahir' => $request->tempat_lahir,
+            'nama'          => $request->nama,
+            'nik'           => $request->nik,
+            'tempat_lahir'  => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'nama_ibu' => $request->nama_ibu,
+            'nama_ibu'      => $request->nama_ibu,
+            // 'kondisi' DIHAPUS → sekarang pakai accessor di Model
         ]);
 
-        // =========================
-        // HITUNG UMUR (0,5 bulan)
-        // =========================
-        $tanggalLahir = Carbon::parse($request->tanggal_lahir);
-        $umurBulan = $tanggalLahir->diffInDays(Carbon::now()) / 30;
-        $umurBulan = round($umurBulan * 2) / 2; // dibulatkan ke 0,5 bulan
-
-        // =========================
-        // AMBIL STANDAR WHO
-        // =========================
-        $standar = StandarWhoTbu::where('jenis_kelamin', $request->jenis_kelamin)
-                    ->where('umur_bulan','<=',$umurBulan)
-                    ->orderBy('umur_bulan','desc')
-                    ->first();
-
-        // fallback jika umur < standar terkecil
-        if(!$standar){
-            $standar = StandarWhoTbu::where('jenis_kelamin', $request->jenis_kelamin)
-                        ->orderBy('umur_bulan','asc')
-                        ->first();
-        }
-
-        $tb = $request->tinggi_badan;
-
-        if($standar){
-            if($tb < $standar->minus_3sd){
-                $kondisi='Stunting Berat';
-            } elseif($tb < $standar->minus_2sd){
-                $kondisi='Stunting';
-            } elseif($tb <= $standar->plus_2sd){
-                $kondisi='Normal';
-            } else {
-                $kondisi='Tinggi';
-            }
-        } else {
-            $kondisi='Belum dihitung';
-        }
-
-        // =========================
-        // UPDATE KONDISI
-        // =========================
-        $balita->update([
-            'kondisi' => $kondisi
-        ]);
-
-        // =========================
-        // SIMPAN PENIMBANGAN BARU
-        // =========================
+        // SIMPAN PENIMBANGAN BARU (bisa pakai tanggal yang diinput user)
         Penimbangan::create([
-            'balita_id' => $balita->id,
+            'balita_id'          => $balita->id,
             'tanggal_penimbangan' => $request->tanggal_penimbangan ?? now(),
-            'berat_badan' => $request->berat_badan,
-            'tinggi_badan' => $request->tinggi_badan,
-            'lila' => $request->lila,
-            'lika' => $request->lika,
-            'pesan' => $request->pesan ?? null,
+            'berat_badan'        => $request->berat_badan,
+            'tinggi_badan'       => $request->tinggi_badan,
+            'lila'               => $request->lila,
+            'lika'               => $request->lika,
+            'pesan'              => $request->pesan ?? null,
         ]);
 
-        return redirect()->route('balita.show',$balita->id)
-                         ->with('success','Data berhasil diperbarui');
+        return redirect()->route('balita.show', $balita->id)
+                         ->with('success', 'Data berhasil diperbarui');
     }
-
     // =========================
-    // STORE
+    // STORE (BARU - SUDAH DISESUAIKAN)
     // =========================
     public function store(Request $request)
     {
         $request->validate([
-            'nama'=>'required',
-            'nik'=>'required|unique:balitas,nik',
-            'tempat_lahir'=>'required',
-            'tanggal_lahir'=>'required',
-            'nama_ibu'=>'required',
-            'jenis_kelamin'=>'required',
-            'berat_badan'=>'required',
-            'tinggi_badan'=>'required',
-            'lila'=>'required',
-            'lika'=>'required',
+            'nama'          => 'required',
+            'nik'           => 'required|unique:balitas,nik',
+            'tempat_lahir'  => 'required',
+            'tanggal_lahir' => 'required|date',
+            'nama_ibu'      => 'required',
+            'jenis_kelamin' => 'required|in:L,P',
+            'berat_badan'   => 'required|numeric',
+            'tinggi_badan'  => 'required|numeric',
+            'lila'          => 'required|numeric',
+            'lika'          => 'required|numeric',
         ]);
 
-        // =========================
-        // HITUNG UMUR
-        // =========================
-        $tanggalLahir = Carbon::parse($request->tanggal_lahir);
-        $umurBulan = $tanggalLahir->diffInDays(Carbon::now()) / 30;
-        $umurBulan = round($umurBulan * 2) / 2; // dibulatkan ke 0,5 bulan
-
-        // =========================
-        // AMBIL STANDAR WHO
-        // =========================
-        $standar = StandarWhoTbu::where('jenis_kelamin',$request->jenis_kelamin)
-                    ->where('umur_bulan','<=',$umurBulan)
-                    ->orderBy('umur_bulan','desc')
-                    ->first();
-
-        if(!$standar){
-            $standar = StandarWhoTbu::where('jenis_kelamin', $request->jenis_kelamin)
-                        ->orderBy('umur_bulan','asc')
-                        ->first();
-        }
-
-        $tb = $request->tinggi_badan;
-
-        if($standar){
-            if($tb < $standar->minus_3sd){
-                $kondisi='Stunting Berat';
-            } elseif($tb < $standar->minus_2sd){
-                $kondisi='Stunting';
-            } elseif($tb <= $standar->plus_2sd){
-                $kondisi='Normal';
-            } else {
-                $kondisi='Tinggi';
-            }
-        } else {
-            $kondisi='Belum dihitung';
-        }
-
-        // =========================
-        // BUAT AKUN ORANG TUA
-        // =========================
+        // Buat akun orang tua
         $user = User::create([
-            'name' => $request->nama_ibu,
-            'email' => $request->nik.'@ortu.posyandu',
+            'name'     => $request->nama_ibu,
+            'email'    => $request->nik . '@ortu.posyandu',
             'password' => Hash::make($request->nama_ibu),
-            'role' => 'orang_tua'
+            'role'     => 'orang_tua'
         ]);
 
-        // =========================
-        // SIMPAN BALITA
-        // =========================
+        // Simpan balita (TIDAK SIMPAN KONDISI lagi)
         $balita = Balita::create([
-            'user_id' => $user->id,
-            'nama' => $request->nama,
-            'nik' => $request->nik,
-            'tempat_lahir' => $request->tempat_lahir,
+            'user_id'       => $user->id,
+            'nama'          => $request->nama,
+            'nik'           => $request->nik,
+            'tempat_lahir'  => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'nama_ibu' => $request->nama_ibu,
-            'kondisi' => $kondisi
+            'nama_ibu'      => $request->nama_ibu,
+            // 'kondisi' dihapus → sekarang pakai accessor di Model
         ]);
 
-        // =========================
-        // PENIMBANGAN PERTAMA
-        // =========================
+        // Penimbangan pertama → pakai tanggal lahir (INI FIX UTAMA)
         Penimbangan::create([
-            'balita_id' => $balita->id,
-            'tanggal_penimbangan' => now(),
-            'berat_badan' => $request->berat_badan,
-            'tinggi_badan' => $request->tinggi_badan,
-            'lila' => $request->lila,
-            'lika' => $request->lika,
-            'pesan' => $request->pesan ?? null
+            'balita_id'          => $balita->id,
+            'tanggal_penimbangan' => $request->tanggal_lahir,   // ← paksa tanggal lahir
+            'berat_badan'        => $request->berat_badan,
+            'tinggi_badan'       => $request->tinggi_badan,
+            'lila'               => $request->lila,
+            'lika'               => $request->lika,
+            'pesan'              => $request->pesan ?? null,
         ]);
 
         return redirect()->route('balita.index')
-                         ->with('success','Data balita berhasil ditambahkan');
+                         ->with('success', 'Data balita berhasil ditambahkan');
     }
 
     // =========================

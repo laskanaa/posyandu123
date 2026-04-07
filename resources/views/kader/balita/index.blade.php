@@ -85,23 +85,7 @@
 
                                 <td>{{ $balita->nama_ibu }}</td>
 
-                                <td>
-
-                                    @if($balita->kondisi == 'Stunting' || $balita->kondisi == 'Stunting Berat')
-
-                                        <span class="status-stunting">
-                                            {{ $balita->kondisi }}
-                                        </span>
-
-                                    @else
-
-                                        <span class="status-normal">
-                                            {{ $balita->kondisi }}
-                                        </span>
-
-                                    @endif
-
-                                </td>
+                                <td>{{ $balita->kondisi }}</td>
 
                                 <td class="action-buttons">
 
