@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Tentang')
+@section('title', 'Data Informasi')
 
 @section('content')
 
@@ -13,66 +13,49 @@
             <div class="topbar">
                 <div class="left">
                     <button id="toggleSidebar" class="hamburger">☰</button>
-                    <h3>Data Tentang</h3>
+                    <h3>Data Informasi</h3>
                 </div>
 
-                @if(!$tentang)
-                    <a href="{{ route('kader.tentang.create') }}" class="btn-add">
-                        + Tambah Data
-                    </a>
-                @endif
+                <a href="{{ route('kader.informasi.create') }}" class="btn-add">
+                    + Tambah
+                </a>
             </div>
 
             <div class="card-table">
 
-                @if($tentang)
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Judul</th>
+                            <th>Angka</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
 
-                    <table>
-                        <thead>
+                    <tbody>
+                        @foreach($data as $item)
                             <tr>
-                                <th>Deskripsi</th>
-                                <th>Gambar</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-
-                                <td>{{ $tentang->deskripsi1 }}</td>
-
-                                <td>
-                                    @if($tentang->gambar)
-                                        <img src="{{ asset('storage/' . $tentang->gambar) }}" width="120">
-                                    @endif
-                                </td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->judul }}</td>
+                                <td>{{ $item->angka }}</td>
 
                                 <td class="aksi">
-
-                                    <!-- EDIT -->
-                                    <a href="{{ route('kader.tentang.edit', $tentang->id) }}" class="btn-edit">
+                                    <a href="{{ route('kader.informasi.edit', $item->id) }}" class="btn-edit">
                                         Edit
                                     </a>
 
-                                    <!-- HAPUS -->
-                                    <form action="{{ route('kader.tentang.destroy', $tentang->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin mau hapus data ini?')">
+                                    <form action="{{ route('kader.informasi.destroy', $item->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn-delete">
-                                            Hapus
-                                        </button>
+                                        <button class="btn-delete">Hapus</button>
                                     </form>
-
                                 </td>
-
                             </tr>
-                        </tbody>
-                    </table>
+                        @endforeach
+                    </tbody>
 
-                @else
-                    <p>Belum ada data.</p>
-                @endif
+                </table>
 
             </div>
 
@@ -84,26 +67,12 @@
 
 @endsection
 
+
 <style>
     .wrapper {
         display: flex;
         min-height: 100vh;
         background: #f4f6f9;
-    }
-
-    .sidebar {
-        position: fixed;
-        left: -260px;
-        top: 0;
-        width: 260px;
-        height: 100%;
-        background: #0d4f4d;
-        transition: 0.3s;
-        z-index: 1000;
-    }
-
-    .sidebar.active {
-        left: 0;
     }
 
     .main {
@@ -141,23 +110,11 @@
         text-decoration: none;
     }
 
-    .btn-delete {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 6px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .aksi form {
-        margin: 0;
-    }
-
     .card-table {
         background: white;
         padding: 20px;
         border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
     }
 
     table {
@@ -183,6 +140,14 @@
         text-decoration: none;
     }
 
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+
     .overlay {
         position: fixed;
         top: 0;
@@ -198,6 +163,7 @@
     }
 </style>
 
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -205,18 +171,18 @@
         const sidebar = document.getElementById("sidebar");
         const overlay = document.getElementById("overlay");
 
-        if (toggle) {
+        if (toggle && sidebar && overlay) {
+
             toggle.addEventListener("click", function () {
                 sidebar.classList.toggle("active");
                 overlay.classList.toggle("active");
             });
-        }
 
-        if (overlay) {
             overlay.addEventListener("click", function () {
                 sidebar.classList.remove("active");
                 overlay.classList.remove("active");
             });
+
         }
 
     });

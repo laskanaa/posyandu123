@@ -34,9 +34,16 @@
         <div class="footer-section">
             <h3>Lokasi</h3>
             <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d..." allowfullscreen=""
+
+                <iframe src="https://www.google.com/maps?q=-7.3006596,109.0381553&z=15&output=embed" allowfullscreen=""
                     loading="lazy">
                 </iframe>
+
+                <a href="https://www.google.com/maps/place/Puskesmas+Paguyangan/@-7.3006596,109.0355804,864m/data=!3m2!1e3!4b1!4m6!3m5!1s0x2e6f88dde831e67d:0x329a62fe3dda579d!8m2!3d-7.3006596!4d109.0381553!16s%2Fg%2F11clvc11g8"
+                    target="_blank" class="map-btn">
+                    Buka Maps
+                </a>
+
             </div>
         </div>
 
@@ -102,6 +109,7 @@
     }
 
     .map-container {
+        position: relative;
         width: 100%;
         height: 200px;
         margin-top: 15px;
@@ -112,6 +120,25 @@
         height: 100%;
         border: 0;
         border-radius: 10px;
+    }
+
+    /* 🔥 tombol kecil pojok */
+    .map-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: #0d4f4d;
+        color: white;
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        z-index: 2;
+        transition: 0.3s;
+    }
+
+    .map-btn:hover {
+        background: #0f766e;
     }
 
     .footer-bottom {

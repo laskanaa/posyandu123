@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data Tentang')
+@section('title', 'Data Galeri')
 
 @section('content')
 
@@ -13,66 +13,52 @@
             <div class="topbar">
                 <div class="left">
                     <button id="toggleSidebar" class="hamburger">☰</button>
-                    <h3>Data Tentang</h3>
+                    <h3>Data Galeri</h3>
                 </div>
 
-                @if(!$tentang)
-                    <a href="{{ route('kader.tentang.create') }}" class="btn-add">
-                        + Tambah Data
-                    </a>
-                @endif
+                <a href="{{ route('kader.galeri.create') }}" class="btn-add">
+                    + Tambah
+                </a>
             </div>
 
             <div class="card-table">
 
-                @if($tentang)
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Gambar</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
 
-                    <table>
-                        <thead>
+                    <tbody>
+
+                        @forelse($galeri as $item)
                             <tr>
-                                <th>Deskripsi</th>
-                                <th>Gambar</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-
-                                <td>{{ $tentang->deskripsi1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
 
                                 <td>
-                                    @if($tentang->gambar)
-                                        <img src="{{ asset('storage/' . $tentang->gambar) }}" width="120">
-                                    @endif
+                                    <img src="{{ asset('storage/' . $item->gambar) }}" class="img-table">
                                 </td>
 
                                 <td class="aksi">
-
-                                    <!-- EDIT -->
-                                    <a href="{{ route('kader.tentang.edit', $tentang->id) }}" class="btn-edit">
-                                        Edit
-                                    </a>
-
-                                    <!-- HAPUS -->
-                                    <form action="{{ route('kader.tentang.destroy', $tentang->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin mau hapus data ini?')">
+                                    <form action="{{ route('kader.galeri.destroy', $item->id) }}" method="POST"
+                                        onsubmit="return confirmDelete()">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn-delete">
-                                            Hapus
-                                        </button>
+                                        <button class="btn-delete">Hapus</button>
                                     </form>
-
                                 </td>
-
                             </tr>
-                        </tbody>
-                    </table>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="empty">Belum ada data</td>
+                            </tr>
+                        @endforelse
 
-                @else
-                    <p>Belum ada data.</p>
-                @endif
+                    </tbody>
+                </table>
 
             </div>
 
@@ -84,26 +70,12 @@
 
 @endsection
 
+
 <style>
     .wrapper {
         display: flex;
         min-height: 100vh;
         background: #f4f6f9;
-    }
-
-    .sidebar {
-        position: fixed;
-        left: -260px;
-        top: 0;
-        width: 260px;
-        height: 100%;
-        background: #0d4f4d;
-        transition: 0.3s;
-        z-index: 1000;
-    }
-
-    .sidebar.active {
-        left: 0;
     }
 
     .main {
@@ -124,6 +96,7 @@
         gap: 10px;
     }
 
+    /* ✅ HAMBURGER DISAMAIN */
     .hamburger {
         background: #0d4f4d;
         color: white;
@@ -141,23 +114,11 @@
         text-decoration: none;
     }
 
-    .btn-delete {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 6px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .aksi form {
-        margin: 0;
-    }
-
     .card-table {
         background: white;
         padding: 20px;
         border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
     }
 
     table {
@@ -169,26 +130,37 @@
     td {
         padding: 12px;
         border-bottom: 1px solid #eee;
+        text-align: center;
+    }
+
+    .img-table {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
     }
 
     .aksi {
         display: flex;
-        gap: 10px;
+        justify-content: center;
     }
 
-    .btn-edit {
-        background: #ffc107;
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        border: none;
         padding: 6px 10px;
         border-radius: 4px;
-        text-decoration: none;
+    }
+
+    .empty {
+        padding: 20px;
+        color: #64748b;
     }
 
     .overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         background: rgba(0, 0, 0, 0.4);
         display: none;
     }
@@ -198,6 +170,7 @@
     }
 </style>
 
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -205,19 +178,23 @@
         const sidebar = document.getElementById("sidebar");
         const overlay = document.getElementById("overlay");
 
-        if (toggle) {
+        if (toggle && sidebar && overlay) {
+
             toggle.addEventListener("click", function () {
                 sidebar.classList.toggle("active");
                 overlay.classList.toggle("active");
             });
-        }
 
-        if (overlay) {
             overlay.addEventListener("click", function () {
                 sidebar.classList.remove("active");
                 overlay.classList.remove("active");
             });
+
         }
 
     });
+
+    function confirmDelete() {
+        return confirm("Yakin mau hapus gambar ini?");
+    }
 </script>

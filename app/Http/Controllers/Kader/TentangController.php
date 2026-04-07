@@ -8,80 +8,73 @@ use App\Models\TentangPosyandu;
 
 class TentangController extends Controller
 {
-    // Tampilkan semua data (cuma 1 deskripsi)
     public function index()
     {
-        $tentang = TentangPosyandu::first(); // ambil 1 data
+        $tentang = TentangPosyandu::first();
         return view('kader.tentang.index', compact('tentang'));
     }
 
-    // Form tambah data
     public function create()
     {
         return view('kader.tentang.create');
     }
 
-    // Simpan data
-public function store(Request $request)
-{
-    $request->validate([
-        'deskripsi1' => 'required',
-        'gambar' => 'image|mimes:jpg,jpeg,png|max:2048'
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'deskripsi1' => 'required',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
 
-    $data = [
-        'deskripsi1' => $request->deskripsi1
-    ];
+        $data = [
+            'deskripsi1' => $request->deskripsi1
+        ];
 
-    if ($request->hasFile('gambar')) {
-        $path = $request->file('gambar')->store('tentang', 'public');
-        $data['gambar'] = $path;
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('tentang', 'public');
+        }
+
+        TentangPosyandu::create($data);
+
+        return redirect()->route('kader.tentang.index')
+            ->with('success', 'Data berhasil disimpan!');
     }
 
-    TentangPosyandu::create($data);
+    public function edit($id)
+    {
+        $tentang = TentangPosyandu::findOrFail($id);
+        return view('kader.tentang.edit', compact('tentang'));
+    }
 
-    return redirect()->route('kader.tentang.index')
-        ->with('success', 'Data berhasil disimpan!');
-}
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'deskripsi1' => 'required',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
 
-    // Form edit
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'deskripsi1' => 'required',
-        'gambar' => 'image|mimes:jpg,jpeg,png|max:2048'
-    ]);
+        $tentang = TentangPosyandu::findOrFail($id);
 
-    $tentang = TentangPosyandu::findOrFail($id);
+        $data = [
+            'deskripsi1' => $request->deskripsi1
+        ];
 
-    $data = [
-        'deskripsi1' => $request->deskripsi1
-    ];
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('tentang', 'public');
+        }
 
-if ($request->hasFile('gambar')) {
-    $path = $request->file('gambar')->store('tentang', 'public');
-    $data['gambar'] = $path;
-}
+        $tentang->update($data);
 
-    $tentang->update($data);
+        return redirect()->route('kader.tentang.index')
+            ->with('success', 'Data berhasil diperbarui!');
+    }
 
-    return redirect()->route('kader.tentang.index')
-        ->with('success', 'Data berhasil diperbarui!');
-}
-
-public function edit($id)
-{
-    $tentang = TentangPosyandu::findOrFail($id);
-    return view('kader.tentang.edit', compact('tentang'));
-}
-
-    // Hapus data
     public function destroy($id)
     {
         $tentang = TentangPosyandu::findOrFail($id);
         $tentang->delete();
 
         return redirect()->route('kader.tentang.index')
-                         ->with('success', 'Data berhasil dihapus!');
+            ->with('success', 'Data berhasil dihapus!');
     }
 }

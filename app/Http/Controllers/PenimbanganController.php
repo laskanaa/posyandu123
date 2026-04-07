@@ -62,7 +62,6 @@ class PenimbanganController extends Controller
     public function destroy($id)
     {
         Penimbangan::destroy($id);
-
         return back()->with('success','Data berhasil dihapus');
     }
 }

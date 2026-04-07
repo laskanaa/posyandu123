@@ -4,19 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Slider;
 use App\Models\TentangPosyandu;
-use App\Models\Spm;
 use App\Models\Layanan;
+use App\Models\Spm;
+use App\Models\Informasi;
+use App\Models\Galeri;
 
 class HomeController extends Controller
 {
-// HomeController.php
-public function index()
-{
-    $tentang = TentangPosyandu::first(); // ambil 1 data saja
-    $sliders = Slider::all();
-    $spm = Spm::all();
-    $layanan = Layanan::all();
-
-    return view('pages.home', compact('tentang', 'sliders', 'spm', 'layanan'));
-}
+    public function index()
+    {
+        return view('pages.home', [
+            'sliders' => Slider::all(),
+            'tentang' => TentangPosyandu::first(),
+            'layanan' => Layanan::all(),
+            'spm' => Spm::all(),
+            'informasi' => Informasi::all(),
+            'galeri' => Galeri::latest()->take(3)->get(),
+        ]);
+    }
 }

@@ -1,40 +1,48 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Layanan')
+@section('title', 'Edit Tentang')
 
 @section('content')
 
-    <div class="dashboard-container">
+    <div class="wrapper">
 
         @include('partials.sidebar_kader')
 
-        <div class="main-content">
+        <div class="main">
 
             <div class="topbar">
-                <h3>Edit Layanan</h3>
+                <div class="left">
+                    <button id="toggleSidebar" class="hamburger">☰</button>
+                    <h3>Edit Tentang</h3>
+                </div>
             </div>
 
-            <form action="{{ route('kader.layanan.update', $layanan->id) }}" method="POST">
-
+            <form action="{{ route('kader.tentang.update', $tentang->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
                 <div class="card-form">
 
-                    <h4>Edit Data Layanan</h4>
-
-                    <div class="form-grid">
-
-                        <div class="form-group">
-                            <label>Judul</label>
-                            <input type="text" name="judul" value="{{ $layanan->judul }}" readonly class="locked-input">
-                        </div>
-
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi1" rows="5" required>{{ $tentang->deskripsi1 }}</textarea>
                     </div>
 
-                    <button class="btn-save">Update Layanan</button>
+                    <div class="form-group">
+                        <label>Gambar Sekarang</label><br>
+                        @if($tentang->gambar)
+                            <img src="{{ asset('storage/' . $tentang->gambar) }}" width="150">
+                        @endif
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ganti Gambar</label>
+                        <input type="file" name="gambar">
+                    </div>
 
                 </div>
+
+                <button type="submit" class="btn-save">Update</button>
 
             </form>
 
@@ -42,74 +50,47 @@
 
     </div>
 
+    <div class="overlay" id="overlay"></div>
+
 @endsection
 
-
 <style>
-    .dashboard-container {
+    .wrapper {
         display: flex;
         min-height: 100vh;
-        font-family: 'Segoe UI', sans-serif;
-        background: #f4f6fb;
+        background: #f4f6f9;
     }
 
-    .main-content {
+    .main {
+        padding: 30px;
         flex: 1;
-        padding: 40px;
-    }
-
-    .topbar {
-        margin-bottom: 30px;
-    }
-
-    .topbar h3 {
-        font-size: 24px;
-        font-weight: 600;
-        color: #0d4f4d;
     }
 
     .card-form {
         background: white;
-        padding: 35px;
-        border-radius: 14px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
+        padding: 25px;
+        border-radius: 12px;
     }
 
     .form-group {
+        margin-bottom: 20px;
         display: flex;
         flex-direction: column;
     }
 
-    .form-group label {
-        font-size: 14px;
-        margin-bottom: 6px;
-        color: #555;
-    }
-
-    .form-group input {
-        padding: 10px 12px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-    }
-
-    .locked-input {
-        background: #e9ecef;
-        cursor: not-allowed;
+    input,
+    textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
     }
 
     .btn-save {
-        margin-top: 25px;
         background: #0d4f4d;
         color: white;
+        padding: 12px 25px;
         border: none;
-        padding: 12px 22px;
         border-radius: 8px;
-        cursor: pointer;
     }
 </style>
+

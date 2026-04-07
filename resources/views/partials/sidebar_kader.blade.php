@@ -16,6 +16,10 @@
             <a href="{{ route('balita.index') }}">Data Balita</a>
         </li>
 
+        <li class="{{ request()->routeIs('kader.informasi.*') ? 'active' : '' }}">
+            <a href="{{ route('kader.informasi.index') }}">Informasi</a>
+        </li>
+
         <li class="{{ request()->routeIs('kader.tentang.*') ? 'active' : '' }}">
             <a href="{{ route('kader.tentang.index') }}">Tentang Posyandu</a>
         </li>
@@ -26,6 +30,10 @@
 
         <li class="{{ request()->routeIs('kader.spm.*') ? 'active' : '' }}">
             <a href="{{ route('kader.spm.index') }}">SPM</a>
+        </li>
+
+        <li class="{{ request()->routeIs('kader.galeri.*') ? 'active' : '' }}">
+            <a href="{{ route('kader.galeri.index') }}">Galeri</a>
         </li>
 
         <li>

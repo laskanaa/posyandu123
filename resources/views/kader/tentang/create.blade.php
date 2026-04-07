@@ -1,188 +1,99 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Layanan')
+@section('title', 'Tambah Tentang')
 
 @section('content')
 
-    <div class="dashboard-container">
+    <div class="wrapper">
 
         @include('partials.sidebar_kader')
 
-        <div class="main-content">
+        <div class="main">
 
-            <h3 class="page-header">Tambah Layanan</h3>
+            <div class="topbar">
+                <div class="left">
+                    <button id="toggleSidebar" class="hamburger">☰</button>
+                    <h3>Tambah Tentang</h3>
+                </div>
+            </div>
 
-            <div class="card-form">
+            <form action="{{ route('kader.tentang.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-                <form action="{{ route('kader.layanan.store') }}" method="POST">
+                <div class="card-form">
 
-                    @csrf
-
-                    <div class="form-grid">
-
-                        <div class="form-group">
-                            <label>Pilih Layanan</label>
-
-                            <select id="layananSelect" onchange="setLayananData()" required>
-
-                                <option value="">-- Pilih Layanan --</option>
-
-                                <option value="penimbangan">⚖️ Penimbangan Berat Badan</option>
-                                <option value="pengukuran">📏 Pengukuran Tinggi Badan</option>
-                                <option value="imunisasi">💉 Imunisasi</option>
-                                <option value="pmt">🥣 Pemberian Makanan Tambahan (PMT)</option>
-                                <option value="vitamin">💊 Vitamin A</option>
-                                <option value="kb">🍼 KB</option>
-                                <option value="konseling">🩺 Konseling Kesehatan</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="form-group">
-                            <label>Icon</label>
-                            <input type="text" id="icon" name="icon" readonly class="locked-input">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Judul Layanan</label>
-                            <input type="text" id="judul" name="judul" readonly class="locked-input">
-                        </div>
-
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea name="deskripsi1" rows="5" required></textarea>
                     </div>
 
-                    <button class="btn-save">Simpan Layanan</button>
+                    <div class="form-group">
+                        <label>Upload Gambar</label>
+                        <input type="file" name="gambar">
+                    </div>
 
-                </form>
+                </div>
 
-            </div>
+                <button type="submit" class="btn-save">Simpan</button>
+
+            </form>
 
         </div>
 
     </div>
 
-
-    <script>
-
-        function setLayananData() {
-
-            const select = document.getElementById('layananSelect').value
-            const icon = document.getElementById('icon')
-            const judul = document.getElementById('judul')
-
-            switch (select) {
-
-                case 'penimbangan':
-                    icon.value = '⚖️'
-                    judul.value = 'Penimbangan Berat Badan'
-                    break
-
-                case 'pengukuran':
-                    icon.value = '📏'
-                    judul.value = 'Pengukuran Tinggi Badan'
-                    break
-
-                case 'imunisasi':
-                    icon.value = '💉'
-                    judul.value = 'Imunisasi'
-                    break
-
-                case 'pmt':
-                    icon.value = '🥣'
-                    judul.value = 'Pemberian Makanan Tambahan (PMT)'
-                    break
-
-                case 'vitamin':
-                    icon.value = '💊'
-                    judul.value = 'Vitamin A'
-                    break
-
-                case 'kb':
-                    icon.value = '🍼'
-                    judul.value = 'KB'
-                    break
-
-                case 'konseling':
-                    icon.value = '🩺'
-                    judul.value = 'Konseling Kesehatan'
-                    break
-
-                default:
-                    icon.value = ''
-                    judul.value = ''
-
-            }
-
-        }
-
-    </script>
+    <div class="overlay" id="overlay"></div>
 
 @endsection
 
-
 <style>
-    .dashboard-container {
+    .wrapper {
         display: flex;
         min-height: 100vh;
-        font-family: 'Segoe UI', sans-serif;
-        background: #f4f6fb;
+        background: #f4f6f9;
     }
 
-    .main-content {
+    .main {
         flex: 1;
-        padding: 40px;
+        padding: 30px;
     }
 
-    .page-header {
-        font-size: 24px;
-        font-weight: 600;
-        color: #0d4f4d;
-        margin-bottom: 25px;
+    .topbar {
+        margin-bottom: 20px;
+    }
+
+    .hamburger {
+        background: #0d4f4d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
     }
 
     .card-form {
         background: white;
-        padding: 35px;
-        border-radius: 14px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
+        padding: 25px;
+        border-radius: 12px;
     }
 
     .form-group {
+        margin-bottom: 20px;
         display: flex;
         flex-direction: column;
     }
 
-    .form-group label {
-        font-size: 14px;
-        margin-bottom: 6px;
-        color: #555;
-    }
-
-    .form-group input,
-    select {
-        padding: 10px 12px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-    }
-
-    .locked-input {
-        background: #f0f0f0;
-        cursor: not-allowed;
+    input,
+    textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
     }
 
     .btn-save {
-        margin-top: 25px;
         background: #0d4f4d;
         color: white;
+        padding: 12px 25px;
         border: none;
-        padding: 12px 22px;
         border-radius: 8px;
-        cursor: pointer;
     }
 </style>
