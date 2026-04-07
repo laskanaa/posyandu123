@@ -410,94 +410,22 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('js/chart-kms.js') }}"></script>
 
     <script>
-
-        const ctx = document.getElementById('chartBalita');
-
-        if (ctx) {
-
-            new Chart(ctx, {
-                type: 'line',
-
-                data: {
-                    labels: [
-                        @foreach($balita->penimbangans as $p)
-                            "{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->translatedFormat('M Y') }}",
-                        @endforeach
+        renderKMSChart(
+            'chartBalita',
+            "{{ strtolower($balita->jenis_kelamin) }}",
+            [
+                @foreach($balita->penimbangans as $p)
+                    {{ $p->berat_badan }},
+                @endforeach
         ],
-
-                    datasets: [
-
-                        {
-                            label: 'Berat Badan (Kg)',
-
-                            data: [
-                                @foreach($balita->penimbangans as $p)
-                                    {{ $p->berat_badan }},
-                                @endforeach
-        ],
-
-                            borderColor: '#3b82f6',
-                            backgroundColor: '#3b82f622',
-                            borderWidth: 3,
-                            pointRadius: 4,
-                            tension: .4,
-                            fill: true
-                        },
-
-                        {
-                            label: 'Tinggi Badan (Cm)',
-
-                            data: [
-                                @foreach($balita->penimbangans as $p)
-                                    {{ $p->tinggi_badan }},
-                                @endforeach
-        ],
-
-                            borderColor: '#8b5cf6',
-                            backgroundColor: '#8b5cf622',
-                            borderWidth: 3,
-                            pointRadius: 4,
-                            tension: .4,
-                            fill: true
-                        }
-
-                    ]
-
-                },
-
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    },
-
-                    scales: {
-                        y: {
-                            grid: {
-                                color: '#e2e8f0'
-                            }
-                        },
-
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-
-                    }
-
-                }
-
-            })
-
-        }
-
+            [
+                @foreach($balita->penimbangans as $p)
+                    "{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('M Y') }}",
+                @endforeach
+        ]
+        );
     </script>
-
 @endsection

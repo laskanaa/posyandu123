@@ -65,30 +65,24 @@
                 <div class="form-grid">
 
                     <div class="form-group">
-                        <label>Tanggal Penimbangan</label>
-                        <input type="date" name="tanggal_penimbangan" required>
+                        <label>Berat Badan (kg)</label>
+                        <input type="text" name="berat_badan" required oninput="formatAngka(this)">
                     </div>
 
                     <div class="form-group">
-                        <label>Berat Badan</label>
-                        <input type="number" name="berat_badan" required>
+                        <label>Tinggi Badan (cm)</label>
+                        <input type="text" name="tinggi_badan" required oninput="formatAngka(this)">
                     </div>
 
                     <div class="form-group">
-                        <label>Tinggi Badan</label>
-                        <input type="number" name="tinggi_badan" required>
+                        <label>LILA (cm)</label>
+                        <input type="text" name="lila" required oninput="formatAngka(this)">
                     </div>
 
                     <div class="form-group">
-                        <label>LILA</label>
-                        <input type="number" name="lila" required>
+                        <label>LIKA (cm)</label>
+                        <input type="text" name="lika" required oninput="formatAngka(this)">
                     </div>
-
-                    <div class="form-group">
-                        <label>LIKA</label>
-                        <input type="number" name="lika" required>
-                    </div>
-
                 </div>
 
             </div>
@@ -100,6 +94,16 @@
         </form>
 
     </div>
+
+    <script>
+        function formatAngka(input) {
+            // hanya angka + koma + titik
+            input.value = input.value.replace(/[^0-9.,]/g, '');
+
+            // ubah koma jadi titik
+            input.value = input.value.replace(',', '.');
+        }
+    </script>
 
 @endsection
 

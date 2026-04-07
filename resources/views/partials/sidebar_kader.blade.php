@@ -28,8 +28,8 @@
             <a href="{{ route('kader.layanan.index') }}">Layanan</a>
         </li>
 
-        <li class="{{ request()->routeIs('kader.spm.*') ? 'active' : '' }}">
-            <a href="{{ route('kader.spm.index') }}">SPM</a>
+        <li class="{{ request()->routeIs('kader.pencegahan.*') ? 'active' : '' }}">
+            <a href="{{ route('kader.pencegahan.index') }}">Pencegahan</a>
         </li>
 
         <li class="{{ request()->routeIs('kader.galeri.*') ? 'active' : '' }}">

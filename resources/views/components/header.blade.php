@@ -3,7 +3,7 @@
     <div class="nav-container">
 
         <!-- LOGO + JUDUL -->
-        <div class="logo-area">
+        <a href="#home" class="logo-area">
             <svg class="logo-icon" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="9" stroke="#0d4f4d" stroke-width="2" />
                 <path d="M12 7v10M7 12h10" stroke="#0d4f4d" stroke-width="2" stroke-linecap="round" />
@@ -13,7 +13,7 @@
                 <div class="title-main">PEMANTAUAN STUNTING</div>
                 <div class="title-sub">Posyandu Paguyangan</div>
             </div>
-        </div>
+        </a>
 
         <!-- MENU -->
         <nav class="menu">

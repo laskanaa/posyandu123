@@ -352,51 +352,23 @@
     </style>
 
 
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('js/chart-kms.js') }}"></script>
 
     <script>
-
-        const ctx = document.getElementById('chartBalita');
-
-        new Chart(ctx, {
-            type: 'line',
-
-            data: {
-                labels: [
-                    @foreach($balita->penimbangans as $p)
-                        "{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('M Y') }}",
-                    @endforeach
-            ],
-
-                datasets: [
-
-                    {
-                        label: 'Berat Badan',
-                        data: [
-                            @foreach($balita->penimbangans as $p)
-                                {{ $p->berat_badan }},
-                            @endforeach
-            ],
-                        borderWidth: 3
-                    },
-
-                    {
-                        label: 'Tinggi Badan',
-                        data: [
-                            @foreach($balita->penimbangans as $p)
-                                {{ $p->tinggi_badan }},
-                            @endforeach
-            ],
-                        borderWidth: 3
-                    }
-
-                ]
-
-            }
-
-        });
-
+        renderKMSChart(
+            'chartBalita',
+            "{{ strtolower($balita->jenis_kelamin) }}",
+            [
+                @foreach($balita->penimbangans as $p)
+                    {{ $p->berat_badan }},
+                @endforeach
+        ],
+            [
+                @foreach($balita->penimbangans as $p)
+                    "{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('M Y') }}",
+                @endforeach
+        ]
+        );
     </script>
-
 @endsection

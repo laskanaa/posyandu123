@@ -9,7 +9,7 @@ use App\Http\Controllers\Kader\SliderController;
 use App\Http\Controllers\OrangtuaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Kader\TentangController;
-use App\Http\Controllers\Kader\SpmController;
+use App\Http\Controllers\Kader\PencegahanController;
 use App\Http\Controllers\Kader\LayananController;
 use App\Http\Controllers\Kader\InformasiController;
 use App\Http\Controllers\GaleriController;
@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('tentang', TentangController::class);
 
         // SPM
-        Route::resource('spm', SpmController::class);
+        Route::resource('pencegahan', PencegahanController::class);
 
         // LAYANAN
         Route::resource('layanan', LayananController::class);

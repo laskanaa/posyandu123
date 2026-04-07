@@ -6,17 +6,17 @@
 
     <div class="container">
 
-        <h2 class="page-title">Tambah Data SPM</h2>
+        <h2 class="page-title">Tambah Data Pencegahan</h2>
 
         <div class="form-card">
 
-            <form action="{{ route('kader.spm.store') }}" method="POST">
+            <form action="{{ route('kader.pencegahan.store') }}" method="POST">
                 @csrf
 
                 <div class="form-group">
                     <label>Pilih Bidang</label>
 
-                    <select id="spmSelect" onchange="setSpmData()" required>
+                    <select id="pencegahanSelect" onchange="setPencegahanData()" required>
 
                         <option value="">-- Pilih Bidang --</option>
                         <option value="pendidikan">🎓 Pendidikan</option>
@@ -46,7 +46,7 @@
                 </div>
 
                 <button class="btn-save">
-                    Simpan SPM
+                    Simpan Pencegahan
                 </button>
 
             </form>
@@ -57,9 +57,9 @@
 
     <script>
 
-        function setSpmData() {
+        function setPencegahanData() {
 
-            let select = document.getElementById("spmSelect").value
+            let select = document.getElementById("pencegahanSelect").value
 
             let icon = document.getElementById("icon")
             let judul = document.getElementById("judul")

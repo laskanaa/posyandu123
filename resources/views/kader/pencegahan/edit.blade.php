@@ -6,9 +6,9 @@
 
     <div class="container">
 
-        <h2>Edit Data SPM</h2>
+        <h2>Edit Data Pencegahan</h2>
 
-        <form action="{{ route('kader.spm.update', $spm->id) }}" method="POST">
+        <form action="{{ route('kader.pencegahan.update', $pencegahan->id) }}" method="POST">
 
             @csrf
             @method('PUT')
@@ -17,16 +17,16 @@
 
                 <div class="form-group">
                     <label>Judul</label>
-                    <input type="text" value="{{ $spm->judul }}" readonly>
+                    <input type="text" value="{{ $pencegahan->judul }}" readonly>
                 </div>
 
                 <div class="form-group">
                     <label>Deskripsi</label>
-                    <textarea name="deskripsi">{{ $spm->deskripsi }}</textarea>
+                    <textarea name="deskripsi">{{ $pencegahan->deskripsi }}</textarea>
                 </div>
 
                 <button class="btn-save">
-                    Update SPM
+                    Update Pencegahan
                 </button>
 
             </div>

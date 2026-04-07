@@ -403,6 +403,7 @@
     </style>
 
     <div class="homepage">
+        <section id="home"></section>
 
         @if($sliders->count())
             <section class="hero-slider">
@@ -430,6 +431,7 @@
                         <span class="carousel-control-next-icon"></span>
                     </button>
                 </div>
+            </section>
             </section>
         @endif
 
@@ -479,14 +481,14 @@
             </section>
         @endif
 
-        @if($spm->count())
+        @if($pencegahans->count())
             <section id="pencegahan" class="pencegahan-section">
                 <div class="container-home">
                     <h2 class="section-title">Lakukan Pencegahan Stunting</h2>
-                    <div class="spm-grid">
-                        @foreach($spm as $item)
-                            <div class="spm-card animate">
-                                <div class="spm-icon">{!! $item->icon !!}</div>
+                    <div class="pencegahan-grid">
+                        @foreach($pencegahans as $item)
+                            <div class="pencegahan-card animate">
+                                <div class="pencegahan-icon">{!! $item->icon !!}</div>
                                 <h3>{{ $item->judul }}</h3>
                                 <p>{{ $item->deskripsi }}</p>
                             </div>

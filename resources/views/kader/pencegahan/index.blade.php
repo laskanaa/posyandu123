@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Data SPM')
+@section('title', 'Data Pencegahan')
 
 @section('content')
 
@@ -16,11 +16,11 @@
 
                 <div class="left">
                     <button id="toggleSidebar" class="hamburger">☰</button>
-                    <h3>Standar Pelayanan Minimal</h3>
+                    <h3>Pencegahan Stunting</h3>
                 </div>
 
-                <a href="{{ route('kader.spm.create') }}" class="btn-add">
-                    + Tambah SPM
+                <a href="{{ route('kader.pencegahan.create') }}" class="btn-add">
+                    + Tambah Pencegahan
                 </a>
 
             </div>
@@ -41,25 +41,25 @@
 
                     <tbody>
 
-                        @foreach($spms as $spm)
+                        @foreach($pencegahans as $pencegahan)
 
                             <tr>
 
                                 <td>{{ $loop->iteration }}</td>
 
-                                <td class="logo">{{ $spm->icon }}</td>
+                                <td class="logo">{{ $pencegahan->icon }}</td>
 
-                                <td>{{ $spm->judul }}</td>
+                                <td>{{ $pencegahan->judul }}</td>
 
-                                <td>{{ $spm->deskripsi }}</td>
+                                <td>{{ $pencegahan->deskripsi }}</td>
 
                                 <td class="aksi">
 
-                                    <a href="{{ route('kader.spm.edit', $spm->id) }}" class="btn-edit">
+                                    <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit">
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('kader.spm.destroy', $spm->id) }}" method="POST">
+                                    <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn-delete">Hapus</button>

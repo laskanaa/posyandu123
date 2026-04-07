@@ -87,29 +87,23 @@
                 <div class="form-grid">
 
                     <div class="form-group">
-                        <label>Tanggal Penimbangan</label>
-                        <input type="date" name="tanggal_penimbangan"
-                            value="{{ old('tanggal_penimbangan', $penimbangan->tanggal_penimbangan ?? '') }}">
-                    </div>
-
-                    <div class="form-group">
                         <label>Berat Badan (kg)</label>
-                        <input type="number" step="0.01" name="berat_badan" required>
+                        <input type="text" name="berat_badan" required oninput="formatAngka(this)">
                     </div>
 
                     <div class="form-group">
                         <label>Tinggi Badan (cm)</label>
-                        <input type="number" step="0.01" name="tinggi_badan" required>
+                        <input type="text" name="tinggi_badan" required oninput="formatAngka(this)">
                     </div>
 
                     <div class="form-group">
                         <label>LILA (cm)</label>
-                        <input type="number" step="0.01" name="lila" required>
+                        <input type="text" name="lila" required oninput="formatAngka(this)">
                     </div>
 
                     <div class="form-group">
                         <label>LIKA (cm)</label>
-                        <input type="number" step="0.01" name="lika" required>
+                        <input type="text" name="lika" required oninput="formatAngka(this)">
                     </div>
 
                     <div class="form-group">
@@ -131,6 +125,16 @@
         ```
 
     </div>
+
+    <script>
+        function formatAngka(input) {
+            // hanya angka + koma + titik
+            input.value = input.value.replace(/[^0-9.,]/g, '');
+
+            // ubah koma jadi titik
+            input.value = input.value.replace(',', '.');
+        }
+    </script>
 
 @endsection
 
