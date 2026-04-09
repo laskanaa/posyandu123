@@ -6,7 +6,6 @@
 
     <div class="wrapper">
 
-        ```
         <!-- SIDEBAR -->
         @include('partials.sidebar_kader')
 

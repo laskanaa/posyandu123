@@ -5,65 +5,87 @@ namespace App\Http\Controllers\Kader;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Informasi;
+use App\Models\Balita;
+use App\Models\User;
 
 class InformasiController extends Controller
 {
     public function index()
     {
-        $data = Informasi::all();
+        $data = Informasi::latest()->get();
         return view('kader.informasi.index', compact('data'));
     }
 
     public function create()
     {
         return view('kader.informasi.create');
-        Informasi::create([
-    'judul' => $request->judul,
-    'angka' => $request->angka
-]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required',
-            'angka' => 'required|numeric'
+            'judul' => 'required|in:Jumlah Balita,Balita Stunting,Jumlah Posyandu,Jumlah Kader'
         ]);
 
-        Informasi::create($request->all());
+        $angka = 0;
+
+        if ($request->judul === 'Jumlah Posyandu') {
+            // Untuk Jumlah Posyandu → ambil dari input manual
+            $request->validate(['angka' => 'required|numeric']);
+            $angka = $request->angka;
+        } 
+        else {
+            // Untuk yang lain → hitung otomatis
+            switch ($request->judul) {
+                case 'Jumlah Balita':
+                    $angka = Balita::count();
+                    break;
+
+                case 'Balita Stunting':
+                    $angka = Balita::get()->filter(fn($b) => $b->kondisi === 'Stunting')->count();
+                    break;
+
+                case 'Jumlah Kader':
+                    $angka = User::where('role', 'kader')->count();
+                    break;
+            }
+        }
+
+        Informasi::create([
+            'judul' => $request->judul,
+            'angka' => $angka,
+        ]);
 
         return redirect()->route('kader.informasi.index')
-            ->with('success', 'Data berhasil ditambahkan');
+                        ->with('success', 'Informasi berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        $data = Informasi::findOrFail($id);
-        return view('kader.informasi.edit', compact('data'));
+        $informasi = Informasi::findOrFail($id);
+        return view('kader.informasi.edit', compact('informasi'));
     }
 
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'angka' => 'required|numeric'
-    ]);
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'angka' => 'required|numeric'
+        ]);
 
-    $data = Informasi::findOrFail($id);
+        $informasi = Informasi::findOrFail($id);
+        $informasi->update([
+            'angka' => $request->angka
+        ]);
 
-    $data->update([
-        'angka' => $request->angka
-    ]);
-
-    return redirect()->route('kader.informasi.index')
-        ->with('success', 'Data berhasil diupdate');
-}
+        return redirect()->route('kader.informasi.index')
+                         ->with('success', 'Data informasi berhasil diupdate');
+    }
 
     public function destroy($id)
     {
-        $data = Informasi::findOrFail($id);
-        $data->delete();
+        Informasi::findOrFail($id)->delete();
 
         return redirect()->route('kader.informasi.index')
-            ->with('success', 'Data berhasil dihapus');
+                         ->with('success', 'Informasi berhasil dihapus');
     }
 }

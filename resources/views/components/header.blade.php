@@ -17,11 +17,11 @@
 
         <!-- MENU -->
         <nav class="menu">
-            <a href="#tentang" class="nav-btn">Tentang</a>
-            <a href="#informasi" class="nav-btn">Informasi</a>
-            <a href="#layanan" class="nav-btn">Layanan</a>
-            <a href="#pencegahan" class="nav-btn">Pencegahan</a>
-            <a href="#galeri" class="nav-btn">Galeri</a>
+            <a href="{{ route('kader.tentang.index') }}" class="nav-btn">Tentang</a>
+            <a href="{{ route('kader.informasi.index') }}" class="nav-btn">Informasi</a>
+            <a href="{{ route('kader.layanan.index') }}" class="nav-btn">Layanan</a>
+            <a href="{{ route('kader.pencegahan.index') }}" class="nav-btn">Pencegahan</a>
+            <a href="{{ route('kader.galeri.index') }}" class="nav-btn">Galeri</a>
 
             <a href="/login" class="nav-btn login-btn">Login</a>
         </nav>
