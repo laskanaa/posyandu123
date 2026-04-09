@@ -6,22 +6,21 @@
 
     <div class="container">
 
+<<<<<<< Updated upstream
+=======
+        <!-- TOPBAR -->
+>>>>>>> Stashed changes
         <div class="topbar">
-
             <h3>Edit Data Balita</h3>
-
             <a href="{{ route('balita.index') }}" class="btn-back">
                 ← Kembali
             </a>
-
         </div>
-
 
         <form action="{{ route('balita.update', $balita->id) }}" method="POST">
 
             @csrf
             @method('PUT')
-
 
             <!-- BIODATA -->
             <div class="card-form">
@@ -52,19 +51,14 @@
 
                     <div class="form-group">
                         <label>Jenis Kelamin</label>
-
                         <select name="jenis_kelamin">
-
                             <option value="L" {{ $balita->jenis_kelamin == 'L' ? 'selected' : '' }}>
                                 Laki-laki
                             </option>
-
                             <option value="P" {{ $balita->jenis_kelamin == 'P' ? 'selected' : '' }}>
                                 Perempuan
                             </option>
-
                         </select>
-
                     </div>
 
                     <div class="form-group">
@@ -76,14 +70,17 @@
 
             </div>
 
-
-
             <!-- PENIMBANGAN -->
             <div class="card-form">
 
                 <h4>Tambah Penimbangan Baru</h4>
 
                 <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Tanggal Penimbangan</label>
+                        <input type="date" name="tanggal_penimbangan" required>
+                    </div>
 
                     <div class="form-group">
                         <label>Berat Badan (kg)</label>
@@ -105,7 +102,7 @@
                         <input type="text" name="lika" required oninput="formatAngka(this)">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group full">
                         <label>Pesan dari Kader</label>
                         <textarea name="pesan" rows="3"
                             placeholder="Isi pesan untuk orang tua...">{{ old('pesan', $penimbangan->pesan ?? '') }}</textarea>
@@ -115,29 +112,26 @@
 
             </div>
 
-
             <button type="submit" class="btn-save">
                 Simpan Perubahan
             </button>
 
         </form>
-        ```
 
     </div>
 
     <script>
         function formatAngka(input) {
-            // hanya angka + koma + titik
             input.value = input.value.replace(/[^0-9.,]/g, '');
-
-            // ubah koma jadi titik
             input.value = input.value.replace(',', '.');
         }
     </script>
 
 @endsection
 
+
 <style>
+    /* CONTAINER */
     .container {
         max-width: 1000px;
         margin: auto;
@@ -145,11 +139,14 @@
         font-family: sans-serif;
     }
 
+    /* TOPBAR */
     .topbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .btn-back {
@@ -160,6 +157,7 @@
         text-decoration: none;
     }
 
+    /* CARD */
     .card-form {
         background: white;
         padding: 25px;
@@ -173,15 +171,27 @@
         color: #0d4f4d;
     }
 
+    /* GRID */
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
     }
 
+    /* FULL WIDTH */
+    .form-group.full {
+        grid-column: span 2;
+    }
+
+    /* INPUT */
     .form-group {
         display: flex;
         flex-direction: column;
+    }
+
+    .form-group label {
+        margin-bottom: 5px;
+        font-weight: 500;
     }
 
     .form-group input,
@@ -192,6 +202,7 @@
         border-radius: 6px;
     }
 
+    /* BUTTON */
     .btn-save {
         background: #0d4f4d;
         color: white;
@@ -199,5 +210,41 @@
         padding: 12px 25px;
         border-radius: 8px;
         cursor: pointer;
+        width: 100%;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:768px) {
+
+        .container {
+            padding: 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+            /* 🔥 jadi 1 kolom */
+        }
+
+        .form-group.full {
+            grid-column: span 1;
+        }
+
+        .btn-save {
+            width: 100%;
+        }
+
+    }
+
+    @media(max-width:480px) {
+
+        .topbar h3 {
+            font-size: 18px;
+        }
+
+        .btn-back {
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+
     }
 </style>

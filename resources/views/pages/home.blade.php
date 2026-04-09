@@ -4,8 +4,7 @@
 
 @section('content')
 
-    <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap)"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         .homepage {
@@ -15,7 +14,7 @@
 
         /* HERO */
         .hero-slider {
-            height: 100vh
+            height: 100vh;
         }
 
         .carousel-item {
@@ -74,7 +73,7 @@
         .container-home {
             max-width: 1400px;
             margin: auto;
-            padding: 0 40px;
+            padding: 0 20px;
         }
 
         /* TITLE */
@@ -95,14 +94,15 @@
             display: flex;
             align-items: center;
             gap: 60px;
+            flex-wrap: wrap;
         }
 
         .tentang-img {
             flex: 1;
+            min-width: 300px;
             height: 380px;
             border-radius: 20px;
             overflow: hidden;
-
             opacity: 0;
             transform: translateX(-80px);
             transition: .9s;
@@ -121,11 +121,11 @@
 
         .tentang-text {
             flex: 1;
+            min-width: 300px;
             font-size: 15px;
             line-height: 1.8;
             color: #475569;
             text-align: center;
-
             opacity: 0;
             transform: translateX(80px);
             transition: .9s;
@@ -153,12 +153,9 @@
             padding: 35px;
             border-radius: 16px;
             text-align: center;
-
             opacity: 0;
             transform: translateY(60px);
-
             transition: .6s;
-
             box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
         }
 
@@ -194,18 +191,13 @@
         .layanan-card {
             width: 100%;
             max-width: 220px;
-
             background: white;
             padding: 28px 16px;
-
             border-radius: 16px;
             text-align: center;
-
             opacity: 0;
             transform: translateY(60px);
-
             transition: all .5s ease;
-
             box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
         }
 
@@ -236,7 +228,7 @@
             font-size: 14px;
         }
 
-        /* SPM (Standard Pelayanan Minimal) */
+        /* SPM */
         .spm-section {
             padding: 110px 0;
         }
@@ -252,12 +244,9 @@
             padding: 32px;
             border-radius: 16px;
             text-align: center;
-
             opacity: 0;
             transform: translateX(-60px);
-
             transition: .6s;
-
             box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
         }
 
@@ -287,8 +276,7 @@
         .spm-card h3 {
             font-size: 16px;
             font-weight: 600;
-            margin-top: 8px;
-            margin-bottom: 6px;
+            margin: 8px 0 6px;
             color: #0f172a;
         }
 
@@ -298,7 +286,42 @@
             color: #64748b;
         }
 
-        /* Galeri */
+        /* PENCEGAHAN */
+        .pencegahan-section {
+            padding: 80px 0;
+        }
+
+        .pencegahan-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .pencegahan-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: .6s;
+        }
+
+        .pencegahan-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pencegahan-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        /* GALERI */
         .galeri-wrapper {
             position: relative;
             display: flex;
@@ -308,7 +331,7 @@
         .galeri-slider {
             display: flex;
             gap: 20px;
-            overflow: hidden;
+            overflow-x: auto;
             scroll-behavior: smooth;
             width: 100%;
         }
@@ -326,7 +349,6 @@
             border-radius: 12px;
         }
 
-        /* NAV BUTTON */
         .galeri-nav {
             position: absolute;
             top: 50%;
@@ -350,7 +372,6 @@
             right: -15px;
         }
 
-        /* BUTTON */
         .galeri-btn {
             text-align: center;
             margin-top: 40px;
@@ -385,6 +406,10 @@
             .tentang-wrapper {
                 flex-direction: column;
             }
+
+            .pencegahan-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media(max-width:768px) {
@@ -411,7 +436,7 @@
                     <div class="carousel-inner">
                         @foreach($sliders as $key => $slider)
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                <img src="{{ asset('slider/' . $slider->gambar) }}" class="slider-img">
+                                <img src="{{ asset('storage/slider/' . $slider->gambar) }}">
                                 <div class="slider-overlay"></div>
                                 <div class="slider-caption">
                                     <h1>{{ $slider->judul }}</h1>
@@ -420,18 +445,13 @@
                             </div>
                         @endforeach
                     </div>
-
-                    {{-- 🔥 BUTTON KIRI --}}
                     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon"></span>
                     </button>
-
-                    {{-- 🔥 BUTTON KANAN --}}
                     <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
                         <span class="carousel-control-next-icon"></span>
                     </button>
                 </div>
-            </section>
             </section>
         @endif
 
@@ -480,20 +500,30 @@
                 </div>
             </section>
         @endif
-
         @if($pencegahans->count())
             <section id="pencegahan" class="pencegahan-section">
                 <div class="container-home">
+
                     <h2 class="section-title">Lakukan Pencegahan Stunting</h2>
+
                     <div class="pencegahan-grid">
+
                         @foreach($pencegahans as $item)
                             <div class="pencegahan-card animate">
-                                <div class="pencegahan-icon">{!! $item->icon !!}</div>
+
+                                <div class="icon-box">
+                                    🩺
+                                </div>
+
                                 <h3>{{ $item->judul }}</h3>
+
                                 <p>{{ $item->deskripsi }}</p>
+
                             </div>
                         @endforeach
+
                     </div>
+
                 </div>
             </section>
         @endif
@@ -502,7 +532,6 @@
             <div class="container-home">
                 <h2 class="section-title">Galeri Kegiatan</h2>
                 <div class="galeri-wrapper">
-                    <!-- SLIDER -->
                     <div class="galeri-slider" id="galeriSlider">
                         @foreach($galeri as $item)
                             <div class="galeri-item">
@@ -511,54 +540,34 @@
                         @endforeach
                     </div>
                 </div>
-
-                <!-- BUTTON LIHAT SEMUA -->
                 <div class="galeri-btn">
-                    <a href="{{ route('galeri') }}" class="btn-galeri">
-                        Lihat Semua Galeri →
-                    </a>
+                    <a href="{{ route('galeri') }}" class="btn-galeri">Lihat Semua Galeri →</a>
                 </div>
             </div>
         </section>
-
     </div>
 
     <script>
         function reveal() {
-            let anim = document.querySelectorAll('.animate')
-
-            anim.forEach(el => {
-                let top = el.getBoundingClientRect().top
-                let win = window.innerHeight
-
-                if (top < win - 100) {
-                    el.classList.add("show")
+            document.querySelectorAll('.animate').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                    el.classList.add("show");
                 }
-            })
+            });
         }
+        window.addEventListener("scroll", reveal);
+        reveal();
 
-        window.addEventListener("scroll", reveal)
-        reveal()
-
-        const counters = document.querySelectorAll(".counter")
-
-        counters.forEach(counter => {
-            counter.innerText = '0'
-
+        document.querySelectorAll(".counter").forEach(counter => {
+            counter.innerText = '0';
             const update = () => {
-                const target = +counter.getAttribute("data-target")
-                const c = +counter.innerText
-                const inc = target / 100
-
-                if (c < target) {
-                    counter.innerText = Math.ceil(c + inc)
-                    setTimeout(update, 20)
-                } else {
-                    counter.innerText = target
-                }
+                const target = +counter.getAttribute("data-target");
+                const c = +counter.innerText;
+                const inc = target / 100;
+                if (c < target) { counter.innerText = Math.ceil(c + inc); setTimeout(update, 20); } else { counter.innerText = target; }
             }
-            update()
-        })
+            update();
+        });
     </script>
 
 @endsection

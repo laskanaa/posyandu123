@@ -9,14 +9,19 @@ use App\Models\StandarWhoTbu;
 class Balita extends Model
 {
     protected $fillable = [
-        'nama', 'nik', 'tempat_lahir', 'tanggal_lahir', 
-        'nama_ibu', 'jenis_kelamin', 'user_id'
+        'nama',
+        'nik',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'nama_ibu',
+        'jenis_kelamin',
+        'user_id'
     ];
 
-    // ← INI YANG PENTING (supaya accessor kondisi aktif)
+    // accessor otomatis
     protected $appends = ['kondisi', 'umur_bulan'];
 
-    // Relasi
+    // ================= RELASI =================
     public function penimbangans()
     {
         return $this->hasMany(Penimbangan::class);
@@ -27,44 +32,57 @@ class Balita extends Model
         return $this->belongsTo(User::class);
     }
 
-    // ================== KONDISI OTOMATIS ==================
-    public function getKondisiAttribute()
-    {
-        $penimbanganTerbaru = $this->penimbangans()->latest()->first();
-
-        if (!$penimbanganTerbaru || $this->umur_bulan < 3) {
-            return 'Belum dihitung';
-        }
-
-        $tinggi = $penimbanganTerbaru->tinggi_badan;
-        $umur   = floor($this->umur_bulan);
-        $jk     = $this->jenis_kelamin;
-
-        $standar = StandarWhoTbu::where('jenis_kelamin', $jk)
-                    ->where('umur_bulan', '<=', $umur)
-                    ->orderBy('umur_bulan', 'desc')
-                    ->first();
-
-        if (!$standar) {
-            $standar = StandarWhoTbu::where('jenis_kelamin', $jk)
-                        ->orderBy('umur_bulan', 'asc')
-                        ->first();
-        }
-
-        if (!$standar) {
-            return 'Belum dihitung';
-        }
-
-        if ($tinggi < $standar->minus_3sd) return 'Stunting Berat';
-        if ($tinggi < $standar->minus_2sd) return 'Stunting';
-        if ($tinggi > $standar->plus_2sd) return 'Tinggi';
-        return 'Normal';
-    }
-
+    // ================= UMUR (BULAN) =================
     public function getUmurBulanAttribute()
     {
         $lahir = Carbon::parse($this->tanggal_lahir);
-        $umurHari = $lahir->diffInDays(Carbon::now());
-        return round($umurHari / 30.4375 * 2) / 2;
+
+        // 🔥 umur dalam bulan (standar WHO)
+        return $lahir->diffInMonths(Carbon::now());
+    }
+
+    // ================= KONDISI OTOMATIS =================
+    public function getKondisiAttribute()
+    {
+        $penimbangan = $this->penimbangans()->latest()->first();
+
+        // kalau belum ada data
+        if (!$penimbangan) {
+            return 'Belum dihitung';
+        }
+
+        // 🔥 pakai BERAT BADAN (sesuai grafik kamu)
+        $nilai = $penimbangan->berat_badan;
+
+        // 🔥 ambil umur (dibulatkan & dibatasi)
+        $umur = round($this->umur_bulan);
+        $umur = min($umur, 60);
+
+        $jk = $this->jenis_kelamin;
+
+        // 🔥 ambil standar WHO sesuai umur & gender
+        $standar = StandarWhoTbu::where('jenis_kelamin', $jk)
+            ->where('umur_bulan', $umur)
+            ->first();
+
+        if (!$standar) {
+            return 'Belum dihitung';
+        }
+
+        // ================= LOGIKA WHO =================
+
+        if ($nilai < $standar->minus_3sd) {
+            return 'Stunting Berat';
+        }
+
+        if ($nilai < $standar->minus_2sd) {
+            return 'Stunting';
+        }
+
+        if ($nilai > $standar->plus_2sd) {
+            return 'Tinggi';
+        }
+
+        return 'Normal';
     }
 }

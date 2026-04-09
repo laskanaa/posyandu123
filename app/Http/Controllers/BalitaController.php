@@ -162,21 +162,23 @@ class BalitaController extends Controller
                          ->with('success', 'Data balita berhasil ditambahkan');
     }
 
-    // =========================
-    // SHOW
-    // =========================
-    public function show($id)
-    {
-        $balita = Balita::with([
-            'user',
-            'penimbangans' => function($q){
-                $q->orderBy('tanggal_penimbangan','asc');
-            }
-        ])->findOrFail($id);
+// =========================
+// SHOW
+// =========================
+public function show($id)
+{
+    $balita = Balita::with([
+        'user',
+        'penimbangans' => function($q){
+            $q->orderBy('tanggal_penimbangan','asc');
+        }
+    ])->findOrFail($id);
 
-        return view('kader.balita.show', compact('balita'));
-    }
+    // 🔥 SAMAKAN NAMA DENGAN BLADE
+    $whoData = StandarWhoTbu::orderBy('umur_bulan')->get();
 
+    return view('kader.balita.show', compact('balita', 'whoData'));
+}
     // =========================
     // DELETE
     // =========================

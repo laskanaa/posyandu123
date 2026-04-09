@@ -20,12 +20,16 @@ class PencegahanController extends Controller
         return view('kader.pencegahan.create');
     }
 
-    public function store(Request $request)
-    {
-        Pencegahan::create($request->all());
-        return redirect()->route('kader.pencegahan.index')
-            ->with('success','Data berhasil ditambah');
-    }
+public function store(Request $request)
+{
+    Pencegahan::create([
+        'judul' => $request->judul,
+        'deskripsi' => $request->deskripsi ?? '', // kasih default kosong
+    ]);
+
+    return redirect()->route('kader.pencegahan.index')
+        ->with('success','Data berhasil ditambah');
+}
 
     public function edit($id)
     {

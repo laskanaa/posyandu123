@@ -6,7 +6,9 @@
 
     <div class="wrapper">
 
-        @include('partials.sidebar_kader')
+        <div class="sidebar" id="sidebar">
+            @include('partials.sidebar_kader')
+        </div>
 
         <div class="main">
 

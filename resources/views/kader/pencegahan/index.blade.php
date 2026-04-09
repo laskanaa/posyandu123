@@ -7,7 +7,9 @@
     <div class="wrapper">
 
         <!-- SIDEBAR -->
-        @include('partials.sidebar_kader')
+        <div class="sidebar" id="sidebar">
+            @include('partials.sidebar_kader')
+        </div>
 
         <!-- MAIN -->
         <div class="main">
@@ -28,49 +30,31 @@
             <div class="card-table">
 
                 <table>
-
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Logo</th>
                             <th>Judul</th>
-                            <th>Deskripsi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
 
                     <tbody>
-
                         @foreach($pencegahans as $pencegahan)
-
                             <tr>
-
                                 <td>{{ $loop->iteration }}</td>
-
-                                <td class="logo">{{ $pencegahan->icon }}</td>
-
                                 <td>{{ $pencegahan->judul }}</td>
-
-                                <td>{{ $pencegahan->deskripsi }}</td>
-
                                 <td class="aksi">
+                                    <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit">Edit</a>
 
-                                    <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit">
-                                        Edit
-                                    </a>
-
-                                    <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}" method="POST">
+                                    <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}" method="POST"
+                                        style="display:inline">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn-delete">Hapus</button>
                                     </form>
-
                                 </td>
-
                             </tr>
-
                         @endforeach
-
                     </tbody>
 
                 </table>
@@ -84,7 +68,6 @@
     <div class="overlay" id="overlay"></div>
 
     <script>
-
         const toggle = document.getElementById("toggleSidebar");
         const sidebar = document.getElementById("sidebar");
         const overlay = document.getElementById("overlay");
@@ -98,11 +81,9 @@
             sidebar.classList.remove("active");
             overlay.classList.remove("active");
         }
-
     </script>
 
 @endsection
-
 
 <style>
     .wrapper {
@@ -181,11 +162,6 @@
     table td {
         padding: 12px;
         border-bottom: 1px solid #eee;
-    }
-
-    .logo {
-        font-size: 30px;
-        text-align: center;
     }
 
     .aksi {

@@ -1,4 +1,3 @@
-<div class="sidebar" id="sidebar">
 
     <h2>Admin Kader</h2>
 
@@ -45,7 +44,6 @@
 
     </ul>
 
-</div>
 
 
 <style>

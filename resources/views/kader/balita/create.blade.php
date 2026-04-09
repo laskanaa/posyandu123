@@ -13,11 +13,8 @@
             @csrf
 
             <!-- BIODATA -->
-
             <div class="card-form">
-
                 <h4>Biodata Balita</h4>
-
                 <div class="form-grid">
 
                     <div class="form-group">
@@ -55,13 +52,11 @@
                     </div>
 
                 </div>
-
             </div>
 
+            <!-- PENIMBANGAN -->
             <div class="card-form">
-
                 <h4>Penimbangan Pertama</h4>
-
                 <div class="form-grid">
 
                     <div class="form-group">
@@ -83,70 +78,99 @@
                         <label>LIKA (cm)</label>
                         <input type="text" name="lika" required oninput="formatAngka(this)">
                     </div>
-                </div>
 
+                </div>
             </div>
 
-            <button type="submit" class="btn-save">
-                Simpan Data Balita
-            </button>
+            <button type="submit" class="btn-save">Simpan Data Balita</button>
 
         </form>
-
     </div>
 
     <script>
         function formatAngka(input) {
             // hanya angka + koma + titik
             input.value = input.value.replace(/[^0-9.,]/g, '');
-
             // ubah koma jadi titik
             input.value = input.value.replace(',', '.');
         }
     </script>
 
+    <style>
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 40px 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        h3 {
+            margin-bottom: 30px;
+        }
+
+        h4 {
+            margin-bottom: 20px;
+        }
+
+        /* CARD */
+        .card-form {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* GRID FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* BUTTON */
+        .btn-save {
+            background: #0d4f4d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-save:hover {
+            background: #0b3c3b;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+
 @endsection
-
-<style>
-    .container {
-        max-width: 900px;
-        margin: auto;
-        padding: 40px;
-        font-family: sans-serif;
-    }
-
-    .card-form {
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .form-group input,
-    .form-group select {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-
-    .btn-save {
-        background: #0d4f4d;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-</style>

@@ -5,7 +5,9 @@
 @section('content')
     <div class="wrapper">
 
-        @include('partials.sidebar_kader')
+        <div class="sidebar" id="sidebar">
+            @include('partials.sidebar_kader')
+        </div>
 
         <div class="main">
 
@@ -50,7 +52,8 @@
                                 <td>{{ $item->angka }}</td>
                                 <td class="action-buttons">
                                     <a href="{{ route('kader.informasi.edit', $item->id) }}" class="btn btn-edit">Edit</a>
-                                    <form action="{{ route('kader.informasi.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('kader.informasi.destroy', $item->id) }}" method="POST"
+                                        style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-delete" onclick="return confirm('Yakin hapus?')">
@@ -79,31 +82,149 @@
 @endsection
 
 <style>
-    .wrapper { display: flex; min-height: 100vh; background: #f4f6f9; }
-    .sidebar { position: fixed; left: -260px; top: 0; width: 260px; height: 100%; background: #0d4f4d; transition: 0.3s; z-index: 1000; }
-    .sidebar.active { left: 0; }
-    .main { flex: 1; padding: 30px; width: 100%; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .left { display: flex; align-items: center; gap: 10px; }
-    .hamburger { background: #0d4f4d; color: white; border: none; padding: 8px 12px; font-size: 18px; border-radius: 6px; cursor: pointer; }
+    .wrapper {
+        display: flex;
+        min-height: 100vh;
+        background: #f4f6f9;
+    }
 
-    .cards { display: flex; gap: 20px; margin-bottom: 20px; }
-    .card { background: white; padding: 20px; border-radius: 12px; flex: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-    .card p { font-size: 28px; font-weight: bold; color: #0d4f4d; }
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        width: 260px;
+        height: 100%;
+        background: #0d4f4d;
+        transition: 0.3s;
+        z-index: 1000;
+    }
 
-    .table-container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-    .table-actions { display: flex; justify-content: space-between; margin-bottom: 15px; }
-    .btn-add { padding: 8px 15px; background: #0d4f4d; color: white; border-radius: 6px; text-decoration: none; }
+    .sidebar.active {
+        left: 0;
+    }
 
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #ddd; padding: 12px; }
-    th { background: #0d4f4d; color: white; }
+    .main {
+        flex: 1;
+        padding: 30px;
+        width: 100%;
+    }
 
-    .action-buttons { display: flex; gap: 6px; }
-    .btn { padding: 6px 10px; border-radius: 6px; font-size: 13px; color: white; text-decoration: none; border: none; cursor: pointer; }
-    .btn-edit { background: #f1c40f; color: #333; }
-    .btn-delete { background: #e74c3c; }
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
 
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 900; }
-    .overlay.active { display: block; }
+    .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .hamburger {
+        background: #0d4f4d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        font-size: 18px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .cards {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        flex: 1;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .card p {
+        font-size: 28px;
+        font-weight: bold;
+        color: #0d4f4d;
+    }
+
+    .table-container {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .table-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .btn-add {
+        padding: 8px 15px;
+        background: #0d4f4d;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 12px;
+    }
+
+    th {
+        background: #0d4f4d;
+        color: white;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 6px;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: white;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-edit {
+        background: #f1c40f;
+        color: #333;
+    }
+
+    .btn-delete {
+        background: #e74c3c;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+        z-index: 900;
+    }
+
+    .overlay.active {
+        display: block;
+    }
 </style>

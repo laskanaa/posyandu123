@@ -7,22 +7,22 @@
     <div class="wrapper">
 
         <!-- SIDEBAR -->
-        @include('partials.sidebar_kader')
+        <div class="sidebar" id="sidebar">
+            @include('partials.sidebar_kader')
+        </div>
 
         <!-- MAIN -->
         <div class="main">
 
             <div class="topbar">
-
                 <div class="left">
                     <button id="toggleSidebar" class="hamburger">☰</button>
                     <h3>Data Balita</h3>
                 </div>
-
                 <span>Selamat Datang, Kader 👋</span>
-
             </div>
 
+            <!-- CARD -->
             <div class="cards">
                 <div class="card">
                     <h4>Total Balita</h4>
@@ -30,10 +30,10 @@
                 </div>
             </div>
 
+            <!-- TABLE -->
             <div class="table-container">
 
                 <div class="table-actions">
-
                     <a href="{{ route('balita.create') }}" class="btn-add">
                         + Tambah Balita
                     </a>
@@ -43,90 +43,76 @@
                             value="{{ request('search') }}">
                         <button type="submit">Cari</button>
                     </form>
-
                 </div>
 
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Balita</th>
-                            <th>NIK</th>
-                            <th>Umur</th>
-                            <th>Nama Ibu</th>
-                            <th>Kondisi</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        @foreach($balitas as $index => $balita)
-
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
                             <tr>
-
-                                <td>{{ $index + 1 }}</td>
-
-                                <td>{{ $balita->nama }}</td>
-
-                                <td>{{ $balita->nik }}</td>
-
-                                <td>
-                                    @php
-                                        $tanggalLahir = \Carbon\Carbon::parse($balita->tanggal_lahir);
-                                        $umurBulan = $tanggalLahir->diffInDays(\Carbon\Carbon::now()) / 30;
-                                        $umurBulan = round($umurBulan * 2) / 2;
-                                    @endphp
-
-                                    {{ $umurBulan }} Bulan
-                                </td>
-
-                                <td>{{ $balita->nama_ibu }}</td>
-
-                                <td>{{ $balita->kondisi }}</td>
-
-                                <td class="action-buttons">
-
-                                    <a href="{{ route('balita.show', $balita->id) }}" class="btn btn-view">Lihat</a>
-
-                                    <a href="{{ route('balita.edit', $balita->id) }}" class="btn btn-edit">Edit</a>
-
-                                    <form action="{{ route('balita.destroy', $balita->id) }}" method="POST">
-
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit" class="btn btn-delete"
-                                            onclick="return confirm('Yakin ingin menghapus data balita ini?')">
-
-                                            Hapus
-
-                                        </button>
-
-                                    </form>
-
-                                </td>
-
+                                <th>No</th>
+                                <th>Nama Balita</th>
+                                <th>NIK</th>
+                                <th>Umur</th>
+                                <th>Nama Ibu</th>
+                                <th>Kondisi</th>
+                                <th>Aksi</th>
                             </tr>
+                        </thead>
 
-                        @endforeach
+                        <tbody>
+                            @foreach($balitas as $index => $balita)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $balita->nama }}</td>
+                                    <td>{{ $balita->nik }}</td>
 
-                    </tbody>
+                                    <td>
+                                        @php
+                                            $tanggalLahir = \Carbon\Carbon::parse($balita->tanggal_lahir);
+                                            $umurBulan = $tanggalLahir->diffInDays(now()) / 30;
+                                            $umurBulan = round($umurBulan * 2) / 2;
+                                        @endphp
+                                        {{ $umurBulan }} Bulan
+                                    </td>
 
-                </table>
+                                    <td>{{ $balita->nama_ibu }}</td>
+
+                                    <td>
+                                        <span
+                                            class="{{ $balita->kondisi == 'Stunting' ? 'status-stunting' : 'status-normal' }}">
+                                            {{ $balita->kondisi }}
+                                        </span>
+                                    </td>
+
+                                    <td class="action-buttons">
+                                        <a href="{{ route('balita.show', $balita->id) }}" class="btn btn-view">Lihat</a>
+                                        <a href="{{ route('balita.edit', $balita->id) }}" class="btn btn-edit">Edit</a>
+
+                                        <form action="{{ route('balita.destroy', $balita->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="btn btn-delete"
+                                                onclick="return confirm('Yakin ingin menghapus data balita ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 
         </div>
-        ```
-
     </div>
 
     <div class="overlay" id="overlay"></div>
 
     <script>
-
         const toggle = document.getElementById("toggleSidebar");
         const sidebar = document.getElementById("sidebar");
         const overlay = document.getElementById("overlay");
@@ -140,12 +126,13 @@
             sidebar.classList.remove("active");
             overlay.classList.remove("active");
         }
-
     </script>
 
 @endsection
 
+
 <style>
+    /* LAYOUT */
     .wrapper {
         display: flex;
         min-height: 100vh;
@@ -153,6 +140,7 @@
         background: #f4f6f9;
     }
 
+    /* SIDEBAR */
     .sidebar {
         position: fixed;
         left: -260px;
@@ -168,12 +156,14 @@
         left: 0;
     }
 
+    /* MAIN */
     .main {
         flex: 1;
         padding: 30px;
         width: 100%;
     }
 
+    /* TOPBAR */
     .topbar {
         display: flex;
         justify-content: space-between;
@@ -197,6 +187,7 @@
         cursor: pointer;
     }
 
+    /* CARD */
     .cards {
         display: flex;
         gap: 20px;
@@ -208,7 +199,6 @@
         padding: 20px;
         border-radius: 12px;
         flex: 1;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     }
 
     .card p {
@@ -217,17 +207,19 @@
         color: #0d4f4d;
     }
 
+    /* TABLE */
     .table-container {
         background: white;
         padding: 20px;
         border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     }
 
     .table-actions {
         display: flex;
         justify-content: space-between;
         margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .btn-add {
@@ -257,15 +249,22 @@
         border-radius: 6px;
     }
 
+    /* TABLE WRAPPER */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 700px;
+        /* 🔥 penting biar ga hancur di mobile */
     }
 
     th,
     td {
         border: 1px solid #ddd;
-        padding: 12px;
+        padding: 10px;
     }
 
     th {
@@ -273,9 +272,11 @@
         color: white;
     }
 
+    /* ACTION */
     .action-buttons {
         display: flex;
-        gap: 6px;
+        flex-wrap: wrap;
+        gap: 5px;
     }
 
     .btn {
@@ -283,7 +284,6 @@
         border-radius: 6px;
         font-size: 13px;
         color: white;
-        text-decoration: none;
         border: none;
         cursor: pointer;
     }
@@ -294,13 +294,14 @@
 
     .btn-edit {
         background: #f1c40f;
-        color: #333;
+        color: black;
     }
 
     .btn-delete {
         background: #e74c3c;
     }
 
+    /* STATUS */
     .status-stunting {
         color: red;
         font-weight: bold;
@@ -311,6 +312,7 @@
         font-weight: bold;
     }
 
+    /* OVERLAY */
     .overlay {
         position: fixed;
         top: 0;
@@ -324,5 +326,29 @@
 
     .overlay.active {
         display: block;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:768px) {
+
+        .main {
+            padding: 15px;
+        }
+
+        .cards {
+            flex-direction: column;
+        }
+
+        .topbar span {
+            display: none;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        .search-form input {
+            flex: 1;
+        }
     }
 </style>

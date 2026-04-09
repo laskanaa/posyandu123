@@ -14,7 +14,7 @@ public function up(): void
     Schema::create('layanans', function (Blueprint $table) {
         $table->id();
         $table->string('judul');
-        $table->text('deskripsi');
+        $table->text('deskripsi')->nullable();
         $table->string('icon');
         $table->timestamps();
     });

@@ -13,7 +13,6 @@ public function up(): void
 {
     Schema::create('pencegahans', function (Blueprint $table) {
         $table->id();
-        $table->string('judul');
         $table->text('deskripsi');
         $table->timestamps();
     });

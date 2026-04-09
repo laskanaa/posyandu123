@@ -5,13 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class pencegahan extends Model
+class Pencegahan extends Model
 {
     use HasFactory;
 
-protected $fillable = [
-    'icon',
-    'judul',
-    'deskripsi'
-];
+    protected $fillable = ['judul', 'deskripsi']; // jangan ada koma kosong
 }
