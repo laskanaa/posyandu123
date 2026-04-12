@@ -4,107 +4,91 @@
 
 @section('content')
 
-    <div class="dashboard-container">
+    <div class="form-container">
 
-        {{-- SIDEBAR --}}
-        @include('partials.sidebar_kader')
+        <div class="form-card">
+            <h3>Tambah Layanan</h3>
 
-        <div class="main-content">
+            <form action="{{ route('kader.layanan.store') }}" method="POST">
+                @csrf
 
-            {{-- HEADER --}}
-            <div class="topbar">
-                <div class="topbar-left">
-                    <button class="hamburger" onclick="toggleSidebar()">☰</button>
-                    <h3>Tambah Layanan</h3>
+                <div class="form-group">
+                    <label>Pilih Layanan</label>
+                    <select id="layananSelect" onchange="setLayananData()">
+                        <option value="">-- Pilih --</option>
+                        <option value="penimbangan">⚖️ Penimbangan</option>
+                        <option value="imunisasi">💉 Imunisasi</option>
+                    </select>
                 </div>
-            </div>
 
-            {{-- FORM CARD --}}
-            <div class="card-form">
-                <form action="{{ route('kader.layanan.store') }}" method="POST">
-                    @csrf
+                <div class="form-group">
+                    <label>Icon</label>
+                    <input type="text" id="icon" name="icon" readonly>
+                </div>
 
-                    <div class="form-grid">
+                <div class="form-group">
+                    <label>Judul</label>
+                    <input type="text" id="judul" name="judul" readonly>
+                </div>
 
-                        <div class="form-group">
-                            <label>Pilih Layanan</label>
-                            <select id="layananSelect" onchange="setLayananData()" required>
-                                <option value="">-- Pilih Layanan --</option>
-                                <option value="penimbangan">⚖️ Penimbangan Berat Badan</option>
-                                <option value="pengukuran">📏 Pengukuran Tinggi Badan</option>
-                                <option value="imunisasi">💉 Imunisasi</option>
-                                <option value="pmt">🥣 PMT</option>
-                                <option value="vitamin">💊 Vitamin A</option>
-                                <option value="kb">🍼 KB</option>
-                                <option value="konseling">🩺 Konseling</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Icon</label>
-                            <input type="text" id="icon" name="icon" readonly class="locked-input">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Judul Layanan</label>
-                            <input type="text" id="judul" name="judul" readonly class="locked-input">
-                        </div>
-                    </div>
-
-                    <button class="btn-save">Simpan Layanan</button>
-
-                </form>
-            </div>
-
+                <button class="btn-save">Simpan</button>
+            </form>
         </div>
 
     </div>
 
-    {{-- SCRIPT --}}
-    <script>
-        function setLayananData() {
-            const select = document.getElementById('layananSelect').value
-            const icon = document.getElementById('icon')
-            const judul = document.getElementById('judul')
-
-            switch (select) {
-                case 'penimbangan':
-                    icon.value = '⚖️'
-                    judul.value = 'Penimbangan Berat Badan'
-                    break
-                case 'pengukuran':
-                    icon.value = '📏'
-                    judul.value = 'Pengukuran Tinggi Badan'
-                    break
-                case 'imunisasi':
-                    icon.value = '💉'
-                    judul.value = 'Imunisasi'
-                    break
-                case 'pmt':
-                    icon.value = '🥣'
-                    judul.value = 'Pemberian Makanan Tambahan (PMT)'
-                    break
-                case 'vitamin':
-                    icon.value = '💊'
-                    judul.value = 'Vitamin A'
-                    break
-                case 'kb':
-                    icon.value = '🍼'
-                    judul.value = 'KB'
-                    break
-                case 'konseling':
-                    icon.value = '🩺'
-                    judul.value = 'Konseling Kesehatan'
-                    break
-                default:
-                    icon.value = ''
-                    judul.value = ''
-            }
-        }
-
-        function toggleSidebar() {
-            document.querySelector('.sidebar').classList.toggle('active')
-        }
-    </script>
-
 @endsection
+
+<style>
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 90vh;
+        background: #f4f6fb;
+    }
+
+    .form-card {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    input,
+    select {
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-save {
+        background: #0d4f4d;
+        color: white;
+        padding: 10px;
+        border-radius: 6px;
+        width: 100%;
+    }
+</style>
+
+<script>
+    function setLayananData() {
+        let val = document.getElementById('layananSelect').value
+
+        if (val === 'penimbangan') {
+            icon.value = '⚖️'
+            judul.value = 'Penimbangan'
+        } else if (val === 'imunisasi') {
+            icon.value = '💉'
+            judul.value = 'Imunisasi'
+        }
+    }
+</script>

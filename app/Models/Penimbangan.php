@@ -13,7 +13,8 @@ protected $fillable = [
     'berat_badan',
     'tinggi_badan',
     'lila',
-    'lika'
+    'lika',
+    'pesan'
 ];
 
 protected $casts = [

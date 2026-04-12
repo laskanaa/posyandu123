@@ -26,9 +26,10 @@
                             <td>{{ $balita->nik }}</td>
                         </tr>
                         <tr>
-                            <th>Tempat, Tanggal Lahir</th>
+                            <th>TTL</th>
                             <td>{{ $balita->tempat_lahir }},
-                                {{ \Carbon\Carbon::parse($balita->tanggal_lahir)->format('d M Y') }}</td>
+                                {{ \Carbon\Carbon::parse($balita->tanggal_lahir)->format('d M Y') }}
+                            </td>
                         </tr>
                         <tr>
                             <th>Jenis Kelamin</th>
@@ -45,12 +46,12 @@
                     </table>
                 </div>
 
-                {{-- AKUN ORTU --}}
+                {{-- AKUN --}}
                 <div class="card-box">
                     <div class="card-header akun">Akun Orang Tua</div>
                     <table class="detail-table">
                         <tr>
-                            <th>Email Terdaftar</th>
+                            <th>Email</th>
                             <td>{{ $balita->user->email ?? '-' }}</td>
                         </tr>
                         <tr>
@@ -60,9 +61,10 @@
                     </table>
                 </div>
 
-                {{-- RIWAYAT PENIMBANGAN --}}
+                {{-- RIWAYAT + PESAN --}}
                 <div class="card-box">
                     <div class="card-header riwayat">Riwayat Penimbangan</div>
+
                     <div class="table-wrapper">
                         <table class="riwayat-table">
                             <thead>
@@ -73,8 +75,10 @@
                                     <th>TB</th>
                                     <th>LILA</th>
                                     <th>LIKA</th>
+                                    <th>Pesan Kader</th> {{-- 🔥 --}}
                                 </tr>
                             </thead>
+
                             <tbody>
                                 @forelse($balita->penimbangans as $p)
                                     <tr>
@@ -84,10 +88,24 @@
                                         <td>{{ $p->tinggi_badan }} cm</td>
                                         <td>{{ $p->lila }} cm</td>
                                         <td>{{ $p->lika }} cm</td>
+
+                                        {{-- 🔥 PESAN --}}
+                                        <td class="pesan-cell">
+                                            @if($p->pesan)
+                                                <div class="pesan-box">
+                                                    {{ $p->pesan }}
+                                                </div>
+                                            @else
+                                                <span class="no-pesan">-</span>
+                                            @endif
+                                        </td>
+
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" align="center">Belum ada data penimbangan</td>
+                                        <td colspan="7" align="center">
+                                            Belum ada data penimbangan
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -113,7 +131,6 @@
     </div>
 
     <style>
-        /* LAYOUT UTAMA */
         .dashboard-container {
             width: 100%;
             padding: 20px;
@@ -122,14 +139,12 @@
 
         .main-content {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: auto;
         }
 
-        /* TITLE */
         .page-title {
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 5px;
         }
 
         .page-subtitle {
@@ -137,7 +152,6 @@
             margin-bottom: 25px;
         }
 
-        /* CARD */
         .card-box {
             background: white;
             border-radius: 12px;
@@ -169,7 +183,6 @@
             background: #36b9cc;
         }
 
-        /* TABLE */
         .detail-table,
         .riwayat-table {
             width: 100%;
@@ -179,35 +192,41 @@
         .detail-table th {
             width: 220px;
             background: #f8f9fc;
-            padding: 10px;
-            border: 1px solid #e3e6f0;
-            text-align: left;
         }
 
-        .detail-table td {
+        .detail-table th,
+        .detail-table td,
+        .riwayat-table th,
+        .riwayat-table td {
             padding: 10px;
-            border: 1px solid #e3e6f0;
+            border: 1px solid #ddd;
         }
 
         .riwayat-table th {
             background: #2c3e50;
             color: white;
-            padding: 10px;
-            border: 1px solid #ddd;
         }
 
         .riwayat-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
             text-align: center;
         }
 
-        .riwayat-table tr:hover {
-            background: #f1f4ff;
+        /* 🔥 PESAN STYLE */
+        .pesan-cell {
+            max-width: 220px;
         }
 
-        .table-wrapper {
-            overflow-x: auto;
+        .pesan-box {
+            background: #ecfeff;
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            text-align: left;
+            color: #0f172a;
+        }
+
+        .no-pesan {
+            color: #999;
         }
 
         /* STATUS */
@@ -216,12 +235,10 @@
             color: white;
             padding: 5px 12px;
             border-radius: 20px;
-            font-size: 13px;
         }
 
         /* CHART */
         .chart-box {
-            width: 100%;
             padding: 20px;
         }
 
@@ -229,73 +246,19 @@
             width: 100% !important;
             height: 400px !important;
         }
-
-        /* RESPONSIVE */
-        @media(max-width:1024px) {
-            .chart-box canvas {
-                height: 350px !important;
-            }
-
-            .detail-table th,
-            .detail-table td {
-                font-size: 14px;
-                padding: 8px;
-            }
-
-            .riwayat-table th,
-            .riwayat-table td {
-                font-size: 13px;
-                padding: 8px;
-            }
-        }
-
-        @media(max-width:768px) {
-            .chart-box canvas {
-                height: 300px !important;
-            }
-
-            .page-title {
-                font-size: 1.5rem;
-            }
-
-            .page-subtitle {
-                font-size: 0.9rem;
-            }
-        }
-
-        @media(max-width:480px) {
-            .chart-box canvas {
-                height: 250px !important;
-            }
-
-            .detail-table th,
-            .detail-table td,
-            .riwayat-table th,
-            .riwayat-table td {
-                font-size: 12px;
-                padding: 6px;
-            }
-        }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('js/chart-kms.js') }}"></script>
+
     <script>
-        window.whoData = @json($whoData);
+        window.whoData = @json($whoData ?? []);
 
         renderKMSChart(
             'chartBalita',
-            "{{ strtolower($balita->jenis_kelamin) }}",
-            [
-                @foreach($balita->penimbangans as $p)
-                    {{ $p->berat_badan }},
-                @endforeach
-        ],
-            [
-                @foreach($balita->penimbangans as $p)
-                    "{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('M Y') }}",
-                @endforeach
-        ]
+            "{{ strtolower($balita->jenis_kelamin ?? '') }}",
+            @json($balita->penimbangans ?? []),
+            "{{ $balita->tanggal_lahir ?? '' }}"
         );
     </script>
 

@@ -6,10 +6,7 @@
 
     <div class="container">
 
-<<<<<<< Updated upstream
-=======
         <!-- TOPBAR -->
->>>>>>> Stashed changes
         <div class="topbar">
             <h3>Edit Data Balita</h3>
             <a href="{{ route('balita.index') }}" class="btn-back">

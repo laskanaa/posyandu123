@@ -35,36 +35,41 @@
                     </a>
                 </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Judul</th>
-                            <th>Angka</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($data as $index => $item)
+                <!-- 🔥 TAMBAHAN WRAPPER -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->judul }}</td>
-                                <td>{{ $item->angka }}</td>
-                                <td class="action-buttons">
-                                    <a href="{{ route('kader.informasi.edit', $item->id) }}" class="btn btn-edit">Edit</a>
-                                    <form action="{{ route('kader.informasi.destroy', $item->id) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-delete" onclick="return confirm('Yakin hapus?')">
-                                            Hapus
-                                        </button>
-                                    </form>
-                                </td>
+                                <th>No</th>
+                                <th>Judul</th>
+                                <th>Angka</th>
+                                <th>Aksi</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($data as $index => $item)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->judul }}</td>
+                                    <td>{{ $item->angka }}</td>
+                                    <td class="action-buttons">
+                                        <a href="{{ route('kader.informasi.edit', $item->id) }}" class="btn btn-edit">✏️</a>
+                                        <form action="{{ route('kader.informasi.destroy', $item->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-delete"
+                                                onclick="return confirm('Yakin hapus?')">
+                                                🗑️
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>
@@ -114,6 +119,8 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .left {
@@ -163,6 +170,7 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 15px;
+        flex-wrap: wrap;
     }
 
     .btn-add {
@@ -173,9 +181,15 @@
         text-decoration: none;
     }
 
+    /* 🔥 RESPONSIVE TABLE */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 500px;
     }
 
     th,
@@ -192,6 +206,7 @@
     .action-buttons {
         display: flex;
         gap: 6px;
+        flex-wrap: wrap;
     }
 
     .btn {
@@ -226,5 +241,26 @@
 
     .overlay.active {
         display: block;
+    }
+
+    /* 🔥 MOBILE */
+    @media(max-width:768px) {
+
+        .main {
+            padding: 15px;
+        }
+
+        .cards {
+            flex-direction: column;
+        }
+
+        .topbar span {
+            display: none;
+        }
+
+        .btn-add {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>

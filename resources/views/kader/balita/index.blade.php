@@ -78,27 +78,40 @@
                                     <td>{{ $balita->nama_ibu }}</td>
 
                                     <td>
+                                        @php
+                                            $kondisi = strtolower($balita->kondisi);
+                                        @endphp
+
                                         <span
-                                            class="{{ $balita->kondisi == 'Stunting' ? 'status-stunting' : 'status-normal' }}">
+                                            class="{{ str_contains($kondisi, 'stunting') ? 'status-stunting' : 'status-normal' }}">
                                             {{ $balita->kondisi }}
                                         </span>
                                     </td>
 
                                     <td class="action-buttons">
-                                        <a href="{{ route('balita.show', $balita->id) }}" class="btn btn-view">Lihat</a>
-                                        <a href="{{ route('balita.edit', $balita->id) }}" class="btn btn-edit">Edit</a>
+                                        <a href="{{ route('balita.show', $balita->id) }}" class="btn btn-view">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        <a href="{{ route('balita.edit', $balita->id) }}" class="btn btn-edit">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
 
                                         <form action="{{ route('balita.destroy', $balita->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
 
+                                            <a href="{{ route('balita.download', $balita->id) }}" class="btn btn-download"
+                                                target="_blank">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+
                                             <button type="submit" class="btn btn-delete"
                                                 onclick="return confirm('Yakin ingin menghapus data balita ini?')">
-                                                Hapus
+                                                <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -130,6 +143,7 @@
 
 @endsection
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
     /* LAYOUT */
@@ -214,6 +228,18 @@
         border-radius: 12px;
     }
 
+    .btn i {
+        font-size: 14px;
+    }
+
+    .btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .table-actions {
         display: flex;
         justify-content: space-between;
@@ -258,7 +284,6 @@
         width: 100%;
         border-collapse: collapse;
         min-width: 700px;
-        /* 🔥 penting biar ga hancur di mobile */
     }
 
     th,
@@ -286,6 +311,8 @@
         color: white;
         border: none;
         cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
     }
 
     .btn-view {
@@ -297,18 +324,22 @@
         color: black;
     }
 
+    .btn-download {
+        background: #3498db;
+    }
+
     .btn-delete {
         background: #e74c3c;
     }
 
     /* STATUS */
     .status-stunting {
-        color: red;
+        color: #e74c3c;
         font-weight: bold;
     }
 
     .status-normal {
-        color: green;
+        color: #27ae60;
         font-weight: bold;
     }
 

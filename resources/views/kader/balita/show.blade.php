@@ -6,20 +6,11 @@
 
     <div class="dashboard-container">
 
-        {{-- SIDEBAR --}}
-        <div class="sidebar" id="sidebar">
-            @include('partials.sidebar_kader')
-        </div>
-
-        {{-- MAIN --}}
         <div class="main-content">
 
             {{-- TOPBAR --}}
             <div class="topbar">
-                <div class="left">
-                    <button class="btn-toggle" onclick="toggleSidebar()">☰</button>
-                    <h3>Detail Data Balita</h3>
-                </div>
+                <h3>Detail Data Balita</h3>
                 <a href="{{ route('balita.index') }}" class="btn-back">← Kembali</a>
             </div>
 
@@ -121,23 +112,11 @@
         /* LAYOUT */
         .dashboard-container {
             display: flex;
+            justify-content: center;
         }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 230px;
-            background: #0d4f4d;
-            color: white;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            transition: 0.3s;
-        }
-
-        /* MAIN */
         .main-content {
-            margin-left: 230px;
+            max-width: 1000px;
             width: 100%;
             padding: 20px;
             background: #f4f6f9;
@@ -149,22 +128,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-        }
-
-        .topbar .left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-toggle {
-            background: #0d4f4d;
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
         }
 
         .btn-back {
@@ -247,47 +210,51 @@
             padding: 20px;
         }
 
-        /* RESPONSIVE */
-        @media(max-width:768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 999;
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
+        /* BACKGROUND BIAR LEBIH BAGUS */
+        body {
+            background: #eef2f7;
         }
+
+        const chart=Chart.getChart("chartBalita");
+
+        function downloadPDF() {
+            const image=chart.toBase64Image();
+
+            // kirim ke server
+            const form=document.createElement("form");
+            form.method="POST";
+            form.action="/balita/{{ $balita->id }}/download";
+
+            const csrf=document.createElement("input");
+            csrf.type="hidden";
+            csrf.name="_token";
+            csrf.value="{{ csrf_token() }}";
+
+            const input=document.createElement("input");
+            input.type="hidden";
+            input.name="chart_image";
+            input.value=image;
+
+            form.appendChild(csrf);
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+        
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('js/chart-kms.js') }}"></script>
 
     <script>
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
         window.whoData = @json($whoData);
 
         renderKMSChart(
             'chartBalita',
             "{{ strtolower($balita->jenis_kelamin) }}",
-            [
-                @foreach($balita->penimbangans as $p)
-                    {{ $p->berat_badan }},
-                @endforeach
-            ],
-            [
-                @foreach($balita->penimbangans as $p)
-                    "{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('M Y') }}",
-                @endforeach
-            ]
+            @json($balita->penimbangans),
+            "{{ $balita->tanggal_lahir }}"
         );
     </script>
 

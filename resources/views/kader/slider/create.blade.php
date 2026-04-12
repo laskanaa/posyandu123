@@ -6,7 +6,6 @@
 
     <div class="container">
 
-        ```
         <h3>Tambah Slider</h3>
 
         <form action="{{ route('kader.slider.store') }}" method="POST" enctype="multipart/form-data">
@@ -36,7 +35,6 @@
             </button>
 
         </form>
-        ```
 
     </div>
 
@@ -73,6 +71,7 @@
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 6px;
+        width: 100%;
     }
 
     .btn-save {
@@ -82,5 +81,22 @@
         padding: 12px 25px;
         border-radius: 8px;
         cursor: pointer;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media(max-width:768px) {
+
+        .container {
+            padding: 20px;
+        }
+
+        .card-form {
+            padding: 15px;
+        }
+
+        .btn-save {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>

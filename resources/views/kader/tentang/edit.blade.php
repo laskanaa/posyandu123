@@ -6,15 +6,10 @@
 
     <div class="wrapper">
 
-        @include('partials.sidebar_kader')
-
         <div class="main">
 
             <div class="topbar">
-                <div class="left">
-                    <button id="toggleSidebar" class="hamburger">☰</button>
-                    <h3>Edit Tentang</h3>
-                </div>
+                <h3>Edit Tentang</h3>
             </div>
 
             <form action="{{ route('kader.tentang.update', $tentang->id) }}" method="POST" enctype="multipart/form-data">
@@ -47,10 +42,7 @@
             </form>
 
         </div>
-
     </div>
-
-    <div class="overlay" id="overlay"></div>
 
 @endsection
 
@@ -92,5 +84,11 @@
         border: none;
         border-radius: 8px;
     }
-</style>
 
+    /* RESPONSIVE */
+    @media(max-width:768px) {
+        .main {
+            padding: 15px;
+        }
+    }
+</style>

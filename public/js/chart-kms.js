@@ -1,4 +1,4 @@
-function renderKMSChart(canvasId, gender, dataBalita) {
+function renderKMSChart(canvasId, gender, penimbangans, tanggalLahir) {
 
     const ctx = document.getElementById(canvasId);
 
@@ -7,9 +7,8 @@ function renderKMSChart(canvasId, gender, dataBalita) {
     const boys = { min3: [], min2: [], normal: [], plus2: [], plus3: [] };
     const girls = { min3: [], min2: [], normal: [], plus2: [], plus3: [] };
 
-    // 🔥 mapping dari DB (0–60 bulan)
+    // mapping WHO
     whoData.forEach(item => {
-
         if (item.jenis_kelamin === 'L') {
             boys.min3.push(item.minus_3sd);
             boys.min2.push(item.minus_2sd);
@@ -23,20 +22,26 @@ function renderKMSChart(canvasId, gender, dataBalita) {
             girls.plus2.push(item.plus_2sd);
             girls.plus3.push(item.plus_3sd);
         }
-
     });
 
     const who = (gender === 'l' || gender === 'laki-laki') ? boys : girls;
 
-    // 🔥 bikin -1 SD & +1 SD
-    function mid(a, b) {
-        return a.map((v, i) => (v + b[i]) / 2);
-    }
+    // ================= DATA BALITA =================
+    let dataBalita = new Array(who.min3.length).fill(null);
 
-    who.min1 = mid(who.min2, who.min3);
-    who.plus1 = mid(who.plus2, who.normal);
+    const tglLahir = new Date(tanggalLahir);
 
-    // 🔥 label umur
+    penimbangans.forEach(p => {
+        const tglTimbang = new Date(p.tanggal_penimbangan);
+
+        let umur = (tglTimbang.getFullYear() - tglLahir.getFullYear()) * 12;
+        umur += tglTimbang.getMonth() - tglLahir.getMonth();
+
+        if (umur >= 0 && umur < dataBalita.length) {
+            dataBalita[umur] = p.berat_badan; // bisa diganti tinggi_badan
+        }
+    });
+
     const labels = Array.from({ length: who.min3.length }, (_, i) => i);
 
     new Chart(ctx, {
@@ -45,48 +50,59 @@ function renderKMSChart(canvasId, gender, dataBalita) {
             labels: labels,
             datasets: [
 
-                // AREA WARNA
+                // 🔴 STUNTING BERAT
                 {
+                    label: '-3 SD',
+                    data: who.min3,
+                    borderColor: '#f97316',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                },
+
+                // 🟡 STUNTING
+                {
+                    label: '-2 SD',
                     data: who.min2,
-                    borderWidth: 0,
-                    fill: (ctx) => ctx.chart.data.datasets[0].data.map((_, i) => who.min3[i]),
-                    backgroundColor: 'rgba(255,206,86,0.5)'
+                    borderColor: '#facc15',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
                 },
+
+                // 🟢 NORMAL (MEDIAN)
                 {
-                    data: who.min1,
-                    borderWidth: 0,
-                    fill: (ctx) => ctx.chart.data.datasets[1].data.map((_, i) => who.min2[i]),
-                    backgroundColor: 'rgba(34,197,94,0.3)'
+                    label: 'Median',
+                    data: who.normal,
+                    borderColor: '#16a34a',
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    fill: false
                 },
+
+                // 🟢 NORMAL ATAS
                 {
-                    data: who.plus1,
-                    borderWidth: 0,
-                    fill: (ctx) => ctx.chart.data.datasets[2].data.map((_, i) => who.min1[i]),
-                    backgroundColor: 'rgba(34,197,94,0.6)'
-                },
-                {
+                    label: '+2 SD',
                     data: who.plus2,
-                    borderWidth: 0,
-                    fill: (ctx) => ctx.chart.data.datasets[3].data.map((_, i) => who.plus1[i]),
-                    backgroundColor: 'rgba(255,206,86,0.4)'
+                    borderColor: '#16a34a',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
                 },
+
+                // 🔴 TINGGI
                 {
+                    label: '+3 SD',
                     data: who.plus3,
-                    borderWidth: 0,
-                    fill: (ctx) => ctx.chart.data.datasets[4].data.map((_, i) => who.plus2[i]),
-                    backgroundColor: 'rgba(255,206,86,0.5)'
+                    borderColor: '#dc2626',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
                 },
 
-                // GARIS WHO
-                { label: '-3 SD', data: who.min3, borderColor: '#f59e0b', borderDash: [5, 5], pointRadius: 0 },
-                { label: '-2 SD', data: who.min2, borderColor: '#facc15', pointRadius: 0 },
-                { label: '-1 SD', data: who.min1, borderColor: '#22c55e', pointRadius: 0 },
-                { label: 'Median', data: who.normal, borderColor: '#15803d', borderWidth: 3, pointRadius: 0 },
-                { label: '+1 SD', data: who.plus1, borderColor: '#22c55e', pointRadius: 0 },
-                { label: '+2 SD', data: who.plus2, borderColor: '#facc15', pointRadius: 0 },
-                { label: '+3 SD', data: who.plus3, borderColor: '#f59e0b', borderDash: [5, 5], pointRadius: 0 },
-
-                // DATA BALITA
+                // ⚫ DATA BALITA (GARIS + TITIK)
                 {
                     label: 'Balita',
                     data: dataBalita,
@@ -94,7 +110,10 @@ function renderKMSChart(canvasId, gender, dataBalita) {
                     backgroundColor: '#000',
                     borderWidth: 3,
                     tension: 0.3,
-                    pointRadius: 4
+                    pointRadius: 5,
+                    pointHoverRadius: 6,
+                    spanGaps: true, // 🔥 INI KUNCINYA
+                    fill: false
                 }
 
             ]
@@ -102,31 +121,36 @@ function renderKMSChart(canvasId, gender, dataBalita) {
         options: {
             responsive: true,
             plugins: {
-                legend: { display: false } // matikan legend default
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Umur (bulan)'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Berat Badan (kg)'
+                    }
+                }
             }
         }
     });
 
-    // 🔥 LEGEND MANUAL (INI YANG KAMU MAU)
+    // LEGEND
     const legendHTML = `
     <div style="margin-top:15px;font-size:13px;line-height:1.8">
         <b>Keterangan Status:</b><br>
-
-        <span style="color:#15803d;font-weight:bold">●</span> Normal 
-        <small>(-2 SD s/d +2 SD)</small><br>
-
-        <span style="color:#facc15;font-weight:bold">●</span> Stunting 
-        <small>(-3 SD s/d -2 SD)</small><br>
-
-        <span style="color:#f59e0b;font-weight:bold">●</span> Stunting Berat 
-        <small>(< -3 SD)</small><br>
-
-        <span style="color:#dc2626;font-weight:bold">●</span> Tinggi 
-        <small>(> +2 SD)</small><br>
-
+        <span style="color:#16a34a;font-weight:bold">●</span> Normal (-2 SD s/d +2 SD)<br>
+        <span style="color:#facc15;font-weight:bold">●</span> Stunting (-3 SD s/d -2 SD)<br>
+        <span style="color:#f97316;font-weight:bold">●</span> Stunting Berat (< -3 SD)<br>
+        <span style="color:#dc2626;font-weight:bold">●</span> Tinggi (> +2 SD)<br>
         <span style="color:#000;font-weight:bold">●</span> Data Balita
     </div>
-`;
+    `;
 
     ctx.insertAdjacentHTML('afterend', legendHTML);
 }

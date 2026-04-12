@@ -6,7 +6,6 @@
 
     <div class="container">
 
-        ```
         <h3>Edit Slider</h3>
 
         <form action="{{ route('kader.slider.update', $slider->id) }}" method="POST" enctype="multipart/form-data">
@@ -28,7 +27,7 @@
                 <div class="form-group">
                     <label>Gambar Sekarang</label>
                     <br>
-                    <img src="{{ asset('storage/' . $slider->gambar) }}" width="150">
+                    <img src="{{ asset('storage/' . $slider->gambar) }}" class="img-preview">
                 </div>
 
                 <div class="form-group">
@@ -43,7 +42,6 @@
             </button>
 
         </form>
-        ```
 
     </div>
 
@@ -80,6 +78,12 @@
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 6px;
+        width: 100%;
+    }
+
+    .img-preview {
+        width: 150px;
+        border-radius: 8px;
     }
 
     .btn-save {
@@ -89,5 +93,27 @@
         padding: 12px 25px;
         border-radius: 8px;
         cursor: pointer;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media(max-width:768px) {
+
+        .container {
+            padding: 20px;
+        }
+
+        .card-form {
+            padding: 15px;
+        }
+
+        .img-preview {
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .btn-save {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>

@@ -5,51 +5,81 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Penimbangan;
 use App\Models\Balita;
-use Carbon\Carbon;
 
 class PenimbanganController extends Controller
 {
+    // =========================
+    // STORE (FIX TOTAL)
+    // =========================
     public function store(Request $request)
     {
         $request->validate([
-            'balita_id'      => 'required|exists:balitas,id',
-            'berat_badan'    => 'required|numeric|min:0',
-            'tinggi_badan'   => 'required|numeric|min:0',
-            'lingkar_kepala' => 'nullable|numeric|min:0',
-            // tambahkan field lain kalau ada di form kamu
+            'balita_id'           => 'required|exists:balitas,id',
+            'tanggal_penimbangan' => 'nullable|date',
+            'berat_badan'         => 'required|numeric|min:0',
+            'tinggi_badan'        => 'required|numeric|min:0',
+            'lila'                => 'nullable|numeric|min:0',
+            'lika'                => 'nullable|numeric|min:0',
+            'pesan'               => 'nullable|string', // 🔥 WAJIB
         ]);
 
         $balita = Balita::findOrFail($request->balita_id);
 
-        $data = $request->all();
-
-        // ================== FIX UTAMA ==================
-        // Penimbangan PERTAMA otomatis pakai tanggal lahir
+        // 🔥 LOGIKA TANGGAL
         if ($balita->penimbangans()->count() === 0) {
-            $data['tanggal'] = $balita->tanggal_lahir;   // paksa tanggal lahir
-        } 
-        // Penimbangan berikutnya pakai tanggal yang diinput
-        else {
-            $data['tanggal'] = $request->tanggal ?? now()->format('Y-m-d');
+            $tanggal = $balita->tanggal_lahir;
+        } else {
+            $tanggal = $request->tanggal_penimbangan ?? now();
         }
 
-        Penimbangan::create($data);
+        // 🔥 SIMPAN DATA (JANGAN PAKAI request->all())
+        Penimbangan::create([
+            'balita_id'           => $balita->id,
+            'tanggal_penimbangan' => $tanggal,
+            'berat_badan'         => $request->berat_badan,
+            'tinggi_badan'        => $request->tinggi_badan,
+            'lila'                => $request->lila,
+            'lika'                => $request->lika,
+            'pesan'               => $request->pesan, // 🔥 INI YANG BIKIN MUNCUL
+        ]);
 
-        return redirect()->route('penimbangan.index')
-                        ->with('success', 'Penimbangan berhasil ditambahkan! Tanggal pertama otomatis sesuai lahir.');
+        return redirect()->back()->with('success', 'Penimbangan berhasil ditambahkan!');
     }
 
+    // =========================
+    // UPDATE
+    // =========================
     public function update(Request $request, $id)
     {
-        $data = Penimbangan::findOrFail($id);
-        $data->update($request->all());
+        $request->validate([
+            'tanggal_penimbangan' => 'nullable|date',
+            'berat_badan'         => 'required|numeric|min:0',
+            'tinggi_badan'        => 'required|numeric|min:0',
+            'lila'                => 'nullable|numeric|min:0',
+            'lika'                => 'nullable|numeric|min:0',
+            'pesan'               => 'nullable|string',
+        ]);
 
-        return back()->with('success','Data berhasil diupdate');
+        $data = Penimbangan::findOrFail($id);
+
+        $data->update([
+            'tanggal_penimbangan' => $request->tanggal_penimbangan ?? $data->tanggal_penimbangan,
+            'berat_badan'         => $request->berat_badan,
+            'tinggi_badan'        => $request->tinggi_badan,
+            'lila'                => $request->lila,
+            'lika'                => $request->lika,
+            'pesan'               => $request->pesan, // 🔥 UPDATE PESAN JUGA
+        ]);
+
+        return back()->with('success', 'Data berhasil diupdate');
     }
 
+    // =========================
+    // DELETE
+    // =========================
     public function destroy($id)
     {
         Penimbangan::destroy($id);
-        return back()->with('success','Data berhasil dihapus');
+        return back()->with('success', 'Data berhasil dihapus');
     }
 }

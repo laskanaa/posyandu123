@@ -37,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
 
     // BALITA
     Route::resource('kader/balita', BalitaController::class);
+    Route::get('/balita/{id}/download', [BalitaController::class, 'download'])
+    ->name('balita.download');
 
     // PENIMBANGAN
     Route::resource('penimbangan', PenimbanganController::class);

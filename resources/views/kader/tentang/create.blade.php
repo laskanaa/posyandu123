@@ -39,7 +39,6 @@
             </form>
 
         </div>
-
     </div>
 
     <div class="overlay" id="overlay"></div>
@@ -56,10 +55,6 @@
     .main {
         flex: 1;
         padding: 30px;
-    }
-
-    .topbar {
-        margin-bottom: 20px;
     }
 
     .hamburger {
@@ -96,4 +91,27 @@
         border: none;
         border-radius: 8px;
     }
+
+    /* RESPONSIVE */
+    @media(max-width:768px) {
+        .main {
+            padding: 15px;
+        }
+    }
 </style>
+
+<script>
+    const toggle = document.getElementById("toggleSidebar");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    toggle.onclick = () => {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+    };
+
+    overlay.onclick = () => {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("active");
+    };
+</script>

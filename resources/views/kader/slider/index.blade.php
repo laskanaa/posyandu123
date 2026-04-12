@@ -6,7 +6,6 @@
 
     <div class="wrapper">
 
-        ```
         <!-- SIDEBAR -->
         <div class="sidebar" id="sidebar">
             @include('partials.sidebar_kader')
@@ -30,60 +29,62 @@
 
             <div class="card-table">
 
-                <table>
+                <!-- WRAPPER RESPONSIVE -->
+                <div class="table-wrapper">
+                    <table>
 
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Judul</th>
-                            <th>Deskripsi</th>
-                            <th>Gambar</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        @foreach($sliders as $slider)
-
+                        <thead>
                             <tr>
-
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $slider->judul }}</td>
-                                <td>{{ $slider->deskripsi }}</td>
-
-                                <td>
-                                    <img src="{{ asset('storage/' . $slider->gambar) }}" width="120">
-                                </td>
-
-                                <td class="aksi">
-
-                                    <a href="{{ route('kader.slider.edit', $slider->id) }}" class="btn-edit">
-                                        Edit
-                                    </a>
-
-                                    <form action="{{ route('kader.slider.delete', $slider->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn-delete">
-                                            Hapus
-                                        </button>
-                                    </form>
-
-                                </td>
-
+                                <th>No</th>
+                                <th>Judul</th>
+                                <th>Deskripsi</th>
+                                <th>Gambar</th>
+                                <th>Aksi</th>
                             </tr>
+                        </thead>
 
-                        @endforeach
+                        <tbody>
 
-                    </tbody>
+                            @foreach($sliders as $slider)
 
-                </table>
+                                <tr>
+
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $slider->judul }}</td>
+                                    <td>{{ $slider->deskripsi }}</td>
+
+                                    <td>
+                                        <img src="{{ asset('storage/' . $slider->gambar) }}" class="img-slider">
+                                    </td>
+
+                                    <td class="aksi">
+
+                                        <a href="{{ route('kader.slider.edit', $slider->id) }}" class="btn-edit">
+                                            ✏️
+                                        </a>
+
+                                        <form action="{{ route('kader.slider.delete', $slider->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn-delete">
+                                                🗑️
+                                            </button>
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                            @endforeach
+
+                        </tbody>
+
+                    </table>
+                </div>
 
             </div>
 
         </div>
-        ```
 
     </div>
 
@@ -143,6 +144,8 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 25px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .left {
@@ -168,6 +171,7 @@
         border-radius: 6px;
         text-decoration: none;
         font-size: 14px;
+        white-space: nowrap;
     }
 
     .card-table {
@@ -177,20 +181,33 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
+    /* WRAPPER BIAR SCROLL */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 700px;
     }
 
     table th,
     table td {
         padding: 12px;
         border-bottom: 1px solid #eee;
+        text-align: left;
+    }
+
+    .img-slider {
+        width: 120px;
+        border-radius: 6px;
     }
 
     .aksi {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
     }
 
     .btn-edit {
@@ -198,6 +215,7 @@
         padding: 6px 10px;
         border-radius: 4px;
         text-decoration: none;
+        color: black;
     }
 
     .btn-delete {
@@ -206,6 +224,7 @@
         border: none;
         padding: 6px 10px;
         border-radius: 4px;
+        cursor: pointer;
     }
 
     .overlay {
@@ -221,5 +240,31 @@
 
     .overlay.active {
         display: block;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media(max-width:768px) {
+
+        .main {
+            padding: 15px;
+        }
+
+        .topbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .btn-add {
+            width: 100%;
+            text-align: center;
+        }
+
+        table {
+            min-width: 600px;
+        }
+
+        .img-slider {
+            width: 80px;
+        }
     }
 </style>

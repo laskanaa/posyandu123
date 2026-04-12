@@ -13,7 +13,6 @@
         <div class="main-content">
 
             <div class="topbar">
-
                 <div class="topbar-left">
                     <button class="hamburger" onclick="toggleSidebar()">☰</button>
                     <h3>Layanan Posyandu</h3>
@@ -22,46 +21,46 @@
                 <a href="{{ route('kader.layanan.create') }}" class="btn-add">
                     + Tambah Layanan
                 </a>
-
             </div>
 
             <div class="card-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Icon</th>
-                            <th>Judul</th>
-                            {{-- <th>Deskripsi</th> --}}
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($layanans as $layanan)
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td class="icon-cell">
-                                    {{-- Revisi: langsung tampilkan emoji --}}
-                                    @if($layanan->icon)
-                                        <span class="emoji-icon">{{ $layanan->icon }}</span>
-                                    @else
-                                        <span class="placeholder-icon">❔</span>
-                                    @endif
-                                </td>
-                                <td>{{ $layanan->judul }}</td>
-                                {{-- <td>{{ $layanan->deskripsi }}</td> --}}
-                                <td class="aksi">
-                                    <a href="{{ route('kader.layanan.edit', $layanan->id) }}" class="btn-edit">Edit</a>
-                                    <form action="{{ route('kader.layanan.destroy', $layanan->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn-delete">Hapus</button>
-                                    </form>
-                                </td>
+                                <th>No</th>
+                                <th>Icon</th>
+                                <th>Judul</th>
+                                <th>Aksi</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($layanans as $layanan)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+
+                                    <td class="icon-cell">
+                                        <span class="emoji-icon">
+                                            {{ $layanan->icon ?? '❔' }}
+                                        </span>
+                                    </td>
+
+                                    <td>{{ $layanan->judul }}</td>
+
+                                    <td class="aksi">
+                                        <a href="{{ route('kader.layanan.edit', $layanan->id) }}" class="btn-edit">✏️</a>
+
+                                        <form action="{{ route('kader.layanan.destroy', $layanan->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn-delete">🗑️</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>
@@ -73,15 +72,32 @@
     .dashboard-container {
         display: flex;
         min-height: 100vh;
-        font-family: 'Segoe UI', sans-serif;
         background: #f4f6fb;
     }
 
-    .main-content {
-        flex: 1;
-        padding: 30px 40px;
+    /* SIDEBAR */
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        width: 260px;
+        height: 100%;
+        background: #0d4f4d;
+        transition: 0.3s;
+        z-index: 1000;
     }
 
+    .sidebar.active {
+        left: 0;
+    }
+
+    /* MAIN */
+    .main-content {
+        flex: 1;
+        padding: 30px;
+        width: 100%;
+    }
+
+    /* TOPBAR */
     .topbar {
         display: flex;
         justify-content: space-between;
@@ -92,77 +108,71 @@
     .topbar-left {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 10px;
     }
 
     .hamburger {
-        font-size: 20px;
         background: #0d4f4d;
         color: white;
         border: none;
         padding: 8px 12px;
         border-radius: 6px;
-        cursor: pointer;
     }
 
+    /* BUTTON */
     .btn-add {
         background: #0d4f4d;
         color: white;
-        padding: 10px 18px;
+        padding: 10px 16px;
         border-radius: 6px;
         text-decoration: none;
-        font-size: 14px;
-        transition: 0.2s;
     }
 
-    .btn-add:hover {
-        background: #0a3c3a;
-    }
-
+    /* CARD */
     .card-table {
         background: white;
-        padding: 25px;
+        padding: 20px;
         border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    /* TABLE */
+    .table-wrapper {
+        overflow-x: auto;
     }
 
     table {
         width: 100%;
+        min-width: 500px;
         border-collapse: collapse;
     }
 
-    table th,
-    table td {
-        padding: 12px 15px;
+    th,
+    td {
+        padding: 12px;
         border-bottom: 1px solid #eee;
-        vertical-align: middle;
     }
 
-    .icon-cell {
-        text-align: center;
+    th {
+        background: #0d4f4d;
+        color: white;
     }
 
+    /* ICON */
     .emoji-icon {
-        font-size: 32px;
+        font-size: 28px;
     }
 
+    /* ACTION */
     .aksi {
         display: flex;
-        gap: 10px;
+        gap: 8px;
     }
 
     .btn-edit {
         background: #ffc107;
         padding: 6px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-        color: #333;
-        font-weight: 500;
-        transition: 0.2s;
-    }
-
-    .btn-edit:hover {
-        background: #e0a800;
+        border-radius: 6px;
     }
 
     .btn-delete {
@@ -170,24 +180,23 @@
         color: white;
         border: none;
         padding: 6px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: 0.2s;
+        border-radius: 6px;
     }
 
-    .btn-delete:hover {
-        background: #b02a37;
+    /* RESPONSIVE */
+    @media(max-width:768px) {
+        .main-content {
+            padding: 15px;
+        }
+
+        table {
+            font-size: 13px;
+        }
     }
 </style>
 
 <script>
-
     function toggleSidebar() {
-
-        const sidebar = document.querySelector('.sidebar')
-
-        sidebar.classList.toggle('active')
-
+        document.getElementById("sidebar").classList.toggle("active");
     }
-
 </script>

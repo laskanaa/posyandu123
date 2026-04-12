@@ -13,21 +13,23 @@
             </div>
 
             <div class="card-form">
-                <form action="{{ route('kader.informasi.update', $data->id) }}" method="POST">
+                <form action="{{ route('kader.informasi.update', $informasi->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
                     <div class="form-group">
                         <label>Judul</label>
-                        <input type="text" value="{{ $data->judul }}" disabled>
+                        <input type="text" value="{{ $informasi->judul }}" disabled>
                     </div>
 
                     <div class="form-group">
                         <label>Angka</label>
-                        <input type="number" name="angka" value="{{ $data->angka }}" required>
+                        <input type="number" name="angka" value="{{ $informasi->angka }}" required>
                     </div>
 
-                    <button class="btn-save">Update</button>
+                    <button type="submit" class="btn-save">
+                        Update
+                    </button>
                 </form>
             </div>
 

@@ -29,48 +29,44 @@
 
                 @if($tentang)
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Deskripsi</th>
-                                <th>Gambar</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Deskripsi</th>
+                                    <th>Gambar</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
-                            <tr>
+                            <tbody>
+                                <tr>
+                                    <td>{{ $tentang->deskripsi1 }}</td>
 
-                                <td>{{ $tentang->deskripsi1 }}</td>
+                                    <td>
+                                        @if($tentang->gambar)
+                                            <img src="{{ asset('storage/' . $tentang->gambar) }}" width="120">
+                                        @endif
+                                    </td>
 
-                                <td>
-                                    @if($tentang->gambar)
-                                        <img src="{{ asset('storage/' . $tentang->gambar) }}" width="120">
-                                    @endif
-                                </td>
+                                    <td class="aksi">
+                                        <a href="{{ route('kader.tentang.edit', $tentang->id) }}" class="btn-edit">
+                                            ✏️ Edit
+                                        </a>
 
-                                <td class="aksi">
-
-                                    <!-- EDIT -->
-                                    <a href="{{ route('kader.tentang.edit', $tentang->id) }}" class="btn-edit">
-                                        Edit
-                                    </a>
-
-                                    <!-- HAPUS -->
-                                    <form action="{{ route('kader.tentang.destroy', $tentang->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin mau hapus data ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn-delete">
-                                            Hapus
-                                        </button>
-                                    </form>
-
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
+                                        <form action="{{ route('kader.tentang.destroy', $tentang->id) }}" method="POST"
+                                            onsubmit="return confirm('Yakin mau hapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn-delete">
+                                                🗑️ Hapus
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                 @else
                     <p>Belum ada data.</p>
@@ -79,7 +75,6 @@
             </div>
 
         </div>
-
     </div>
 
     <div class="overlay" id="overlay"></div>
@@ -111,6 +106,7 @@
     .main {
         flex: 1;
         padding: 30px;
+        width: 100%;
     }
 
     .topbar {
@@ -143,39 +139,53 @@
         text-decoration: none;
     }
 
-    .btn-delete {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 6px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .aksi form {
-        margin: 0;
-    }
-
     .card-table {
         background: white;
         padding: 20px;
         border-radius: 12px;
+        overflow: hidden;
+        /* 🔥 INI PENTING biar ga keluar garis */
+    }
+
+    /* WRAPPER BIAR SCROLL */
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
     }
 
     table {
         width: 100%;
+        min-width: 500px;
+        /* 🔥 biar ga gepeng */
         border-collapse: collapse;
+        table-layout: fixed;
+        /* 🔥 BIAR RAPIH */
     }
 
     th,
     td {
         padding: 12px;
         border-bottom: 1px solid #eee;
+        word-wrap: break-word;
+        /* 🔥 biar teks ga keluar */
+    }
+
+    th {
+        background: #0d4f4d;
+        color: white;
+        text-align: left;
+    }
+
+    td img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
     }
 
     .aksi {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
     }
 
     .btn-edit {
@@ -183,6 +193,17 @@
         padding: 6px 10px;
         border-radius: 4px;
         text-decoration: none;
+        color: black;
+        white-space: nowrap;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 4px;
+        white-space: nowrap;
     }
 
     .overlay {
@@ -198,6 +219,32 @@
     .overlay.active {
         display: block;
     }
+
+    /* RESPONSIVE */
+    @media(max-width:768px) {
+
+        .main {
+            padding: 15px;
+        }
+
+        table {
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+        }
+
+        .topbar h3 {
+            font-size: 16px;
+        }
+
+        .btn-add {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+    }
 </style>
 
 <script>
@@ -208,17 +255,17 @@
         const overlay = document.getElementById("overlay");
 
         if (toggle) {
-            toggle.addEventListener("click", function () {
+            toggle.onclick = () => {
                 sidebar.classList.toggle("active");
                 overlay.classList.toggle("active");
-            });
+            };
         }
 
         if (overlay) {
-            overlay.addEventListener("click", function () {
+            overlay.onclick = () => {
                 sidebar.classList.remove("active");
                 overlay.classList.remove("active");
-            });
+            };
         }
 
     });
