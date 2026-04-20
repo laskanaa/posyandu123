@@ -45,7 +45,7 @@
 
                                     <td>
                                         @if($tentang->gambar)
-                                            <img src="{{ asset('storage/' . $tentang->gambar) }}" width="120">
+                                            <img src="{{ asset('tentang/' . $tentang->gambar) }}" width="120">
                                         @endif
                                     </td>
 

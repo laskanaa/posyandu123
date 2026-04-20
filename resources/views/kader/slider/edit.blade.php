@@ -27,7 +27,7 @@
                 <div class="form-group">
                     <label>Gambar Sekarang</label>
                     <br>
-                    <img src="{{ asset('storage/' . $slider->gambar) }}" class="img-preview">
+                    <img src="{{ asset('slider/' . $slider->gambar) }}" class="img-preview">
                 </div>
 
                 <div class="form-group">

@@ -436,7 +436,7 @@
                     <div class="carousel-inner">
                         @foreach($sliders as $key => $slider)
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                <img src="{{ asset('storage/slider/' . $slider->gambar) }}">
+                                <img src="{{ asset('slider/' . $slider->gambar) }}">
                                 <div class="slider-overlay"></div>
                                 <div class="slider-caption">
                                     <h1>{{ $slider->judul }}</h1>
@@ -461,7 +461,7 @@
                     <h2 class="section-title">Tentang Posyandu</h2>
                     <div class="tentang-wrapper">
                         <div class="tentang-img animate">
-                            <img src="{{ asset('storage/' . $tentang->gambar) }}">
+                            <img src="{{ asset('tentang/' . $tentang->gambar) }}">
                         </div>
                         <div class="tentang-text animate">
                             <p>{{ $tentang->deskripsi1 }}</p>
@@ -500,30 +500,20 @@
                 </div>
             </section>
         @endif
+
         @if($pencegahans->count())
             <section id="pencegahan" class="pencegahan-section">
                 <div class="container-home">
-
                     <h2 class="section-title">Lakukan Pencegahan Stunting</h2>
-
                     <div class="pencegahan-grid">
-
                         @foreach($pencegahans as $item)
                             <div class="pencegahan-card animate">
-
-                                <div class="icon-box">
-                                    🩺
-                                </div>
-
+                                <div class="icon-box">🩺</div>
                                 <h3>{{ $item->judul }}</h3>
-
                                 <p>{{ $item->deskripsi }}</p>
-
                             </div>
                         @endforeach
-
                     </div>
-
                 </div>
             </section>
         @endif
@@ -535,7 +525,7 @@
                     <div class="galeri-slider" id="galeriSlider">
                         @foreach($galeri as $item)
                             <div class="galeri-item">
-                                <img src="{{ asset('storage/' . $item->gambar) }}">
+                                <img src="{{ asset('galeri/' . $item->gambar) }}">
                             </div>
                         @endforeach
                     </div>

@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <label>Gambar Sekarang</label><br>
                         @if($tentang->gambar)
-                            <img src="{{ asset('storage/' . $tentang->gambar) }}" width="150">
+                            <img src="{{ asset('tentang/' . $tentang->gambar) }}" width="150">
                         @endif
                     </div>
 

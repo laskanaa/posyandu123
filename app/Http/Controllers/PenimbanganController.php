@@ -46,6 +46,12 @@ class PenimbanganController extends Controller
         return redirect()->back()->with('success', 'Penimbangan berhasil ditambahkan!');
     }
 
+public function edit($id)
+{
+    $penimbangan = Penimbangan::with('balita')->findOrFail($id);
+
+    return view('kader.balita.editPenimbangan', compact('penimbangan'));
+}
     // =========================
     // UPDATE
     // =========================
@@ -71,7 +77,9 @@ class PenimbanganController extends Controller
             'pesan'               => $request->pesan, // 🔥 UPDATE PESAN JUGA
         ]);
 
-        return back()->with('success', 'Data berhasil diupdate');
+        return redirect()
+    ->route('balita.show', $data->balita_id)
+    ->with('success', 'Data penimbangan berhasil diupdate');
     }
 
     // =========================

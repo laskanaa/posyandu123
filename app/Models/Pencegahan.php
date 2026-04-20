@@ -9,5 +9,5 @@ class Pencegahan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['judul', 'deskripsi']; // jangan ada koma kosong
+    protected $fillable = ['deskripsi']; // jangan ada koma kosong
 }

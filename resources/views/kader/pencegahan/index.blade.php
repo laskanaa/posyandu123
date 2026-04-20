@@ -42,7 +42,7 @@
                         @foreach($pencegahans as $pencegahan)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $pencegahan->judul }}</td>
+                                <td>{{ $pencegahan->deskripsi }}</td>
                                 <td class="aksi">
                                     <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit">Edit</a>
 

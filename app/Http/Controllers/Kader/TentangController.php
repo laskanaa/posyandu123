@@ -20,25 +20,30 @@ class TentangController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'deskripsi1' => 'required',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+{
+    $request->validate([
+        'deskripsi1' => 'required',
+        'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
 
-        $data = [
-            'deskripsi1' => $request->deskripsi1
-        ];
+    $data = [
+        'deskripsi1' => $request->deskripsi1
+    ];
 
-        if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('tentang', 'public');
-        }
+    if ($request->hasFile('gambar')) {
+        $file = $request->file('gambar');
+        $namaFile = time() . '_' . $file->getClientOriginalName();
 
-        TentangPosyandu::create($data);
+        $file->move(public_path('tentang'), $namaFile);
 
-        return redirect()->route('kader.tentang.index')
-            ->with('success', 'Data berhasil disimpan!');
+        $data['gambar'] = $namaFile;
     }
+
+    TentangPosyandu::create($data);
+
+    return redirect()->route('kader.tentang.index')
+        ->with('success', 'Data berhasil disimpan!');
+}
 
     public function edit($id)
     {
@@ -46,29 +51,39 @@ class TentangController extends Controller
         return view('kader.tentang.edit', compact('tentang'));
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'deskripsi1' => 'required',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+   public function update(Request $request, $id)
+{
+    $request->validate([
+        'deskripsi1' => 'required',
+        'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    ]);
 
-        $tentang = TentangPosyandu::findOrFail($id);
+    $tentang = TentangPosyandu::findOrFail($id);
 
-        $data = [
-            'deskripsi1' => $request->deskripsi1
-        ];
+    $data = [
+        'deskripsi1' => $request->deskripsi1
+    ];
 
-        if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('tentang', 'public');
+    if ($request->hasFile('gambar')) {
+
+        // hapus gambar lama
+        if ($tentang->gambar && file_exists(public_path('tentang/' . $tentang->gambar))) {
+            unlink(public_path('tentang/' . $tentang->gambar));
         }
 
-        $tentang->update($data);
+        $file = $request->file('gambar');
+        $namaFile = time() . '_' . $file->getClientOriginalName();
 
-        return redirect()->route('kader.tentang.index')
-            ->with('success', 'Data berhasil diperbarui!');
+        $file->move(public_path('tentang'), $namaFile);
+
+        $data['gambar'] = $namaFile;
     }
 
+    $tentang->update($data);
+
+    return redirect()->route('kader.tentang.index')
+        ->with('success', 'Data berhasil diperbarui!');
+}
     public function destroy($id)
     {
         $tentang = TentangPosyandu::findOrFail($id);

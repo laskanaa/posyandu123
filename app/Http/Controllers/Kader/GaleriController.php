@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Kader;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Galeri;
+use Illuminate\Support\Facades\File;
 
 class GaleriController extends Controller
 {
@@ -25,27 +26,32 @@ class GaleriController extends Controller
             'gambar' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $path = $request->file('gambar')->store('galeri', 'public');
+        $file = $request->file('gambar');
+        $namaFile = time() . '_' . $file->getClientOriginalName();
+        
+        // Simpan ke folder public/galeri (bukan storage)
+        $file->move(public_path('galeri'), $namaFile);
 
         Galeri::create([
-            'gambar' => $path
+            'gambar' => $namaFile   // hanya nama file saja
         ]);
 
         return redirect()->route('kader.galeri.index')
-            ->with('success', 'Berhasil tambah');
+            ->with('success', 'Gambar berhasil ditambahkan');
     }
 
     public function destroy($id)
     {
         $data = Galeri::findOrFail($id);
 
-        // 🔥 hapus file juga (biar rapi)
-        if (file_exists(storage_path('app/public/' . $data->gambar))) {
-            unlink(storage_path('app/public/' . $data->gambar));
+        // Hapus file fisik dari folder public/galeri
+        $filePath = public_path('galeri/' . $data->gambar);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
         }
 
         $data->delete();
 
-        return back()->with('success', 'Berhasil hapus');
+        return back()->with('success', 'Gambar berhasil dihapus');
     }
 }

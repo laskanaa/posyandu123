@@ -10,7 +10,8 @@
             font-size: 12px;
         }
 
-        h2 {
+        h2,
+        h3 {
             text-align: center;
         }
 
@@ -24,10 +25,15 @@
         td {
             border: 1px solid #333;
             padding: 6px;
+            text-align: center;
         }
 
         th {
             background: #eee;
+        }
+
+        .left {
+            text-align: left;
         }
     </style>
 </head>
@@ -36,30 +42,27 @@
 
     <h2>Data Balita</h2>
 
+    <!-- BIODATA -->
     <table>
         <tr>
-            <th>Nama</th>
-            <td>{{ $balita->nama }}</td>
+            <th class="left">Nama</th>
+            <td class="left">{{ $balita->nama }}</td>
         </tr>
         <tr>
-            <th>NIK</th>
-            <td>{{ $balita->nik }}</td>
+            <th class="left">NIK</th>
+            <td class="left">{{ $balita->nik }}</td>
         </tr>
         <tr>
-            <th>Tanggal Lahir</th>
-            <td>{{ $balita->tanggal_lahir }}</td>
+            <th class="left">Tanggal Lahir</th>
+            <td class="left">{{ $balita->tanggal_lahir }}</td>
         </tr>
         <tr>
-            <th>Jenis Kelamin</th>
-            <td>{{ $balita->jenis_kelamin }}</td>
+            <th class="left">Jenis Kelamin</th>
+            <td class="left">{{ $balita->jenis_kelamin }}</td>
         </tr>
         <tr>
-            <th>Nama Ibu</th>
-            <td>{{ $balita->nama_ibu }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ $balita->kondisi }}</td>
+            <th class="left">Nama Ibu</th>
+            <td class="left">{{ $balita->nama_ibu }}</td>
         </tr>
     </table>
 
@@ -69,24 +72,32 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Tanggal</th>
+                <th>Tanggal Penimbangan</th>
+                <th>Umur (Bulan)</th>
                 <th>BB</th>
                 <th>TB</th>
                 <th>LILA</th>
                 <th>LIKA</th>
-                <th>Pesan</th>
             </tr>
         </thead>
         <tbody>
             @foreach($balita->penimbangans as $i => $p)
+
+                @php
+                    $umur = round(
+                        \Carbon\Carbon::parse($balita->tanggal_lahir)
+                        ->diffInDays(\Carbon\Carbon::parse($p->tanggal_penimbangan)) / 30
+                    );
+                @endphp
+
                 <tr>
                     <td>{{ $i + 1 }}</td>
-                    <td>{{ $p->tanggal_penimbangan }}</td>
+                    <td>{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('d-m-Y') }}</td>
+                    <td>{{ $umur }}</td>
                     <td>{{ $p->berat_badan }}</td>
                     <td>{{ $p->tinggi_badan }}</td>
                     <td>{{ $p->lila }}</td>
                     <td>{{ $p->lika }}</td>
-                    <td>{{ $p->pesan }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -95,3 +106,38 @@
 </body>
 
 </html>
+
+<style>
+    body {
+        font-family: sans-serif;
+        font-size: 12px;
+    }
+
+    h2,
+    h3 {
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+        table-layout: fixed;
+    }
+
+    th,
+    td {
+        border: 1px solid #333;
+        padding: 6px;
+        text-align: center;
+        width: 14.28%;
+    }
+
+    th {
+        background: #eee;
+    }
+
+    .left {
+        text-align: left;
+    }
+</style>

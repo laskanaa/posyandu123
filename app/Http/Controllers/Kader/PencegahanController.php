@@ -22,15 +22,17 @@ class PencegahanController extends Controller
 
 public function store(Request $request)
 {
+    $request->validate([
+        'deskripsi' => 'required'
+    ]);
+
     Pencegahan::create([
-        'judul' => $request->judul,
-        'deskripsi' => $request->deskripsi ?? '', // kasih default kosong
+        'deskripsi' => $request->deskripsi
     ]);
 
     return redirect()->route('kader.pencegahan.index')
         ->with('success','Data berhasil ditambah');
 }
-
     public function edit($id)
     {
         $pencegahan = Pencegahan::findOrFail($id);
@@ -38,14 +40,21 @@ public function store(Request $request)
     }
 
     public function update(Request $request, $id)
-    {
-        $pencegahan = Pencegahan::findOrFail($id);
+{
+    $request->validate([
+        'deskripsi' => 'required'
+    ]);
 
-        $pencegahan->update($request->all());
+    $pencegahan = Pencegahan::findOrFail($id);
 
-        return redirect()->route('kader.pencegahan.index')
-            ->with('success','Data berhasil diupdate');
-    }
+    $pencegahan->update([
+        'deskripsi' => $request->deskripsi
+    ]);
+
+    return redirect()->route('kader.pencegahan.index')
+        ->with('success','Data berhasil diupdate');
+}
+
 
     public function destroy($id)
     {

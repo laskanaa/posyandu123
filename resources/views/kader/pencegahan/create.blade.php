@@ -12,7 +12,7 @@
 
                 <div class="form-group">
                     <label>Judul</label>
-                    <input type="text" name="judul" placeholder="Masukkan judul pencegahan" required>
+                    <textarea name="deskripsi" required placeholder="Masukkan deskripsi pencegahan"></textarea>
                 </div>
 
                 <button class="btn-save">Simpan Pencegahan</button>

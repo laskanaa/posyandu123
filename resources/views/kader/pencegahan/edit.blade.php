@@ -12,12 +12,11 @@
 
             <div class="form-card">
                 <div class="form-group">
-                    <label>Judul</label>
-                    <input type="text" name="judul" value="{{ $pencegahan->judul }}" required>
-                </div>
+                    <label>Deskripsi</label>
+                    <textarea name="deskripsi" required>{{ $pencegahan->deskripsi }}</textarea>
 
-                <button class="btn-save">Update Pencegahan</button>
-            </div>
+                    <button class="btn-save">Update Pencegahan</button>
+                </div>
         </form>
     </div>
 

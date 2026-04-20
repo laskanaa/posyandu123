@@ -78,14 +78,14 @@
                                     <td>{{ $balita->nama_ibu }}</td>
 
                                     <td>
-                                        @php
-                                            $kondisi = strtolower($balita->kondisi);
-                                        @endphp
+@php
+    $last = $balita->penimbangans->last();
+    $kondisi = strtolower($last->hasil['kesimpulan'] ?? '');
+@endphp
 
-                                        <span
-                                            class="{{ str_contains($kondisi, 'stunting') ? 'status-stunting' : 'status-normal' }}">
-                                            {{ $balita->kondisi }}
-                                        </span>
+<span class="{{ str_contains($kondisi, 'stunting') ? 'status-stunting' : 'status-normal' }}">
+    {{ $last->hasil['kesimpulan'] ?? 'Belum ada data' }}
+</span>
                                     </td>
 
                                     <td class="action-buttons">

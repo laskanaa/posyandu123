@@ -11,6 +11,7 @@ use App\Models\StandarWhoTbu;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class BalitaController extends Controller
 {
@@ -22,7 +23,9 @@ class BalitaController extends Controller
     {
         $search = $request->search;
 
-        $balitas = Balita::with('penimbangans')
+        $balitas = Balita::with(['penimbangans' => function($q){
+    $q->orderBy('tanggal_penimbangan','asc');
+}])
             ->when($search, function ($query) use ($search) {
                 $query->where('nama', 'like', "%$search%")
                     ->orWhere('nama_ibu', 'like', "%$search%");
@@ -155,19 +158,28 @@ class BalitaController extends Controller
     // SHOW
     // =========================
     public function show($id)
-    {
-        $balita = Balita::with([
-            'user',
-            'penimbangans' => function($q){
-                $q->orderBy('tanggal_penimbangan','asc');
-            }
-        ])->findOrFail($id);
+{
+    $balita = Balita::with([
+        'user',
+        'penimbangans' => function($q){
+            $q->orderBy('tanggal_penimbangan','asc');
+        }
+    ])->findOrFail($id);
 
-        $whoData = StandarWhoTbu::orderBy('umur_bulan')->get();
+    // 🔥 AMBIL DATA WHO
+    $whoBBU = DB::table('standar_who_bbu')->orderBy('umur_bulan')->get();
+    $whoTBU = DB::table('standar_who_tbu')->orderBy('umur_bulan')->get();
 
-        return view('kader.balita.show', compact('balita', 'whoData'));
-    }
+    // 🔥 AMBIL PENIMBANGAN TERAKHIR
+    $penimbanganTerakhir = $balita->penimbangans->last();
 
+    return view('kader.balita.show', compact(
+        'balita',
+        'whoBBU',
+        'whoTBU',
+        'penimbanganTerakhir'
+    ));
+}
     // =========================
     // DELETE
     // =========================

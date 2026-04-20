@@ -42,7 +42,11 @@
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td><span class="badge-status">{{ $balita->kondisi }}</span></td>
+                        <td>
+                            <span class="badge-status">
+                                {{ $penimbanganTerakhir->hasil['kesimpulan'] ?? '-' }}
+                            </span>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -68,30 +72,99 @@
                 <div class="table-wrapper">
                     <table class="riwayat-table">
                         <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Bulan</th>
-                                <th>BB</th>
-                                <th>TB</th>
-                                <th>LILA</th>
-                                <th>LIKA</th>
-                            </tr>
-                        </thead>
+    <tr>
+        <th>No</th>
+        <th>Tanggal</th>
+        <th>Umur (Bulan)</th> 
+        <th>BB</th>
+        <th>Z BB/U</th>
+        <th>Status BB</th>
+        <th>TB</th>
+        <th>Z TB/U</th>
+        <th>Status TB</th>
+        <th>LILA</th>
+        <th>LIKA</th>
+        <th>Status Akhir</th>
+        <th>Aksi</th> 
+</thead>
                         <tbody>
                             @forelse($balita->penimbangans as $p)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('M Y') }}</td>
-                                    <td>{{ $p->berat_badan }} kg</td>
-                                    <td>{{ $p->tinggi_badan }} cm</td>
-                                    <td>{{ $p->lila }} cm</td>
-                                    <td>{{ $p->lika }} cm</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6">Belum ada data</td>
-                                </tr>
-                            @endforelse
+@php
+    $tglLahir = \Carbon\Carbon::parse($balita->tanggal_lahir);
+    $tglTimbang = \Carbon\Carbon::parse($p->tanggal_penimbangan);
+
+    // 🔥 BULATIN KE BAWAH (FIX KMS STYLE)
+    $umurBulan = floor($tglLahir->floatDiffInMonths($tglTimbang));
+@endphp
+
+    <tr>
+        <td>{{ $loop->iteration }}</td>
+
+        <td>{{ \Carbon\Carbon::parse($p->tanggal_penimbangan)->format('d M Y') }}</td>
+
+        {{-- 🔥 UMUR --}}
+        <td><b>{{ $umurBulan }}</b> bln</td>
+
+        {{-- BB --}}
+        <td>{{ $p->berat_badan }} kg</td>
+        <td>{{ $p->hasil['z_bb_u'] ?? '-' }}</td>
+        <td>{{ $p->hasil['status_bb'] ?? '-' }}</td>
+
+        {{-- TB --}}
+        <td>{{ $p->tinggi_badan }} cm</td>
+        <td>{{ $p->hasil['z_tb_u'] ?? '-' }}</td>
+        <td>{{ $p->hasil['status_tb'] ?? '-' }}</td>
+
+        {{-- LILA & LIKA --}}
+        <td>{{ $p->lila }} cm</td>
+        <td>{{ $p->lika }} cm</td>
+
+        {{-- KESIMPULAN --}}
+        <td>
+            <b>{{ $p->hasil['kesimpulan'] ?? '-' }}</b>
+        </td>
+
+        {{-- 🔥 AKSI --}}
+        <td style="white-space:nowrap; display:flex; gap:8px; justify-content:center;">
+
+    <!-- EDIT -->
+    <a href="{{ route('penimbangan.edit', $p->id) }}"
+        title="Edit"
+        style="color:#3b82f6;">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15.232 5.232l3.536 3.536M9 13l6.232-6.232a2 2 0 112.828 2.828L11.828 16H9v-3z"/>
+        </svg>
+    </a>
+
+    <!-- DELETE -->
+    <form action="{{ route('penimbangan.destroy', $p->id) }}"
+        method="POST"
+        onsubmit="return confirm('Yakin hapus data ini?')">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+            title="Hapus"
+            style="background:none; border:none; color:#ef4444; cursor:pointer; padding:0;">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M6 7h12M9 7V4h6v3m-8 0l1 12h8l1-12"/>
+            </svg>
+        </button>
+    </form>
+
+</td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="13">Belum ada data</td>
+    </tr>
+@endforelse
                         </tbody>
                     </table>
                 </div>
@@ -101,7 +174,8 @@
             <div class="card-box">
                 <div class="card-header grafik">Grafik Pertumbuhan</div>
                 <div class="chart-box">
-                    <canvas id="chartBalita"></canvas>
+                    <canvas id="chartBBU"></canvas>
+                    <canvas id="chartTBU" style="margin-top:40px;"></canvas>
                 </div>
             </div>
 
@@ -116,7 +190,6 @@
         }
 
         .main-content {
-            max-width: 1000px;
             width: 100%;
             padding: 20px;
             background: #f4f6f9;
@@ -137,6 +210,17 @@
             border-radius: 6px;
             text-decoration: none;
         }
+
+
+        td a:hover svg {
+    transform: scale(1.2);
+    transition: 0.2s;
+}
+
+td button:hover svg {
+    transform: scale(1.2);
+    transition: 0.2s;
+}
 
         /* CARD */
         .card-box {
@@ -241,17 +325,30 @@
             document.body.appendChild(form);
             form.submit();
         }
-        
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('js/chart-kms.js') }}"></script>
 
+    <script src="{{ asset('js/chart-kms.js') }}"></script>
+
+    <script src="{{ asset('js/chart-kms.js') }}"></script>
+
     <script>
-        window.whoData = @json($whoData);
+        window.whoBBU = @json($whoBBU);
+        window.whoTBU = @json($whoTBU);
 
         renderKMSChart(
-            'chartBalita',
+            'chartBBU',
+            'bb',
+            "{{ strtolower($balita->jenis_kelamin) }}",
+            @json($balita->penimbangans),
+            "{{ $balita->tanggal_lahir }}"
+        );
+
+        renderKMSChart(
+            'chartTBU',
+            'tb',
             "{{ strtolower($balita->jenis_kelamin) }}",
             @json($balita->penimbangans),
             "{{ $balita->tanggal_lahir }}"

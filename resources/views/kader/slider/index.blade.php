@@ -54,7 +54,7 @@
                                     <td>{{ $slider->deskripsi }}</td>
 
                                     <td>
-                                        <img src="{{ asset('storage/' . $slider->gambar) }}" class="img-slider">
+                                        <img src="{{ asset('slider/' . $slider->gambar) }}" class="img-slider">
                                     </td>
 
                                     <td class="aksi">
