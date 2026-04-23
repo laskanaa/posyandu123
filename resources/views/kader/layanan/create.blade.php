@@ -16,8 +16,12 @@
                     <label>Pilih Layanan</label>
                     <select id="layananSelect" onchange="setLayananData()">
                         <option value="">-- Pilih --</option>
-                        <option value="penimbangan">⚖️ Penimbangan</option>
+                        <option value="penimbangan">⚖️ Pemantauan Pertumbuhan</option>
                         <option value="imunisasi">💉 Imunisasi</option>
+                        <option value="Layanan Kesehatan Ibu dan Anak">🤱 Layanan Kesehatan Ibu dan Anak</option>
+                        <option value="Pemberian Makanan Tambahan">🥣 Pemberian Makanan Tambahan</option>
+                        <option value="Pemberian Vitamin A & Obat Cacing">💊 Pemberian Vitamin A & Obat Cacing</option>
+                        <option value="Konsultasi Gizi dan KB">👨‍👩‍👧‍👦 Konsultasi Gizi dan KB</option>
                     </select>
                 </div>
 
@@ -81,14 +85,38 @@
 
 <script>
     function setLayananData() {
-        let val = document.getElementById('layananSelect').value
+        let val = document.getElementById('layananSelect').value;
+        let icon = document.getElementById('icon'); // Pastikan ID element input icon sesuai
+        let judul = document.getElementById('judul'); // Pastikan ID element input judul sesuai
 
-        if (val === 'penimbangan') {
-            icon.value = '⚖️'
-            judul.value = 'Penimbangan'
-        } else if (val === 'imunisasi') {
-            icon.value = '💉'
-            judul.value = 'Imunisasi'
+        switch (val) {
+            case 'penimbangan':
+                icon.value = '⚖️';
+                judul.value = 'Pemantauan Pertumbuhan';
+                break;
+            case 'imunisasi':
+                icon.value = '💉';
+                judul.value = 'Imunisasi';
+                break;
+            case 'Layanan Kesehatan Ibu dan Anak':
+                icon.value = '🤱';
+                judul.value = 'Layanan Kesehatan Ibu dan Anak';
+                break;
+            case 'Pemberian Makanan Tambahan':
+                icon.value = '🥣';
+                judul.value = 'Pemberian Makanan Tambahan';
+                break;
+            case 'Pemberian Vitamin A & Obat Cacing':
+                icon.value = '💊';
+                judul.value = 'Pemberian Vitamin A & Obat Cacing';
+                break;
+            case 'Konsultasi Gizi dan KB':
+                icon.value = '👨‍👩‍👧‍👦';
+                judul.value = 'Konsultasi Gizi dan KB';
+                break;
+            default:
+                icon.value = '';
+                judul.value = '';
         }
     }
 </script>

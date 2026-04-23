@@ -23,18 +23,17 @@ class GaleriController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'gambar' => 'required|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+    'gambar' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+]);
 
-        $file = $request->file('gambar');
-        $namaFile = time() . '_' . $file->getClientOriginalName();
-        
-        // Simpan ke folder public/galeri (bukan storage)
-        $file->move(public_path('galeri'), $namaFile);
+$file = $request->file('gambar');
+$namaFile = time() . '_' . $file->getClientOriginalName();
 
-        Galeri::create([
-            'gambar' => $namaFile   // hanya nama file saja
-        ]);
+$file->move(public_path('upload-galeri'), $namaFile);
+
+Galeri::create([
+    'gambar' => $namaFile
+]);
 
         return redirect()->route('kader.galeri.index')
             ->with('success', 'Gambar berhasil ditambahkan');
@@ -45,7 +44,7 @@ class GaleriController extends Controller
         $data = Galeri::findOrFail($id);
 
         // Hapus file fisik dari folder public/galeri
-        $filePath = public_path('galeri/' . $data->gambar);
+        $filePath = public_path('upload-galeri/' . $data->gambar);
         if (File::exists($filePath)) {
             File::delete($filePath);
         }

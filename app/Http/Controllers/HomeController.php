@@ -19,7 +19,7 @@ class HomeController extends Controller
             'layanan' => Layanan::all(),
             'pencegahans' => Pencegahan::all(),
             'informasi' => Informasi::all(),
-            'galeri' => Galeri::latest()->take(3)->get(),
+            'galeri' => Galeri::latest()->take(6)->get(),
         ]);
     }
 }

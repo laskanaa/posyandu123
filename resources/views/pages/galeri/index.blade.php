@@ -60,7 +60,7 @@
         <div class="galeri-grid">
             @foreach($galeri as $item)
                 <div class="galeri-item">
-                    <img src="{{ asset('storage/' . $item->gambar) }}">
+                    <img src="{{ asset('upload-galeri/' . $item->gambar) }}">
                 </div>
             @endforeach
         </div>

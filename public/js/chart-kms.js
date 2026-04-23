@@ -252,8 +252,8 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
 
     ${type === 'bb'
             ? `
-        <div><span style="color:${warna.plus3};">━━━</span> > +3 SD = sangat tinggi / risiko obesitas</div>
-        <div><span style="color:${warna.plus2};">━━━</span> +2 SD s/d +3 SD = tinggi</div>
+        <div><span style="color:${warna.plus3};">━━━</span> > +3 SD = sangat tinggi / obesitas</div>
+        <div><span style="color:${warna.plus2};">━━━</span> +2 SD s/d +3 SD = tinggi / resiko tinggi</div>
         <div><span style="color:${warna.median}; font-weight:bold;">━━━</span> -2 SD s/d +2 SD = normal</div>
         <div><span style="color:${warna.min2};">━━━</span> -2 SD s/d -3 SD = kurang</div>
         <div><span style="color:${warna.min3};">━━━</span> < -3 SD = sangat kurang</div>
@@ -270,7 +270,7 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
 </div>
 
 <div style="text-align:center; margin-top:6px; font-size:12px;">
-    <span style="color:#000;">●</span> Balita → Data penimbangan
+    <span style="color:#000;">●</span> Balita → ${type === 'bb' ? 'Data penimbangan' : 'Data pengukuran'}
 </div>
 `;
 

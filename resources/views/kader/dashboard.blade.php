@@ -24,7 +24,7 @@
             <div class="cards">
                 <div class="card card-hover">
                     <div class="card-icon">👶</div>
-                    <h4>Data Stunting</h4>
+                    <h4>Data Balita</h4>
                     <p>{{ $totalBalita }}</p>
                 </div>
             </div>

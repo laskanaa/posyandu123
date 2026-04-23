@@ -41,7 +41,7 @@
                                 <td>{{ $loop->iteration }}</td>
 
                                 <td>
-                                    <img src="{{ asset('galeri/' . $item->gambar) }}" class="img-table">
+                                    <img src="{{ asset('upload-galeri/' . $item->gambar) }}" class="img-table">
                                 </td>
 
                                 <td class="aksi">

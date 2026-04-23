@@ -13,48 +13,58 @@ use App\Http\Controllers\Kader\PencegahanController;
 use App\Http\Controllers\Kader\LayananController;
 use App\Http\Controllers\Kader\InformasiController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\Kader\GaleriController as KaderGaleriController;
+
 
 // =====================
-// FRONTEND
+// FRONTEND (PUBLIC)
 // =====================
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// 🔥 WAJIB ADA & DI LUAR SEMUA GROUP
 Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri');
 
+
 // =====================
-// AUTH ROUTES
+// AUTH
 // =====================
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
 // =====================
-// MIDDLEWARE AUTH
+// PROTECTED (LOGIN)
 // =====================
 Route::middleware(['auth'])->group(function () {
 
-    // DASHBOARD KADER
+    // DASHBOARD
     Route::get('/dashboard/kader', [DashboardController::class, 'index'])->name('dashboard.kader');
-
-    // BALITA
-    Route::resource('kader/balita', BalitaController::class);
-    Route::get('/balita/{id}/download', [BalitaController::class, 'download'])
-    ->name('balita.download');
-
-    // PENIMBANGAN
-    Route::resource('penimbangan', PenimbanganController::class);
-
-    // DASHBOARD ORANG TUA
     Route::get('/dashboard-ortu', [OrangtuaController::class, 'dashboard'])->name('dashboard.orangtua');
 
+
     // =====================
-    // KADER PREFIX (CRUD & SLIDER)
+    // BALITA
+    // =====================
+    Route::resource('kader/balita', BalitaController::class);
+    Route::get('/balita/{id}/download', [BalitaController::class, 'download'])->name('balita.download');
+
+
+    // =====================
+    // PENIMBANGAN
+    // =====================
+    Route::resource('penimbangan', PenimbanganController::class);
+
+
+    // =====================
+    // KADER AREA
     // =====================
     Route::prefix('kader')->name('kader.')->group(function () {
 
         // TENTANG
         Route::resource('tentang', TentangController::class);
 
-        // SPM
+        // PENCEGAHAN
         Route::resource('pencegahan', PencegahanController::class);
 
         // LAYANAN
@@ -63,10 +73,12 @@ Route::middleware(['auth'])->group(function () {
         // INFORMASI
         Route::resource('informasi', InformasiController::class);
 
-        // GALERI (CRUD Kader)
-        Route::resource('galeri', \App\Http\Controllers\Kader\GaleriController::class);
+        // 🔥 GALERI (INI SAJA, JANGAN DUPLIKAT)
+        Route::resource('galeri', KaderGaleriController::class);
 
+        // =====================
         // SLIDER
+        // =====================
         Route::get('/slider', [SliderController::class,'index'])->name('slider.index');
         Route::get('/slider/create', [SliderController::class,'create'])->name('slider.create');
         Route::post('/slider/store', [SliderController::class,'store'])->name('slider.store');
