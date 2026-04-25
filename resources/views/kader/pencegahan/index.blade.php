@@ -44,14 +44,32 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $pencegahan->deskripsi }}</td>
                                 <td class="aksi">
-                                    <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit">Edit</a>
 
+                                    <!-- EDIT ICON -->
+                                    <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            viewBox="0 0 16 16">
+                                            <path
+                                                d="M12.146.146a.5.5 0 0 1 .708 0l2.999 3a.5.5 0 0 1 0 .708l-9.5 9.5a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l9.5-9.5zM11.207 2 14 4.793 13.207 5.586 10.414 2.793 11.207 2zM10.5 3.207 2 11.707V14h2.293l8.5-8.5-2.293-2.293z" />
+                                        </svg>
+                                    </a>
+
+                                    <!-- DELETE ICON -->
                                     <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}" method="POST"
                                         style="display:inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn-delete">Hapus</button>
+                                        <button class="btn-delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm4 0A.5.5 0 0 1 10 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5l1-1h4l1 1h2.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z" />
+                                            </svg>
+                                        </button>
                                     </form>
+
                                 </td>
                             </tr>
                         @endforeach
@@ -169,19 +187,27 @@
         gap: 10px;
     }
 
+    /* 🔥 sedikit disesuaikan biar icon enak */
+    .btn-edit,
+    .btn-delete {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+    }
+
     .btn-edit {
         background: #ffc107;
-        padding: 6px 10px;
-        border-radius: 4px;
-        text-decoration: none;
+        color: #000;
     }
 
     .btn-delete {
         background: #dc3545;
         color: white;
-        border: none;
-        padding: 6px 10px;
-        border-radius: 4px;
     }
 
     .overlay {

@@ -352,6 +352,61 @@
                 font-size: 28px;
             }
         }
+
+        .galeri-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .galeri-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            gap: 20px;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .galeri-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .galeri-card {
+            min-width: 300px;
+            flex: 0 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .galeri-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .galeri-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            background: #0f766e;
+            color: white;
+            font-size: 26px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .galeri-nav.prev {
+            left: -20px;
+        }
+
+        .galeri-nav.next {
+            right: -20px;
+        }
     </style>
 
     <div class="homepage">
@@ -461,28 +516,53 @@
             </section>
         @endif
 
-        <section id="galeri" class="galeri-section" style="padding: 110px 0;">
+        <section id="galeri" class="galeri-section">
             <div class="container-home">
                 <div class="section-header">
                     <h2 class="section-title">Galeri Kegiatan</h2>
-                    <p class="section-subtitle">Dokumentasi momen keceriaan dan pelayanan kesehatan rutin di lingkungan
-                        Posyandu Paguyangan.</p>
+                    <p class="section-subtitle">
+                        Dokumentasi momen keceriaan dan pelayanan kesehatan rutin di lingkungan Posyandu Paguyangan.
+                    </p>
                 </div>
-                <div class="galeri-grid-custom">
-                    @foreach($galeri->take(6) as $item)
-                        <div class="galeri-item animate">
-                            <img src="{{ asset('upload-galeri/' . $item->gambar) }}">
-                        </div>
-                    @endforeach
+
+                <div class="galeri-wrapper">
+                    <button class="galeri-nav prev" id="prevBtn">‹</button>
+
+                    <div class="galeri-container" id="galeriContainer">
+                        @foreach($galeri as $item)
+                            <div class="galeri-card">
+                                <img src="{{ asset('upload-galeri/' . $item->gambar) }}">
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <button class="galeri-nav next" id="nextBtn">›</button>
                 </div>
-                <div class="galeri-btn">
-                    <a href="{{ route('galeri') }}" class="btn-galeri">Lihat Semua Galeri →</a>
-                </div>
+
             </div>
         </section>
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const container = document.getElementById('galeriContainer');
+            const prev = document.getElementById('prevBtn');
+            const next = document.getElementById('nextBtn');
+
+            if (!container || !prev || !next) return;
+
+            const scrollAmount = 320;
+
+            next.onclick = () => {
+                container.scrollLeft += scrollAmount;
+            };
+
+            prev.onclick = () => {
+                container.scrollLeft -= scrollAmount;
+            };
+
+        });
         function reveal() {
             document.querySelectorAll('.animate').forEach(el => {
                 if (el.getBoundingClientRect().top < window.innerHeight - 100) {

@@ -123,12 +123,16 @@
             margin-bottom: 5px;
         }
 
+        /* 🔥 INI YANG DIPERBAIKI */
         .form-group input {
             width: 100%;
-            padding: 11px 12px;
+            height: 45px;
+            /* samain tinggi */
+            padding: 0 12px;
             border-radius: 8px;
             border: 1px solid #d1d5db;
             font-size: 14px;
+            box-sizing: border-box;
         }
 
         .form-group input:focus {
@@ -139,7 +143,8 @@
         /* BUTTON */
         .login-btn {
             width: 100%;
-            padding: 12px;
+            height: 45px;
+            /* samain tinggi */
             background: #0d4f4d;
             color: white;
             border: none;

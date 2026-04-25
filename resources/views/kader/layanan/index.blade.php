@@ -48,7 +48,6 @@
                                     <td>{{ $layanan->judul }}</td>
 
                                     <td class="aksi">
-                                        <a href="{{ route('kader.layanan.edit', $layanan->id) }}" class="btn-edit">✏️</a>
 
                                         <form action="{{ route('kader.layanan.destroy', $layanan->id) }}" method="POST">
                                             @csrf
