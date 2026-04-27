@@ -17,12 +17,10 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            /* Mencegah scroll horizontal liar */
         }
 
         main {
             flex: 1;
-            /* Padding dihapus agar konten bisa full width/height */
             padding: 0;
             margin: 0;
             width: 100%;
@@ -32,16 +30,19 @@
 
 <body>
 
-    @include('components.header')
+    {{-- HEADER --}}
+    @if (!View::hasSection('hideHeader'))
+        @include('components.header')
+    @endif
 
     <main>
         @yield('content')
     </main>
 
-    @include('components.footer')
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    {{-- FOOTER --}}
+    @if (!View::hasSection('hideFooter'))
+        @include('components.footer')
+    @endif
 
 </body>
 

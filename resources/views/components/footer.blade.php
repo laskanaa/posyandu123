@@ -1,163 +1,440 @@
-<footer class="footer">
+<style>
+    :root {
+        --teal-dark: #0a3d38;
+        --teal: #0f766e;
+        --teal-mid: #14b8a6;
+        --teal-light: #ccfbf1;
+        --accent: #f59e0b;
+    }
 
-    <div class="footer-container">
+    /* ─── FOOTER WRAPPER ─────────────────────────────────────── */
+    .site-footer {
+        background: var(--teal-dark);
+        color: white;
+        font-family: 'DM Sans', sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
 
-        <!-- Pengertian Posyandu -->
-        <div class="footer-section">
-            <h3>Posyandu</h3>
-            <p>
-                Posyandu (Pos Pelayanan Terpadu) merupakan layanan kesehatan
-                masyarakat yang berfokus pada pemantauan pertumbuhan balita,
-                pencegahan stunting, serta peningkatan gizi anak.
+    /* Decorative glows */
+    .site-footer::before {
+        content: '';
+        position: absolute;
+        top: -120px;
+        left: -120px;
+        width: 420px;
+        height: 420px;
+        background: radial-gradient(circle, rgba(20, 184, 166, .12), transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .site-footer::after {
+        content: '';
+        position: absolute;
+        bottom: -80px;
+        right: -80px;
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(circle, rgba(245, 158, 11, .08), transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    /* ─── TOP STRIP ──────────────────────────────────────────── */
+    .footer-top {
+        border-bottom: 1px solid rgba(255, 255, 255, .07);
+        padding: 48px 0 32px;
+    }
+
+    .footer-top-inner {
+        max-width: 1240px;
+        margin: auto;
+        padding: 0 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .footer-logo-circle {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--teal), var(--teal-mid));
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+        box-shadow: 0 4px 16px rgba(20, 184, 166, .3);
+    }
+
+    .footer-brand-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .footer-brand-sub {
+        font-size: 11px;
+        color: var(--teal-mid);
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .footer-tagline {
+        font-size: 13.5px;
+        color: rgba(255, 255, 255, .5);
+        max-width: 340px;
+        line-height: 1.6;
+        text-align: right;
+    }
+
+    /* ─── MAIN GRID ──────────────────────────────────────────── */
+    .footer-main {
+        max-width: 1240px;
+        margin: auto;
+        padding: 56px 40px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.3fr 1.8fr;
+        gap: 48px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer-col h4 {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: var(--teal-mid);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .footer-col h4::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, .08);
+    }
+
+    /* About column */
+    .footer-about p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, .55);
+        line-height: 1.8;
+        margin-bottom: 24px;
+    }
+
+    .footer-socials {
+        display: flex;
+        gap: 10px;
+    }
+
+    .social-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, .07);
+        border: 1px solid rgba(255, 255, 255, .1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        text-decoration: none;
+        color: white;
+        transition: all .3s;
+    }
+
+    .social-btn:hover {
+        background: var(--teal);
+        border-color: var(--teal);
+        transform: translateY(-3px);
+        color: white;
+    }
+
+    /* Nav column */
+    .footer-nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .footer-nav-list li a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, .55);
+        text-decoration: none;
+        padding: 6px 0;
+        transition: all .25s;
+    }
+
+    .footer-nav-list li a::before {
+        content: '';
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--teal-mid);
+        opacity: 0;
+        transition: opacity .25s;
+        flex-shrink: 0;
+    }
+
+    .footer-nav-list li a:hover {
+        color: white;
+        padding-left: 6px;
+    }
+
+    .footer-nav-list li a:hover::before {
+        opacity: 1;
+    }
+
+    /* Contact column */
+    .footer-contact-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .footer-contact-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, .55);
+        line-height: 1.5;
+    }
+
+    .contact-icon {
+        width: 32px;
+        height: 32px;
+        background: rgba(20, 184, 166, .12);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    /* Map column */
+    .map-wrap {
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .3);
+        border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .map-wrap iframe {
+        width: 100%;
+        height: 180px;
+        display: block;
+        border: none;
+        filter: grayscale(30%) contrast(1.05);
+    }
+
+    .map-open-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 12px;
+        background: rgba(20, 184, 166, .12);
+        border: 1px solid rgba(20, 184, 166, .25);
+        color: var(--teal-mid);
+        font-size: 13px;
+        font-weight: 500;
+        padding: 9px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: all .3s;
+        width: 100%;
+        text-align: center;
+    }
+
+    .map-open-btn:hover {
+        background: var(--teal);
+        border-color: var(--teal);
+        color: white;
+    }
+
+    /* ─── BOTTOM BAR ─────────────────────────────────────────── */
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, .07);
+        padding: 20px 40px;
+        max-width: 1240px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .footer-bottom-copy {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, .35);
+    }
+
+    .footer-bottom-copy strong {
+        color: rgba(255, 255, 255, .6);
+        font-weight: 500;
+    }
+
+    .footer-bottom-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11.5px;
+        color: rgba(255, 255, 255, .3);
+    }
+
+    .footer-bottom-badge span {
+        color: var(--accent);
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+        .footer-main {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .footer-main {
+            grid-template-columns: 1fr;
+            padding: 40px 24px;
+        }
+
+        .footer-top-inner {
+            padding: 0 24px;
+        }
+
+        .footer-tagline {
+            text-align: left;
+        }
+
+        .footer-bottom {
+            padding: 20px 24px;
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+
+<footer class="site-footer">
+
+    {{-- Top strip --}}
+    <div class="footer-top">
+        <div class="footer-top-inner">
+            <div class="footer-brand">
+                <div class="footer-logo-circle">🌿</div>
+                <div>
+                    <div class="footer-brand-name">Posyandu</div>
+                    <div class="footer-brand-sub">Paguyangan</div>
+                </div>
+            </div>
+            <p class="footer-tagline">
+                Bersama menjaga kesehatan ibu & anak demi generasi yang lebih kuat dan sehat.
             </p>
         </div>
+    </div>
 
-        <!-- Navigasi -->
-        <div class="footer-section">
-            <h3>Navigasi</h3>
-            <ul>
+    {{-- Main grid --}}
+    <div class="footer-main">
+
+        {{-- Col 1: About --}}
+        <div class="footer-col footer-about">
+            <h4>Tentang</h4>
+            <p>
+                Posyandu (Pos Pelayanan Terpadu) merupakan layanan kesehatan masyarakat yang berfokus
+                pada pemantauan pertumbuhan balita, pencegahan stunting, serta peningkatan gizi anak dan ibu.
+            </p>
+            <div class="footer-socials">
+                <a href="#" class="social-btn" title="Instagram">📷</a>
+                <a href="#" class="social-btn" title="Facebook">📘</a>
+                <a href="#" class="social-btn" title="WhatsApp">💬</a>
+            </div>
+        </div>
+
+        {{-- Col 2: Nav --}}
+        <div class="footer-col">
+            <h4>Navigasi</h4>
+            <ul class="footer-nav-list">
                 <li><a href="/">Home</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#layanan">Layanan</a></li>
+                <li><a href="#pencegahan">Pencegahan</a></li>
+                <li><a href="#galeri">Galeri</a></li>
                 <li><a href="#">Login</a></li>
             </ul>
         </div>
 
-        <!-- Hubungi -->
-        <div class="footer-section">
-            <h3>Hubungi</h3>
-            <p>
-                Email: info@posyandu.id <br>
-                Telp: 0812-3456-7890
-            </p>
+        {{-- Col 3: Contact --}}
+        <div class="footer-col">
+            <h4>Hubungi Kami</h4>
+            <ul class="footer-contact-list">
+                <li>
+                    <div class="contact-icon">📧</div>
+                    <div>info@posyandu.id</div>
+                </li>
+                <li>
+                    <div class="contact-icon">📞</div>
+                    <div>0812-3456-7890</div>
+                </li>
+                <li>
+                    <div class="contact-icon">🕐</div>
+                    <div>Senin – Jumat<br>08.00 – 16.00 WIB</div>
+                </li>
+            </ul>
         </div>
 
-        <!-- Lokasi -->
-        <div class="footer-section">
-            <h3>Lokasi</h3>
-            <div class="map-container">
-
+        {{-- Col 4: Map --}}
+        <div class="footer-col">
+            <h4>Lokasi</h4>
+            <div class="map-wrap">
                 <iframe src="https://www.google.com/maps?q=-7.3006596,109.0381553&z=15&output=embed" allowfullscreen=""
-                    loading="lazy">
+                    loading="lazy" title="Lokasi Posyandu Paguyangan">
                 </iframe>
-
-                <a href="https://www.google.com/maps/place/Puskesmas+Paguyangan/@-7.3006596,109.0355804,864m/data=!3m2!1e3!4b1!4m6!3m5!1s0x2e6f88dde831e67d:0x329a62fe3dda579d!8m2!3d-7.3006596!4d109.0381553!16s%2Fg%2F11clvc11g8"
-                    target="_blank" class="map-btn">
-                    Buka Maps
-                </a>
-
             </div>
+            <a href="https://www.google.com/maps/place/Puskesmas+Paguyangan/@-7.3006596,109.0355804,864m/data=!3m2!1e3!4b1!4m6!3m5!1s0x2e6f88dde831e67d:0x329a62fe3dda579d!8m2!3d-7.3006596!4d109.0381553!16s%2Fg%2F11clvc11g8"
+                target="_blank" class="map-open-btn">
+                🗺 Buka di Google Maps
+            </a>
         </div>
 
     </div>
 
+    {{-- Bottom bar --}}
     <div class="footer-bottom">
-        © {{ date('Y') }} Sistem Monitoring Posyandu. All Rights Reserved.
+        <p class="footer-bottom-copy">
+            © {{ date('Y') }} <strong>Sistem Monitoring Posyandu Paguyangan</strong>. All Rights Reserved.
+        </p>
+        <div class="footer-bottom-badge">
+            Dibuat dengan <span>♥</span> untuk masyarakat Paguyangan
+        </div>
     </div>
 
 </footer>
-
-
-<style>
-    .footer {
-        background-color: #0d4f4d;
-        color: white;
-        padding: 60px 80px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .footer-container {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 50px;
-    }
-
-    .footer-section {
-        flex: 1;
-        min-width: 220px;
-    }
-
-    .footer-section h3 {
-        margin-bottom: 20px;
-        font-size: 18px;
-        letter-spacing: 0.5px;
-    }
-
-    .footer-section p,
-    .footer-section li {
-        font-size: 14px;
-        line-height: 1.8;
-        opacity: 0.9;
-    }
-
-    .footer-section ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .footer-section ul li {
-        margin-bottom: 10px;
-    }
-
-    .footer-section a {
-        color: white;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-    .footer-section a:hover {
-        opacity: 0.7;
-    }
-
-    .map-container {
-        position: relative;
-        width: 100%;
-        height: 200px;
-        margin-top: 15px;
-    }
-
-    .map-container iframe {
-        width: 100%;
-        height: 100%;
-        border: 0;
-        border-radius: 10px;
-    }
-
-    /* 🔥 tombol kecil pojok */
-    .map-btn {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: #0d4f4d;
-        color: white;
-        padding: 6px 10px;
-        font-size: 12px;
-        border-radius: 6px;
-        text-decoration: none;
-        z-index: 2;
-        transition: 0.3s;
-    }
-
-    .map-btn:hover {
-        background: #0f766e;
-    }
-
-    .footer-bottom {
-        margin-top: 50px;
-        padding-top: 25px;
-        text-align: center;
-        font-size: 13px;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        opacity: 0.8;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .footer {
-            padding: 40px 25px;
-        }
-
-        .footer-container {
-            gap: 35px;
-        }
-    }
-</style>

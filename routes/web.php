@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     // DASHBOARD
     Route::get('/dashboard/kader', [DashboardController::class, 'index'])->name('dashboard.kader');
     Route::get('/dashboard-ortu', [OrangtuaController::class, 'dashboard'])->name('dashboard.orangtua');
-
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // =====================
     // BALITA

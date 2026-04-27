@@ -2,249 +2,570 @@
 
 @section('title', 'Dashboard Kader')
 
+@section('hideHeader', true)
+@section('hideFooter', true)
+
+
 @section('content')
 
-    <div class="wrapper">
-
-        <div class="sidebar" id="sidebar">
-            @include('partials.sidebar_kader')
-        </div>
-
-        <div class="main">
-
-            <div class="topbar">
-                <button class="hamburger" id="toggleSidebar">☰</button>
-
-                <div class="topbar-text">
-                    <h3>Dashboard</h3>
-                    <span>Selamat Datang, <strong>Kader 👋</strong></span>
-                </div>
-            </div>
-
-            <div class="cards">
-                <div class="card card-hover">
-                    <div class="card-icon">👶</div>
-                    <h4>Data Balita</h4>
-                    <p>{{ $totalBalita }}</p>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="overlay" id="overlay"></div>
-
-    <script>
-        const toggle = document.getElementById("toggleSidebar");
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("overlay");
-
-        toggle.onclick = function () {
-            sidebar.classList.toggle("active");
-            overlay.classList.toggle("active");
-        }
-
-        overlay.onclick = function () {
-            sidebar.classList.remove("active");
-            overlay.classList.remove("active");
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ================= WRAPPER ================= */
-        .wrapper {
+        :root {
+            --teal-dark:  #0a3d38;
+            --teal:       #0f766e;
+            --teal-mid:   #14b8a6;
+            --teal-light: #ccfbf1;
+            --accent:     #f59e0b;
+            --bg:         #f0f7f6;
+            --sidebar-w:  260px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: #0d1f1e;
+        }
+
+        /* ─── LAYOUT ─────────────────────────────────────────────── */
+        .dash-wrapper {
             display: flex;
             min-height: 100vh;
-            background: #f4f7fa;
-            font-family: 'Segoe UI', sans-serif;
         }
 
-        /* ================= SIDEBAR ================= */
-        .sidebar {
+        /* ─── SIDEBAR ────────────────────────────────────────────── */
+        .dash-sidebar {
             position: fixed;
-            left: -260px;
-            top: 0;
-            width: 260px;
-            height: 100%;
-            background: linear-gradient(180deg, #0d4f4d 0%, #126e6c 100%);
-            color: white;
-            transition: 0.4s;
+            top: 0; left: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: var(--teal-dark);
             z-index: 1000;
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            border-radius: 0 12px 12px 0;
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        /* ================= MAIN ================= */
-        .main {
-            flex: 1;
-            padding: 30px;
-            width: 100%;
-            transition: 0.3s;
-        }
-
-        /* ================= TOPBAR ================= */
-        .topbar {
-            background: #fff;
-            padding: 20px 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
             display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            transition: 0.3s;
-        }
-
-        .topbar-text h3 {
-            margin: 0;
-            font-size: 22px;
-            color: #0d4f4d;
-        }
-
-        .topbar-text span {
-            font-size: 14px;
-            color: #555;
-        }
-
-        .hamburger {
-            background: #0d4f4d;
-            color: #fff;
-            border: none;
-            padding: 10px 14px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .hamburger:hover {
-            background: #126e6c;
-        }
-
-        /* ================= CARDS ================= */
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: #fff;
-            padding: 22px 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-            border-left: 5px solid #0d4f4d;
-            transition: 0.4s ease;
-            position: relative;
+            flex-direction: column;
+            transition: transform .4s cubic-bezier(.22,1,.36,1);
             overflow: hidden;
         }
 
-        .card-hover:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
-        }
-
-        .card h4 {
-            margin: 12px 0 5px;
-            font-size: 15px;
-            color: #666;
-        }
-
-        .card p {
-            font-size: 28px;
-            font-weight: bold;
-            color: #0d4f4d;
-        }
-
-        .card-icon {
-            font-size: 30px;
-            display: inline-block;
-            background: #e0f2f1;
-            color: #0d4f4d;
-            padding: 12px;
+        /* Decorative glow inside sidebar */
+        .dash-sidebar::before {
+            content: '';
+            position: absolute;
+            top: -80px; left: -80px;
+            width: 260px; height: 260px;
+            background: radial-gradient(circle, rgba(20,184,166,.15), transparent 65%);
             border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-            transition: 0.3s;
-            margin-bottom: 10px;
+            pointer-events: none;
         }
 
-        .card-hover:hover .card-icon {
-            transform: scale(1.1);
+        .dash-sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(245,158,11,.08), transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
-        /* ================= OVERLAY ================= */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.35);
+        /* Sidebar brand strip */
+        .sidebar-brand {
+            padding: 28px 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            position: relative; z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-emblem {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-mid));
+            border-radius: 11px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(20,184,166,.3);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand-sub {
+            font-size: 10.5px;
+            color: var(--teal-mid);
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+
+        /* Sidebar nav content */
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+            position: relative; z-index: 1;
+            scrollbar-width: none;
+        }
+
+        .sidebar-nav::-webkit-scrollbar { display: none; }
+
+        /* Sidebar footer */
+        .sidebar-foot {
+            padding: 16px 24px 24px;
+            border-top: 1px solid rgba(255,255,255,.07);
+            position: relative; z-index: 1;
+        }
+
+        .sidebar-foot-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-avatar {
+            width: 36px; height: 36px;
+            background: rgba(20,184,166,.2);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+
+        .sidebar-foot-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            line-height: 1.3;
+        }
+
+        .sidebar-foot-role {
+            font-size: 11px;
+            color: var(--teal-mid);
+        }
+
+        /* Collapsed on mobile */
+        @media (max-width: 900px) {
+            .dash-sidebar { transform: translateX(-100%); }
+            .dash-sidebar.open { transform: translateX(0); }
+        }
+
+        /* ─── MAIN AREA ──────────────────────────────────────────── */
+        .dash-main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: margin .4s;
+        }
+
+        @media (max-width: 900px) {
+            .dash-main { margin-left: 0; }
+        }
+
+        /* ─── TOPBAR ─────────────────────────────────────────────── */
+        .dash-topbar {
+            position: sticky;
+            top: 0; z-index: 100;
+            background: rgba(240,247,246,.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15,118,110,.08);
+            padding: 0 32px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .dash-hamburger {
+            width: 40px; height: 40px;
+            background: var(--teal-dark);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
             display: none;
+            align-items: center;
+            justify-content: center;
+            transition: background .25s;
+            flex-shrink: 0;
+        }
+
+        .dash-hamburger:hover { background: var(--teal); }
+
+        @media (max-width: 900px) {
+            .dash-hamburger { display: flex; }
+        }
+
+        .topbar-breadcrumb {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar-page {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--teal-dark);
+            line-height: 1.2;
+        }
+
+        .topbar-greeting {
+            font-size: 13px;
+            color: #7a9e9b;
+        }
+
+        .topbar-greeting strong {
+            color: var(--teal);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar-date {
+            font-size: 12.5px;
+            color: #7a9e9b;
+            background: white;
+            border: 1px solid rgba(15,118,110,.1);
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .topbar-notif {
+            width: 38px; height: 38px;
+            background: white;
+            border: 1px solid rgba(15,118,110,.1);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all .25s;
+            position: relative;
+        }
+
+        .topbar-notif:hover {
+            background: var(--teal-light);
+            border-color: var(--teal-mid);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 8px; right: 8px;
+            width: 7px; height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+        }
+
+        /* ─── CONTENT AREA ───────────────────────────────────────── */
+        .dash-content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        /* Section header */
+        .dash-section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--teal-light);
+            color: var(--teal);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 5px 13px;
+            border-radius: 30px;
+            margin-bottom: 8px;
+        }
+
+        .dash-section-tag::before {
+            content: '';
+            width: 5px; height: 5px;
+            background: var(--teal);
+            border-radius: 50%;
+        }
+
+        .dash-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--teal-dark);
+            margin-bottom: 24px;
+        }
+
+        /* ─── STAT CARDS ─────────────────────────────────────────── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(15,118,110,.07);
+            border: 1px solid rgba(15,118,110,.06);
+            position: relative;
+            overflow: hidden;
+            transition: all .35s cubic-bezier(.22,1,.36,1);
+            cursor: default;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--teal), var(--teal-mid));
+            border-radius: 18px 18px 0 0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(15,118,110,.13);
+        }
+
+        .stat-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 46px; height: 46px;
+            border-radius: 13px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            background: var(--teal-light);
+            transition: transform .35s;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .stat-trend {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 9px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .stat-trend.down {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--teal-dark);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #7a9e9b;
+            font-weight: 500;
+        }
+
+        /* Color variants */
+        .stat-card.amber  .stat-icon { background: #fef3c7; }
+        .stat-card.amber::before     { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .stat-card.amber .stat-value { color: #92400e; }
+
+        .stat-card.rose   .stat-icon { background: #ffe4e6; }
+        .stat-card.rose::before      { background: linear-gradient(90deg, #f43f5e, #fb7185); }
+        .stat-card.rose .stat-value  { color: #9f1239; }
+
+        .stat-card.blue   .stat-icon { background: #dbeafe; }
+        .stat-card.blue::before      { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .stat-card.blue .stat-value  { color: #1e3a8a; }
+
+        /* ─── OVERLAY ────────────────────────────────────────────── */
+        .dash-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.35);
             z-index: 900;
+            backdrop-filter: blur(2px);
         }
 
-        .overlay.active {
-            display: block;
-        }
+        .dash-overlay.open { display: block; }
 
-        /* ================= RESPONSIVE ================= */
-        @media(max-width:768px) {
-            .main {
-                padding: 15px;
-            }
-
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .topbar-text h3 {
-                font-size: 18px;
-            }
-
-            .topbar-text span {
-                font-size: 13px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .card p {
-                font-size: 22px;
-            }
-        }
-
-        @media(max-width:480px) {
-            .main {
-                padding: 12px;
-            }
-
-            .topbar {
-                padding: 12px;
-            }
-
-            .card {
-                padding: 16px;
-                border-radius: 14px;
-            }
-
-            .card h4 {
-                font-size: 13px;
-            }
-
-            .card p {
-                font-size: 20px;
-            }
+        /* ─── RESPONSIVE ─────────────────────────────────────────── */
+        @media (max-width: 640px) {
+            .dash-content { padding: 20px 16px; }
+            .dash-topbar  { padding: 0 16px; }
+            .topbar-date  { display: none; }
         }
     </style>
+
+    <div class="dash-wrapper">
+
+        {{-- ── Sidebar ── --}}
+        <aside class="dash-sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-emblem">🌿</div>
+                <div>
+                    <div class="sidebar-brand-name">Posyandu</div>
+                    <div class="sidebar-brand-sub">Paguyangan</div>
+                </div>
+            </div>
+
+            <div class="sidebar-nav">
+                @include('partials.sidebar_kader')
+            </div>
+
+            <div class="sidebar-foot">
+                <div class="sidebar-foot-user">
+                    <div class="sidebar-avatar">🧑‍⚕️</div>
+                    <div>
+                        <div class="sidebar-foot-name">Kader Posyandu</div>
+                        <div class="sidebar-foot-role">Kader Aktif</div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <div class="dash-overlay" id="overlay"></div>
+
+        {{-- ── Main ── --}}
+        <div class="dash-main">
+
+            {{-- Topbar --}}
+            <header class="dash-topbar">
+                <div class="topbar-left">
+                    <button class="dash-hamburger" id="toggleSidebar">☰</button>
+                    <div class="topbar-breadcrumb">
+                        <span class="topbar-page">Dashboard</span>
+                        <span class="topbar-greeting">Selamat datang kembali, <strong>Kader 👋</strong></span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-date" id="topbarDate"></span>
+                    <div class="topbar-notif">
+                        🔔
+                        <span class="notif-dot"></span>
+                    </div>
+                </div>
+            </header>
+
+            {{-- Content --}}
+            <div class="dash-content">
+
+                <div class="dash-section-tag">Ringkasan</div>
+                <h2 class="dash-section-title">Statistik Posyandu</h2>
+
+                <div class="stat-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-card-top">
+                            <div class="stat-icon">👶</div>
+                            <span class="stat-trend">+2 baru</span>
+                        </div>
+                        <div class="stat-value">{{ $totalBalita }}</div>
+                        <div class="stat-label">Total Balita Terdaftar</div>
+                    </div>
+
+                    {{-- Tambahkan kartu lain sesuai data yang tersedia --}}
+                    {{-- Contoh placeholder (hapus jika tidak ada datanya): --}}
+                    {{--
+                    <div class="stat-card amber">
+                        <div class="stat-card-top">
+                            <div class="stat-icon">⚠️</div>
+                            <span class="stat-trend down">Perlu perhatian</span>
+                        </div>
+                        <div class="stat-value">{{ $stunting ?? '—' }}</div>
+                        <div class="stat-label">Kasus Stunting</div>
+                    </div>
+
+                    <div class="stat-card blue">
+                        <div class="stat-card-top">
+                            <div class="stat-icon">📅</div>
+                            <span class="stat-trend">Bulan ini</span>
+                        </div>
+                        <div class="stat-value">{{ $pemeriksaan ?? '—' }}</div>
+                        <div class="stat-label">Pemeriksaan Bulan Ini</div>
+                    </div>
+
+                    <div class="stat-card rose">
+                        <div class="stat-card-top">
+                            <div class="stat-icon">👩‍👧</div>
+                            <span class="stat-trend">Aktif</span>
+                        </div>
+                        <div class="stat-value">{{ $ibu ?? '—' }}</div>
+                        <div class="stat-label">Ibu Terdaftar</div>
+                    </div>
+                    --}}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        const sidebar  = document.getElementById('sidebar');
+        const overlay  = document.getElementById('overlay');
+        const toggle   = document.getElementById('toggleSidebar');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            overlay.classList.add('open');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+        }
+
+        toggle.addEventListener('click', function () {
+            sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+        });
+
+        overlay.addEventListener('click', closeSidebar);
+
+        // Date display
+        const dateEl = document.getElementById('topbarDate');
+        if (dateEl) {
+            const now = new Date();
+            dateEl.textContent = now.toLocaleDateString('id-ID', {
+                weekday: 'short', day: 'numeric', month: 'long', year: 'numeric'
+            });
+        }
+    })();
+    </script>
 
 @endsection

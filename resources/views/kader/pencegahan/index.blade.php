@@ -2,226 +2,554 @@
 
 @section('title', 'Data Pencegahan')
 
+@section('hideHeader', true)
+@section('hideFooter', true)
+
 @section('content')
 
-    <div class="wrapper">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-        <!-- SIDEBAR -->
-        <div class="sidebar" id="sidebar">
-            @include('partials.sidebar_kader')
-        </div>
+    <style>
+        :root {
+            --teal-dark:  #0a3d38;
+            --teal:       #0f766e;
+            --teal-mid:   #14b8a6;
+            --teal-light: #ccfbf1;
+            --accent:     #f59e0b;
+            --bg:         #f0f7f6;
+            --sidebar-w:  260px;
+        }
 
-        <!-- MAIN -->
-        <div class="main">
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-            <div class="topbar">
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: #0d1f1e;
+        }
 
-                <div class="left">
-                    <button id="toggleSidebar" class="hamburger">☰</button>
-                    <h3>Pencegahan Stunting</h3>
+        /* ─── LAYOUT ─────────────────────────────────────────────── */
+        .dash-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ─── SIDEBAR ────────────────────────────────────────────── */
+        .dash-sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: var(--teal-dark);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform .4s cubic-bezier(.22,1,.36,1);
+            overflow: hidden;
+        }
+
+        .dash-sidebar::before {
+            content: '';
+            position: absolute;
+            top: -80px; left: -80px;
+            width: 260px; height: 260px;
+            background: radial-gradient(circle, rgba(20,184,166,.15), transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .dash-sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(245,158,11,.08), transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .sidebar-brand {
+            padding: 28px 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            position: relative; z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-emblem {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-mid));
+            border-radius: 11px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(20,184,166,.3);
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand-sub {
+            font-size: 10.5px;
+            color: var(--teal-mid);
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+            position: relative; z-index: 1;
+            scrollbar-width: none;
+        }
+
+        .sidebar-nav::-webkit-scrollbar { display: none; }
+
+        .sidebar-foot {
+            padding: 16px 24px 24px;
+            border-top: 1px solid rgba(255,255,255,.07);
+            position: relative; z-index: 1;
+        }
+
+        .sidebar-foot-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-avatar {
+            width: 36px; height: 36px;
+            background: rgba(20,184,166,.2);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+
+        .sidebar-foot-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            line-height: 1.3;
+        }
+
+        .sidebar-foot-role {
+            font-size: 11px;
+            color: var(--teal-mid);
+        }
+
+        @media (max-width: 900px) {
+            .dash-sidebar { transform: translateX(-100%); }
+            .dash-sidebar.open { transform: translateX(0); }
+        }
+
+        /* ─── MAIN AREA ──────────────────────────────────────────── */
+        .dash-main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: margin .4s;
+        }
+
+        @media (max-width: 900px) {
+            .dash-main { margin-left: 0; }
+        }
+
+        /* ─── TOPBAR ─────────────────────────────────────────────── */
+        .dash-topbar {
+            position: sticky;
+            top: 0; z-index: 100;
+            background: rgba(240,247,246,.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15,118,110,.08);
+            padding: 0 32px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .dash-hamburger {
+            width: 40px; height: 40px;
+            background: var(--teal-dark);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: background .25s;
+            flex-shrink: 0;
+        }
+
+        .dash-hamburger:hover { background: var(--teal); }
+
+        @media (max-width: 900px) {
+            .dash-hamburger { display: flex; }
+        }
+
+        .topbar-breadcrumb {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar-page {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--teal-dark);
+            line-height: 1.2;
+        }
+
+        .topbar-sub {
+            font-size: 13px;
+            color: #7a9e9b;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            letter-spacing: .02em;
+            transition: all .3s;
+            box-shadow: 0 4px 14px rgba(15,118,110,.25);
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15,118,110,.35);
+        }
+
+        /* ─── CONTENT ────────────────────────────────────────────── */
+        .dash-content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        .dash-section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--teal-light);
+            color: var(--teal);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 5px 13px;
+            border-radius: 30px;
+            margin-bottom: 8px;
+        }
+
+        .dash-section-tag::before {
+            content: '';
+            width: 5px; height: 5px;
+            background: var(--teal);
+            border-radius: 50%;
+        }
+
+        .dash-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--teal-dark);
+            margin-bottom: 24px;
+        }
+
+        /* ─── TABLE CARD ─────────────────────────────────────────── */
+        .table-card {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(15,118,110,.07);
+            border: 1px solid rgba(15,118,110,.06);
+            overflow: hidden;
+        }
+
+        .table-card table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-card thead tr {
+            background: linear-gradient(90deg, var(--teal-dark), var(--teal));
+        }
+
+        .table-card thead th {
+            padding: 14px 20px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .table-card thead th:first-child { border-radius: 0; }
+
+        .table-card tbody tr {
+            border-bottom: 1px solid rgba(15,118,110,.06);
+            transition: background .2s;
+        }
+
+        .table-card tbody tr:last-child { border-bottom: none; }
+
+        .table-card tbody tr:hover { background: #f8fdfc; }
+
+        .table-card tbody td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: #2d4a48;
+            vertical-align: middle;
+        }
+
+        .row-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px; height: 28px;
+            background: var(--teal-light);
+            color: var(--teal);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .aksi-cell {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-edit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 9px;
+            border: 1px solid #fde68a;
+            cursor: pointer;
+            transition: all .25s;
+            text-decoration: none;
+        }
+
+        .btn-edit:hover {
+            background: #fbbf24;
+            color: white;
+            border-color: #fbbf24;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(251,191,36,.3);
+        }
+
+        .btn-delete {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            background: #fee2e2;
+            color: #9f1239;
+            border-radius: 9px;
+            border: 1px solid #fecaca;
+            cursor: pointer;
+            transition: all .25s;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(239,68,68,.3);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7a9e9b;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* ─── OVERLAY ────────────────────────────────────────────── */
+        .dash-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.35);
+            z-index: 900;
+            backdrop-filter: blur(2px);
+        }
+
+        .dash-overlay.open { display: block; }
+
+        @media (max-width: 640px) {
+            .dash-content { padding: 20px 16px; }
+            .dash-topbar  { padding: 0 16px; }
+        }
+    </style>
+
+    <div class="dash-wrapper">
+
+        {{-- Sidebar --}}
+        <aside class="dash-sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-emblem">🌿</div>
+                <div>
+                    <div class="sidebar-brand-name">Posyandu</div>
+                    <div class="sidebar-brand-sub">Paguyangan</div>
+                </div>
+            </div>
+            <div class="sidebar-nav">
+                @include('partials.sidebar_kader')
+            </div>
+            <div class="sidebar-foot">
+                <div class="sidebar-foot-user">
+                    <div class="sidebar-avatar">🧑‍⚕️</div>
+                    <div>
+                        <div class="sidebar-foot-name">Kader Posyandu</div>
+                        <div class="sidebar-foot-role">Kader Aktif</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="dash-overlay" id="overlay"></div>
+
+        {{-- Main --}}
+        <div class="dash-main">
+
+            {{-- Topbar --}}
+            <header class="dash-topbar">
+                <div class="topbar-left">
+                    <button class="dash-hamburger" id="toggleSidebar">☰</button>
+                    <div class="topbar-breadcrumb">
+                        <span class="topbar-page">Pencegahan Stunting</span>
+                        <span class="topbar-sub">Kelola data pencegahan stunting</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <a href="{{ route('kader.pencegahan.create') }}" class="btn-add">
+                        + Tambah Pencegahan
+                    </a>
+                </div>
+            </header>
+
+            {{-- Content --}}
+            <div class="dash-content">
+
+                <div class="dash-section-tag">Manajemen Data</div>
+                <h2 class="dash-section-title">Daftar Pencegahan Stunting</h2>
+
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:60px">No</th>
+                                <th>Deskripsi Pencegahan</th>
+                                <th style="width:120px">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($pencegahans as $pencegahan)
+                                <tr>
+                                    <td><span class="row-num">{{ $loop->iteration }}</span></td>
+                                    <td>{{ $pencegahan->deskripsi }}</td>
+                                    <td>
+                                        <div class="aksi-cell">
+                                            {{-- Edit --}}
+                                            <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit" title="Edit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l2.999 3a.5.5 0 0 1 0 .708l-9.5 9.5a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l9.5-9.5zM11.207 2 14 4.793 13.207 5.586 10.414 2.793 11.207 2zM10.5 3.207 2 11.707V14h2.293l8.5-8.5-2.293-2.293z"/>
+                                                </svg>
+                                            </a>
+
+                                            {{-- Delete --}}
+                                            <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}" method="POST" style="display:inline"
+                                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn-delete" title="Hapus">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm4 0A.5.5 0 0 1 10 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z"/>
+                                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5l1-1h4l1 1h2.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z"/>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3">
+                                        <div class="empty-state">
+                                            <div class="empty-state-icon">📋</div>
+                                            <p>Belum ada data pencegahan. Tambahkan data pertama Anda.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
 
-                <a href="{{ route('kader.pencegahan.create') }}" class="btn-add">
-                    + Tambah Pencegahan
-                </a>
-
             </div>
-
-            <div class="card-table">
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Judul</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach($pencegahans as $pencegahan)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $pencegahan->deskripsi }}</td>
-                                <td class="aksi">
-
-                                    <!-- EDIT ICON -->
-                                    <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                            viewBox="0 0 16 16">
-                                            <path
-                                                d="M12.146.146a.5.5 0 0 1 .708 0l2.999 3a.5.5 0 0 1 0 .708l-9.5 9.5a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l9.5-9.5zM11.207 2 14 4.793 13.207 5.586 10.414 2.793 11.207 2zM10.5 3.207 2 11.707V14h2.293l8.5-8.5-2.293-2.293z" />
-                                        </svg>
-                                    </a>
-
-                                    <!-- DELETE ICON -->
-                                    <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}" method="POST"
-                                        style="display:inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn-delete">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                                viewBox="0 0 16 16">
-                                                <path
-                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm4 0A.5.5 0 0 1 10 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z" />
-                                                <path fill-rule="evenodd"
-                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5l1-1h4l1 1h2.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z" />
-                                            </svg>
-                                        </button>
-                                    </form>
-
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-
-                </table>
-
-            </div>
-
         </div>
-
     </div>
 
-    <div class="overlay" id="overlay"></div>
-
     <script>
-        const toggle = document.getElementById("toggleSidebar");
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("overlay");
+    (function () {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const toggle  = document.getElementById('toggleSidebar');
 
-        toggle.onclick = function () {
-            sidebar.classList.toggle("active");
-            overlay.classList.toggle("active");
-        }
+        function openSidebar()  { sidebar.classList.add('open');    overlay.classList.add('open'); }
+        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('open'); }
 
-        overlay.onclick = function () {
-            sidebar.classList.remove("active");
-            overlay.classList.remove("active");
-        }
+        toggle.addEventListener('click', function () {
+            sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+        });
+        overlay.addEventListener('click', closeSidebar);
+    })();
     </script>
 
 @endsection
-
-<style>
-    .wrapper {
-        display: flex;
-        min-height: 100vh;
-        font-family: sans-serif;
-        background: #f4f6f9;
-    }
-
-    .sidebar {
-        position: fixed;
-        left: -260px;
-        top: 0;
-        width: 260px;
-        height: 100%;
-        background: #0d4f4d;
-        transition: 0.3s;
-        z-index: 1000;
-    }
-
-    .sidebar.active {
-        left: 0;
-    }
-
-    .main {
-        flex: 1;
-        padding: 30px;
-        width: 100%;
-    }
-
-    .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-
-    .left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .hamburger {
-        background: #0d4f4d;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        font-size: 18px;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-
-    .btn-add {
-        background: #0d4f4d;
-        color: white;
-        padding: 10px 18px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 14px;
-    }
-
-    .card-table {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table th,
-    table td {
-        padding: 12px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .aksi {
-        display: flex;
-        gap: 10px;
-    }
-
-    /* 🔥 sedikit disesuaikan biar icon enak */
-    .btn-edit,
-    .btn-delete {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 34px;
-        height: 34px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-    }
-
-    .btn-edit {
-        background: #ffc107;
-        color: #000;
-    }
-
-    .btn-delete {
-        background: #dc3545;
-        color: white;
-    }
-
-    .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.4);
-        display: none;
-        z-index: 900;
-    }
-
-    .overlay.active {
-        display: block;
-    }
-</style>

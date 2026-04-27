@@ -1,145 +1,313 @@
-<header class="header">
+<style>
+:root {
+    --teal-dark:  #0a3d38;
+    --teal:       #0f766e;
+    --teal-mid:   #14b8a6;
+    --teal-light: #ccfbf1;
+    --accent:     #f59e0b;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+.site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    transition: all .4s cubic-bezier(.22,1,.36,1);
+}
+
+/* Transparent */
+.site-header.at-top {
+    background: transparent;
+}
+
+/* Solid */
+.site-header.scrolled {
+    background: rgba(10, 61, 56, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 32px rgba(0,0,0,.18);
+}
+
+/* ─── CONTAINER ─────────────────────────────────────────── */
+.nav-container {
+    max-width: 1240px;
+    margin: auto;
+    padding: 0 40px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ─── LOGO ─────────────────────────────────────────────── */
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    flex: 1;
+    min-width: 0;
+}
+
+.logo-emblem {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--teal), var(--teal-mid));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 14px rgba(20,184,166,.35);
+    flex-shrink: 0;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    overflow: hidden;
+}
+
+.logo-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logo-sub {
+    font-size: 11px;
+    color: var(--teal-mid);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+/* ─── NAV MENU ─────────────────────────────────────────── */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-link {
+    font-size: 13.5px;
+    color: rgba(255,255,255,.75);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: .25s;
+}
+
+.nav-link:hover {
+    color: white;
+    background: rgba(255,255,255,.08);
+}
+
+/* ─── LOGIN ─────────────────────────────────────────────── */
+.nav-login {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--teal-dark);
+    background: white;
+    text-decoration: none;
+    padding: 9px 20px;
+    border-radius: 10px;
+    margin-left: 8px;
+}
+
+/* ─── HAMBURGER ─────────────────────────────────────────── */
+.nav-hamburger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.nav-hamburger span {
+    width: 20px;
+    height: 2px;
+    background: white;
+    transition: .3s;
+}
+
+/* animasi X */
+.nav-hamburger.open span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+.nav-hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+.nav-hamburger.open span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ─── DRAWER ───────────────────────────────────────────── */
+.nav-drawer {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+    background: rgba(10,61,56,.97);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
+
+    max-height: 0;
+    padding: 0 20px;
+    transition: all .35s ease;
+}
+
+.nav-drawer.open {
+    max-height: 400px;
+    padding: 16px 20px 24px;
+}
+
+.nav-drawer .nav-link {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.nav-drawer .nav-login {
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* ─── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 900px) {
+
+    .nav-container {
+        padding: 0 16px;
+    }
+
+    .nav-menu {
+        display: none;
+    }
+
+    .nav-hamburger {
+        display: flex;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .logo-main {
+        font-size: 14px;
+        max-width: 150px;
+    }
+
+    .logo-sub {
+        font-size: 10px;
+    }
+}
+</style>
+
+<header class="site-header at-top" id="siteHeader">
 
     <div class="nav-container">
 
-        <!-- LOGO + JUDUL -->
-        <a href="#home" class="logo-area">
-            <svg class="logo-icon" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="#0d4f4d" stroke-width="2" />
-                <path d="M12 7v10M7 12h10" stroke="#0d4f4d" stroke-width="2" stroke-linecap="round" />
-            </svg>
-
+        {{-- Logo --}}
+        <a href="{{ url('/') }}#home" class="logo-area">
+            <div class="logo-emblem">🌿</div>
             <div class="logo-text">
-                <div class="title-main">PEMANTAUAN STUNTING</div>
-                <div class="title-sub">Posyandu Paguyangan</div>
+                <span class="logo-main">Pemantauan Stunting</span>
+                <span class="logo-sub">Posyandu Paguyangan</span>
             </div>
         </a>
 
-        <!-- MENU -->
-        <nav class="menu">
-            <a href="{{ url('/') }}#tentang" class="nav-btn">Tentang</a>
-            <a href="{{ url('/') }}#informasi" class="nav-btn">Informasi</a>
-            <a href="{{ url('/') }}#layanan" class="nav-btn">Layanan</a>
-            <a href="{{ url('/') }}#pencegahan" class="nav-btn">Pencegahan</a>
-            <a href="{{ url('/') }}#galeri" class="nav-btn">Galeri</a>
-            <a href="/login" class="nav-btn login-btn">Login</a>
+        {{-- Desktop nav --}}
+        <nav class="nav-menu">
+            <a href="{{ url('/') }}#tentang"    class="nav-link">Tentang</a>
+            <a href="{{ url('/') }}#informasi"  class="nav-link">Informasi</a>
+            <a href="{{ url('/') }}#layanan"    class="nav-link">Layanan</a>
+            <a href="{{ url('/') }}#pencegahan" class="nav-link">Pencegahan</a>
+            <a href="{{ url('/') }}#galeri"     class="nav-link">Galeri</a>
+            <a href="/login" class="nav-login">
+                <span class="nav-login-icon">🔑</span> Login
+            </a>
         </nav>
+
+        {{-- Hamburger --}}
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
 
     </div>
 
+    {{-- Mobile drawer --}}
+    <nav class="nav-drawer" id="navDrawer">
+        <a href="{{ url('/') }}#tentang"    class="nav-link">Tentang</a>
+        <a href="{{ url('/') }}#informasi"  class="nav-link">Informasi</a>
+        <a href="{{ url('/') }}#layanan"    class="nav-link">Layanan</a>
+        <a href="{{ url('/') }}#pencegahan" class="nav-link">Pencegahan</a>
+        <a href="{{ url('/') }}#galeri"     class="nav-link">Galeri</a>
+        <a href="/login" class="nav-login">
+            <span class="nav-login-icon">🔑</span> Login
+        </a>
+    </nav>
+
 </header>
 
-<style>
-    /* HEADER */
-    .header {
-        background: white;
-        padding: 18px 60px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-        position: sticky;
-        top: 0;
-        z-index: 999;
-    }
+<script>
+(function () {
+    const header    = document.getElementById('siteHeader');
+    const hamburger = document.getElementById('hamburger');
+    const drawer    = document.getElementById('navDrawer');
 
-    /* CONTAINER */
-    .nav-container {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    /* LOGO AREA */
-    .logo-area {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-    }
-
-    /* ICON */
-    .logo-icon {
-        width: 48px;
-        height: 48px;
-    }
-
-    /* TEXT */
-    .logo-text {
-        display: flex;
-        flex-direction: column;
-        line-height: 1.2;
-    }
-
-    .title-main {
-        font-size: 22px;
-        font-weight: 800;
-        color: #0d4f4d;
-        letter-spacing: 0.5px;
-    }
-
-    .title-sub {
-        font-size: 13px;
-        color: #64748b;
-    }
-
-    /* MENU */
-    .menu {
-        display: flex;
-        gap: 16px;
-    }
-
-    /* BUTTON STYLE */
-    .nav-btn {
-        padding: 10px 22px;
-        border-radius: 10px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 14px;
-        color: #0d4f4d;
-        background: white;
-
-        /* 🔥 soft border pake shadow */
-        box-shadow: 0 0 0 1px rgba(13, 79, 77, 0.25);
-        transition: all 0.3s ease;
-    }
-
-    /* HOVER */
-    .nav-btn:hover {
-        background: linear-gradient(135deg, #0d4f4d, #0f766e);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(13, 79, 77, 0.25);
-    }
-
-    /* LOGIN BUTTON */
-    .login-btn {
-        background: linear-gradient(135deg, #0d4f4d, #0f766e);
-        color: white;
-        box-shadow: none;
-    }
-
-    /* LOGIN HOVER */
-    .login-btn:hover {
-        background: white;
-        color: #0d4f4d;
-        box-shadow: 0 0 0 1px rgba(13, 79, 77, 0.25);
-    }
-
-    /* RESPONSIVE */
-    @media(max-width: 768px) {
-        .header {
-            padding: 15px 20px;
-        }
-
-        .menu {
-            display: none;
-        }
-
-        .title-main {
-            font-size: 18px;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
+    // Scroll: transparent ↔ solid
+    function onScroll() {
+        if (window.scrollY > 40) {
+            header.classList.remove('at-top');
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+            header.classList.add('at-top');
         }
     }
-</style>
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Hamburger toggle
+    hamburger.addEventListener('click', function () {
+        const open = hamburger.classList.toggle('open');
+        drawer.classList.toggle('open', open);
+    });
+
+    // Close drawer on link click
+    drawer.querySelectorAll('.nav-link, .nav-login').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            drawer.classList.remove('open');
+        });
+    });
+
+    // Active link highlight on scroll
+    const sections = ['tentang','informasi','layanan','pencegahan','galeri'];
+    const links = document.querySelectorAll('.nav-link');
+
+    function setActive() {
+        let current = '';
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && window.scrollY >= el.offsetTop - 100) current = id;
+        });
+        links.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href').includes(current) && current);
+        });
+    }
+    window.addEventListener('scroll', setActive, { passive: true });
+})();
+</script>

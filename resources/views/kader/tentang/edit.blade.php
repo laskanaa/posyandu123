@@ -2,93 +2,379 @@
 
 @section('title', 'Edit Tentang')
 
+@section('hideHeader', true)
+@section('hideFooter', true)
+
 @section('content')
 
-    <div class="wrapper">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        <div class="main">
+    <style>
+        :root {
+            --teal-dark: #0a3d38;
+            --teal:      #0f766e;
+            --teal-mid:  #14b8a6;
+            --teal-light:#ccfbf1;
+            --bg:        #f0f7f6;
+            --sidebar-w: 260px;
+        }
 
-            <div class="topbar">
-                <h3>Edit Tentang</h3>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: #0d1f1e; }
+
+        .dash-wrapper { display: flex; min-height: 100vh; }
+
+        /* ─── SIDEBAR ─── */
+        .dash-sidebar {
+            position: fixed; top: 0; left: 0;
+            width: var(--sidebar-w); height: 100vh;
+            background: var(--teal-dark); z-index: 1000;
+            display: flex; flex-direction: column;
+            transition: transform .4s cubic-bezier(.22,1,.36,1); overflow: hidden;
+        }
+        .dash-sidebar::before {
+            content: ''; position: absolute; top: -80px; left: -80px;
+            width: 260px; height: 260px;
+            background: radial-gradient(circle, rgba(20,184,166,.15), transparent 65%);
+            border-radius: 50%; pointer-events: none;
+        }
+        .sidebar-brand {
+            padding: 28px 24px 20px; display: flex; align-items: center; gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,.07); position: relative; z-index: 1; flex-shrink: 0;
+        }
+        .sidebar-brand-emblem {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-mid));
+            border-radius: 11px; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; box-shadow: 0 4px 12px rgba(20,184,166,.3); flex-shrink: 0;
+        }
+        .sidebar-brand-name { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: white; line-height: 1.2; }
+        .sidebar-brand-sub  { font-size: 10.5px; color: var(--teal-mid); letter-spacing: .07em; text-transform: uppercase; }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 0; position: relative; z-index: 1; scrollbar-width: none; }
+        .sidebar-nav::-webkit-scrollbar { display: none; }
+        .sidebar-foot { padding: 16px 24px 24px; border-top: 1px solid rgba(255,255,255,.07); position: relative; z-index: 1; }
+        .sidebar-foot-user { display: flex; align-items: center; gap: 10px; }
+        .sidebar-avatar { width: 36px; height: 36px; background: rgba(20,184,166,.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .sidebar-foot-name { font-size: 13px; font-weight: 600; color: white; line-height: 1.3; }
+        .sidebar-foot-role { font-size: 11px; color: var(--teal-mid); }
+
+        @media (max-width: 900px) {
+            .dash-sidebar { transform: translateX(-100%); }
+            .dash-sidebar.open { transform: translateX(0); }
+        }
+
+        /* ─── MAIN ─── */
+        .dash-main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+        @media (max-width: 900px) { .dash-main { margin-left: 0; } }
+
+        /* ─── TOPBAR ─── */
+        .dash-topbar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(240,247,246,.9); backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15,118,110,.08);
+            padding: 0 32px; height: 68px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .topbar-left  { display: flex; align-items: center; gap: 16px; }
+        .topbar-page  { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--teal-dark); }
+        .topbar-sub   { font-size: 13px; color: #7a9e9b; }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .topbar-date  { font-size: 12.5px; color: #7a9e9b; background: white; border: 1px solid rgba(15,118,110,.1); border-radius: 8px; padding: 6px 12px; }
+
+        .dash-hamburger {
+            width: 40px; height: 40px; background: var(--teal-dark); border: none;
+            border-radius: 10px; color: white; font-size: 18px; cursor: pointer;
+            display: none; align-items: center; justify-content: center; transition: background .25s;
+        }
+        .dash-hamburger:hover { background: var(--teal); }
+        @media (max-width: 900px) { .dash-hamburger { display: flex; } }
+
+        .btn-back-top {
+            display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px;
+            background: white; border: 1.5px solid rgba(15,118,110,.2);
+            color: var(--teal-dark); border-radius: 10px;
+            text-decoration: none; font-size: 13px; font-weight: 600; transition: all .25s;
+        }
+        .btn-back-top:hover { background: var(--teal-light); border-color: var(--teal); }
+
+        /* ─── CONTENT ─── */
+        .dash-content { padding: 32px; flex: 1; }
+
+        .dash-section-tag {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: var(--teal-light); color: var(--teal);
+            font-size: 11px; font-weight: 600; letter-spacing: .1em;
+            text-transform: uppercase; padding: 5px 13px; border-radius: 30px; margin-bottom: 8px;
+        }
+        .dash-section-tag::before { content: ''; width: 5px; height: 5px; background: var(--teal); border-radius: 50%; }
+
+        .dash-section-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--teal-dark); margin-bottom: 24px; }
+
+        /* ─── PANEL ─── */
+        .panel {
+            background: white; border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(15,118,110,.07);
+            border: 1px solid rgba(15,118,110,.06);
+            overflow: hidden; max-width: 760px;
+            animation: slideUp .4s cubic-bezier(.22,1,.36,1) both;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .panel-header {
+            padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+        }
+        .panel-header-icon { width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+        .panel-header-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: white; }
+
+        /* ─── FORM ─── */
+        .form-body { padding: 28px 28px 8px; }
+
+        .form-group { display: flex; flex-direction: column; margin-bottom: 22px; }
+
+        .form-label { font-size: 12px; font-weight: 600; color: #7a9e9b; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 8px; }
+
+        .form-input, .form-textarea {
+            padding: 11px 14px;
+            border: 1.5px solid rgba(15,118,110,.15); border-radius: 10px;
+            font-family: 'DM Sans', sans-serif; font-size: 14px; color: #0d1f1e;
+            background: #fafcfc; transition: border-color .2s, box-shadow .2s; width: 100%;
+        }
+        .form-textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
+        .form-input:focus, .form-textarea:focus {
+            outline: none; border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(15,118,110,.1); background: white;
+        }
+
+        /* Gambar sekarang */
+        .preview-box { margin-top: 6px; }
+        .preview-label { font-size: 12px; color: #7a9e9b; margin-bottom: 8px; }
+        .img-current { width: 160px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.1); display: block; }
+
+        /* Upload area */
+        .upload-area {
+            border: 2px dashed rgba(15,118,110,.25); border-radius: 12px;
+            background: #f8faf9; padding: 28px 20px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            cursor: pointer; transition: border-color .2s, background .2s; position: relative;
+        }
+        .upload-area:hover, .upload-area.dragover { border-color: var(--teal); background: var(--teal-light); }
+        .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .upload-icon { font-size: 30px; }
+        .upload-text { font-size: 13px; font-weight: 600; color: var(--teal-dark); }
+        .upload-hint { font-size: 11.5px; color: #7a9e9b; }
+
+        .img-preview-wrap { display: none; margin-top: 14px; }
+        .img-preview-wrap img { width: 160px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.1); display: block; }
+        .img-preview-label { font-size: 11.5px; color: #7a9e9b; margin-bottom: 6px; }
+
+        /* ─── FORM FOOTER ─── */
+        .form-footer { padding: 20px 28px 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .btn-save {
+            display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px;
+            background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+            color: white; border: none; border-radius: 10px;
+            font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(15,118,110,.25); transition: all .25s;
+        }
+        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(15,118,110,.35); }
+
+        .btn-cancel {
+            display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px;
+            background: white; border: 1.5px solid rgba(15,118,110,.2);
+            color: var(--teal-dark); border-radius: 10px;
+            font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+            text-decoration: none; transition: all .25s;
+        }
+        .btn-cancel:hover { background: var(--teal-light); border-color: var(--teal); }
+
+        /* ─── OVERLAY ─── */
+        .dash-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 900; backdrop-filter: blur(2px); }
+        .dash-overlay.open { display: block; }
+
+        @media (max-width: 640px) {
+            .dash-content { padding: 16px; }
+            .dash-topbar  { padding: 0 16px; }
+            .topbar-date  { display: none; }
+            .form-body    { padding: 20px 16px 4px; }
+            .form-footer  { padding: 16px 16px 24px; }
+            .btn-save, .btn-cancel { width: 100%; justify-content: center; }
+        }
+    </style>
+
+    <div class="dash-wrapper">
+
+        {{-- SIDEBAR --}}
+        <aside class="dash-sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-emblem">🌿</div>
+                <div>
+                    <div class="sidebar-brand-name">Posyandu</div>
+                    <div class="sidebar-brand-sub">Paguyangan</div>
+                </div>
             </div>
+            <div class="sidebar-nav">@include('partials.sidebar_kader')</div>
+            <div class="sidebar-foot">
+                <div class="sidebar-foot-user">
+                    <div class="sidebar-avatar">🧑‍⚕️</div>
+                    <div>
+                        <div class="sidebar-foot-name">Kader Posyandu</div>
+                        <div class="sidebar-foot-role">Kader Aktif</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
-            <form action="{{ route('kader.tentang.update', $tentang->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+        <div class="dash-overlay" id="overlay"></div>
 
-                <div class="card-form">
+        {{-- MAIN --}}
+        <div class="dash-main">
 
-                    <div class="form-group">
-                        <label>Deskripsi</label>
-                        <textarea name="deskripsi1" rows="5" required>{{ $tentang->deskripsi1 }}</textarea>
+            {{-- TOPBAR --}}
+            <header class="dash-topbar">
+                <div class="topbar-left">
+                    <button class="dash-hamburger" id="toggleSidebar">☰</button>
+                    <div>
+                        <div class="topbar-page">Edit Tentang</div>
+                        <div class="topbar-sub">Perbarui informasi profil posyandu</div>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-date" id="topbarDate"></span>
+                    <a href="{{ route('kader.tentang.index') }}" class="btn-back-top">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </a>
+                </div>
+            </header>
+
+            {{-- CONTENT --}}
+            <div class="dash-content">
+
+                <div class="dash-section-tag">Manajemen Konten</div>
+                <h2 class="dash-section-title">Edit Data Tentang</h2>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-header-icon">ℹ️</div>
+                        <div class="panel-header-title">Form Edit Tentang</div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Gambar Sekarang</label><br>
-                        @if($tentang->gambar)
-                            <img src="{{ asset('tentang/' . $tentang->gambar) }}" width="150">
-                        @endif
-                    </div>
+                    <form action="{{ route('kader.tentang.update', $tentang->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
-                    <div class="form-group">
-                        <label>Ganti Gambar</label>
-                        <input type="file" name="gambar">
-                    </div>
+                        <div class="form-body">
 
+                            <div class="form-group">
+                                <label class="form-label">Deskripsi</label>
+                                <textarea name="deskripsi1" class="form-textarea" rows="6"
+                                    required placeholder="Tuliskan deskripsi tentang posyandu...">{{ old('deskripsi1', $tentang->deskripsi1) }}</textarea>
+                            </div>
+
+                            @if($tentang->gambar)
+                                <div class="form-group">
+                                    <label class="form-label">Gambar Saat Ini</label>
+                                    <div class="preview-box">
+                                        <p class="preview-label">Gambar yang sedang digunakan:</p>
+                                        <img src="{{ asset('tentang/' . $tentang->gambar) }}"
+                                            class="img-current" id="imgPreview" alt="Gambar Tentang">
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Ganti Gambar
+                                    <span style="color:#94a3b8;font-size:11px;text-transform:none;">(opsional)</span>
+                                </label>
+                                <div class="upload-area" id="uploadArea">
+                                    <input type="file" name="gambar" accept="image/*" id="fileInput">
+                                    <div class="upload-icon">🖼️</div>
+                                    <div class="upload-text">Klik atau seret gambar baru ke sini</div>
+                                    <div class="upload-hint">PNG, JPG, WEBP — maks. 2MB</div>
+                                </div>
+                                @if(!$tentang->gambar)
+                                    <div class="img-preview-wrap" id="previewWrap">
+                                        <p class="img-preview-label">Preview gambar:</p>
+                                        <img id="imgPreviewNew" src="#" alt="Preview">
+                                    </div>
+                                @endif
+                            </div>
+
+                        </div>
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn-save">
+                                <i class="fas fa-floppy-disk"></i> Update
+                            </button>
+                            <a href="{{ route('kader.tentang.index') }}" class="btn-cancel">
+                                <i class="fas fa-xmark"></i> Batal
+                            </a>
+                        </div>
+
+                    </form>
                 </div>
 
-                <button type="submit" class="btn-save">Update</button>
-
-            </form>
-
+            </div>
         </div>
     </div>
 
+    <script>
+        (function () {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const toggle  = document.getElementById('toggleSidebar');
+
+            toggle.addEventListener('click', () => {
+                const open = sidebar.classList.toggle('open');
+                overlay.classList.toggle('open', open);
+            });
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            });
+
+            const dateEl = document.getElementById('topbarDate');
+            if (dateEl) dateEl.textContent = new Date().toLocaleDateString('id-ID', {
+                weekday: 'short', day: 'numeric', month: 'long', year: 'numeric'
+            });
+
+            // Preview: kalau ada gambar lama, update gambar lama; kalau tidak ada, tampilkan preview baru
+            const fileInput  = document.getElementById('fileInput');
+            const imgCurrent = document.getElementById('imgPreview');      // gambar lama (bisa null)
+            const previewWrap = document.getElementById('previewWrap');    // hanya ada kalau belum ada gambar
+            const imgNew     = document.getElementById('imgPreviewNew');   // hanya ada kalau belum ada gambar
+
+            if (fileInput) {
+                fileInput.addEventListener('change', function () {
+                    const file = this.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        if (imgCurrent) {
+                            // Update preview gambar lama langsung
+                            imgCurrent.src = e.target.result;
+                        } else if (previewWrap && imgNew) {
+                            imgNew.src = e.target.result;
+                            previewWrap.style.display = 'block';
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea) {
+                uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+                uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+                uploadArea.addEventListener('drop', () => uploadArea.classList.remove('dragover'));
+            }
+        })();
+    </script>
+
 @endsection
-
-<style>
-    .wrapper {
-        display: flex;
-        min-height: 100vh;
-        background: #f4f6f9;
-    }
-
-    .main {
-        padding: 30px;
-        flex: 1;
-    }
-
-    .card-form {
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    input,
-    textarea {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-
-    .btn-save {
-        background: #0d4f4d;
-        color: white;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 8px;
-    }
-
-    /* RESPONSIVE */
-    @media(max-width:768px) {
-        .main {
-            padding: 15px;
-        }
-    }
-</style>
