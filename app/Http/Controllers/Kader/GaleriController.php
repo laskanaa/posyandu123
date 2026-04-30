@@ -42,8 +42,6 @@ Galeri::create([
     public function destroy($id)
     {
         $data = Galeri::findOrFail($id);
-
-        // Hapus file fisik dari folder public/galeri
         $filePath = public_path('upload-galeri/' . $data->gambar);
         if (File::exists($filePath)) {
             File::delete($filePath);

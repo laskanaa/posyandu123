@@ -19,11 +19,9 @@ class OrangtuaController extends Controller
             }
         ])->where('user_id', $user->id)->first();
 
-        // 🔥 ambil WHO (SAMA kayak show)
         $whoBBU = DB::table('standar_who_bbu')->orderBy('umur_bulan')->get();
         $whoTBU = DB::table('standar_who_tbu')->orderBy('umur_bulan')->get();
 
-        // 🔥 penimbangan terakhir
         $penimbanganTerakhir = $balita?->penimbangans->last();
 
         return view('orangtua.dashboard', compact(

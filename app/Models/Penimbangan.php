@@ -27,7 +27,6 @@ class Penimbangan extends Model
         return $this->belongsTo(Balita::class);
     }
 
-    // 🔥 FUNCTION LMS (WAJIB DI LUAR METHOD)
     private function hitungZ($nilai, $l, $m, $s)
     {
         if ($l == 0) {
@@ -42,15 +41,13 @@ class Penimbangan extends Model
         $balita = $this->balita;
         if (!$balita) return null;
 
-        // 🔥 HITUNG UMUR
         $umur = Carbon::parse($balita->tanggal_lahir)
             ->diffInMonths($this->tanggal_penimbangan);
 
-        $umur = max(0, min(60, $umur)); // biar aman
+        $umur = max(0, min(60, $umur)); 
 
         $jk = $balita->jenis_kelamin;
 
-        // 🔥 AMBIL DATA WHO (FLEKSIBEL)
         $who_bb = DB::table('standar_who_bbu')
             ->where('jenis_kelamin', $jk)
             ->where('umur_bulan', '<=', $umur)
@@ -73,7 +70,6 @@ class Penimbangan extends Model
             ];
         }
 
-        // 🔥 HITUNG Z-SCORE LMS
         $z_bb = $this->hitungZ(
             $this->berat_badan,
             $who_bb->l,
@@ -88,7 +84,6 @@ class Penimbangan extends Model
             $who_tb->s
         );
 
-        // 🔥 STATUS BB
         if ($z_bb < -3) {
             $status_bb = 'Sangat Kurang';
         } elseif ($z_bb < -2) {
@@ -99,7 +94,6 @@ class Penimbangan extends Model
             $status_bb = 'Lebih';
         }
 
-        // 🔥 STATUS TB
         if ($z_tb < -3) {
             $status_tb = 'Stunting Berat';
         } elseif ($z_tb < -2) {

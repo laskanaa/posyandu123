@@ -29,8 +29,6 @@
 </head>
 
 <body>
-
-    {{-- HEADER --}}
     @if (!View::hasSection('hideHeader'))
         @include('components.header')
     @endif
@@ -39,7 +37,6 @@
         @yield('content')
     </main>
 
-    {{-- FOOTER --}}
     @if (!View::hasSection('hideFooter'))
         @include('components.footer')
     @endif

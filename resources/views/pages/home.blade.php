@@ -35,7 +35,6 @@ body {
     padding: 0 40px;
 }
 
-/* ══ HERO SLIDER ══ */
 .hero {
     position: relative;
     width: 100%;
@@ -166,7 +165,6 @@ body {
     background: var(--accent);
 }
 
-/* ══ SHARED ══ */
 .sec-label {
     font-size: 11px;
     font-weight: 600;
@@ -202,7 +200,6 @@ body {
 .rv.right { transform: translateX( 40px); }
 .rv.on    { opacity: 1; transform: none; }
 
-/* ══ TENTANG ══ */
 .tentang {
     padding: 110px 0;
     background: var(--bg-white);
@@ -264,7 +261,6 @@ body {
     margin-top: 20px;
 }
 
-/* ══ STATISTIK ══ */
 .statistik {
     padding: 90px 0;
     background: var(--teal-dark);
@@ -330,7 +326,6 @@ body {
     font-weight: 300;
 }
 
-/* ══ LAYANAN ══ */
 .layanan {
     padding: 110px 0;
     background: var(--bg-cream);
@@ -391,7 +386,6 @@ body {
     transition: color .3s;
 }
 
-/* ══ PENCEGAHAN ══ */
 .pencegahan {
     padding: 110px 0;
     background: var(--bg-white);
@@ -454,7 +448,6 @@ body {
     font-weight: 300;
 }
 
-/* ══ GALERI ══ */
 .galeri {
     padding: 100px 0 110px;
     background: var(--teal-dark);
@@ -500,7 +493,7 @@ body {
 
 .galeri-item {
     flex: 0 0 300px;
-    height: 220px; /* samain semua */
+    height: 220px; 
     border-radius: 16px;
     overflow: hidden;
     position: relative;
@@ -528,7 +521,6 @@ body {
 
 .galeri-item:hover::after { opacity: 1; }
 
-/* ══ RESPONSIVE ══ */
 @media (max-width: 1050px) {
     .stat-grid, .layanan-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -550,7 +542,6 @@ body {
 }
 </style>
 
-{{-- ══ HERO ══ --}}
 @if($sliders->count())
 <section class="hero">
     <div class="hero-slides" id="heroSlides">
@@ -576,7 +567,6 @@ body {
 </section>
 @endif
 
-{{-- ══ TENTANG ══ --}}
 @if($tentang)
 <section id="tentang" class="tentang">
     <div class="wrap">
@@ -595,7 +585,6 @@ body {
 </section>
 @endif
 
-{{-- ══ STATISTIK ══ --}}
 <section id="informasi" class="statistik">
     <div class="wrap">
         <span class="sec-label">Statistik</span>
@@ -613,7 +602,6 @@ body {
     </div>
 </section>
 
-{{-- ══ LAYANAN ══ --}}
 @if($layanan->count())
 <section id="layanan" class="layanan">
     <div class="wrap">
@@ -632,7 +620,6 @@ body {
 </section>
 @endif
 
-{{-- ══ PENCEGAHAN ══ --}}
 @if($pencegahans->count())
 <section id="pencegahan" class="pencegahan">
     <div class="wrap">
@@ -651,7 +638,6 @@ body {
 </section>
 @endif
 
-{{-- ══ GALERI ══ --}}
 <section id="galeri" class="galeri">
     <div class="wrap">
         <div class="galeri-header">
@@ -678,7 +664,6 @@ body {
 <script>
 (function(){
 
-    /* ── HERO SLIDER ── */
     var slides = document.querySelectorAll('.hero-slide');
     var dots   = document.querySelectorAll('.hero-dot');
     var total  = slides.length;
@@ -713,7 +698,6 @@ body {
 
     startAuto();
 
-    /* ── COUNTER ── */
     document.querySelectorAll('.counter').forEach(function(el){
         var target  = parseInt(el.getAttribute('data-target')) || 0;
         var started = false;
@@ -737,7 +721,6 @@ body {
         io.observe(el);
     });
 
-    /* ── REVEAL ── */
     var rvObs = new IntersectionObserver(function(entries){
         entries.forEach(function(e, i){
             if (e.isIntersecting) {
@@ -748,7 +731,6 @@ body {
     }, { threshold: 0.1 });
     document.querySelectorAll('.rv').forEach(function(el){ rvObs.observe(el); });
 
-    /* ── GALERI ── */
     var gs = document.getElementById('galeriScroll');
     var gp = document.getElementById('gPrev');
     var gn = document.getElementById('gNext');

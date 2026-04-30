@@ -7,10 +7,7 @@
 
 @section('content')
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --teal-dark: #0a3d38;
@@ -41,7 +38,6 @@
             min-height: 100vh;
         }
 
-        /* ─── SIDEBAR ────────────────────────────────────────────── */
         .dash-sidebar {
             position: fixed;
             top: 0;
@@ -105,7 +101,7 @@
         }
 
         .sidebar-brand-name {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 15px;
             font-weight: 700;
             color: white;
@@ -178,7 +174,6 @@
             }
         }
 
-        /* ─── MAIN ───────────────────────────────────────────────── */
         .dash-main {
             margin-left: var(--sidebar-w);
             flex: 1;
@@ -194,7 +189,6 @@
             }
         }
 
-        /* ─── TOPBAR ─────────────────────────────────────────────── */
         .dash-topbar {
             position: sticky;
             top: 0;
@@ -244,7 +238,7 @@
         }
 
         .topbar-page {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 20px;
             font-weight: 700;
             color: var(--teal-dark);
@@ -277,7 +271,6 @@
             box-shadow: 0 8px 20px rgba(15, 118, 110, .35);
         }
 
-        /* ─── CONTENT ────────────────────────────────────────────── */
         .dash-content {
             padding: 32px;
             flex: 1;
@@ -307,14 +300,13 @@
         }
 
         .dash-section-title {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 22px;
             font-weight: 700;
             color: var(--teal-dark);
             margin-bottom: 24px;
         }
 
-        /* ─── TABLE CARD ─────────────────────────────────────────── */
         .table-card {
             background: white;
             border-radius: 18px;
@@ -375,7 +367,6 @@
             font-weight: 700;
         }
 
-        /* Badge angka / statistik */
         .angka-badge {
             display: inline-flex;
             align-items: center;
@@ -399,7 +390,6 @@
             box-shadow: none;
         }
 
-        /* Judul badge kategori */
         .judul-tag {
             display: inline-flex;
             align-items: center;
@@ -483,7 +473,6 @@
             font-size: 14px;
         }
 
-        /* ─── OVERLAY ────────────────────────────────────────────── */
         .dash-overlay {
             display: none;
             position: fixed;
@@ -550,10 +539,8 @@
             </header>
 
             <div class="dash-content">
-
                 <div class="dash-section-tag">Manajemen Data</div>
                 <h2 class="dash-section-title">Daftar Informasi Posyandu</h2>
-
                 <div class="table-card">
                     <table>
                         <thead>
@@ -592,8 +579,6 @@
                                                         d="M12.146.146a.5.5 0 0 1 .708 0l2.999 3a.5.5 0 0 1 0 .708l-9.5 9.5a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l9.5-9.5zM11.207 2 14 4.793 13.207 5.586 10.414 2.793 11.207 2zM10.5 3.207 2 11.707V14h2.293l8.5-8.5-2.293-2.293z" />
                                                 </svg>
                                             </a>
-
-                                            {{-- Delete --}}
                                             <form action="{{ route('kader.informasi.destroy', $informasi->id) }}" method="POST"
                                                 style="display:inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus informasi ini?')">
@@ -625,7 +610,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>

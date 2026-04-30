@@ -8,14 +8,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('layanans', function (Blueprint $table) {
-            $table->dropColumn('deskripsi'); // hapus kolom
+            $table->dropColumn('deskripsi'); 
         });
     }
 
     public function down(): void
     {
         Schema::table('layanans', function (Blueprint $table) {
-            $table->text('deskripsi')->nullable(); // rollback
+            $table->text('deskripsi')->nullable(); 
         });
     }
 };

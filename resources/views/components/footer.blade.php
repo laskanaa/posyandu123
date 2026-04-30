@@ -7,7 +7,6 @@
         --accent: #f59e0b;
     }
 
-    /* ─── FOOTER WRAPPER ─────────────────────────────────────── */
     .site-footer {
         background: var(--teal-dark);
         color: white;
@@ -16,7 +15,6 @@
         overflow: hidden;
     }
 
-    /* Decorative glows */
     .site-footer::before {
         content: '';
         position: absolute;
@@ -41,7 +39,6 @@
         pointer-events: none;
     }
 
-    /* ─── TOP STRIP ──────────────────────────────────────────── */
     .footer-top {
         border-bottom: 1px solid rgba(255, 255, 255, .07);
         padding: 48px 0 32px;
@@ -99,7 +96,6 @@
         text-align: right;
     }
 
-    /* ─── MAIN GRID ──────────────────────────────────────────── */
     .footer-main {
         max-width: 1240px;
         margin: auto;
@@ -130,7 +126,6 @@
         background: rgba(255, 255, 255, .08);
     }
 
-    /* About column */
     .footer-about p {
         font-size: 14px;
         color: rgba(255, 255, 255, .55);
@@ -165,7 +160,6 @@
         color: white;
     }
 
-    /* Nav column */
     .footer-nav-list {
         list-style: none;
         padding: 0;
@@ -206,7 +200,6 @@
         opacity: 1;
     }
 
-    /* Contact column */
     .footer-contact-list {
         list-style: none;
         padding: 0;
@@ -238,7 +231,6 @@
         margin-top: 1px;
     }
 
-    /* Map column */
     .map-wrap {
         border-radius: 14px;
         overflow: hidden;
@@ -280,7 +272,6 @@
         color: white;
     }
 
-    /* ─── BOTTOM BAR ─────────────────────────────────────────── */
     .footer-bottom {
         border-top: 1px solid rgba(255, 255, 255, .07);
         padding: 20px 40px;
@@ -315,7 +306,6 @@
         color: var(--accent);
     }
 
-    /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 1024px) {
         .footer-main {
             grid-template-columns: 1fr 1fr;
@@ -345,8 +335,6 @@
 </style>
 
 <footer class="site-footer">
-
-    {{-- Top strip --}}
     <div class="footer-top">
         <div class="footer-top-inner">
             <div class="footer-brand">
@@ -362,10 +350,7 @@
         </div>
     </div>
 
-    {{-- Main grid --}}
     <div class="footer-main">
-
-        {{-- Col 1: About --}}
         <div class="footer-col footer-about">
             <h4>Tentang</h4>
             <p>
@@ -379,7 +364,6 @@
             </div>
         </div>
 
-        {{-- Col 2: Nav --}}
         <div class="footer-col">
             <h4>Navigasi</h4>
             <ul class="footer-nav-list">
@@ -392,7 +376,6 @@
             </ul>
         </div>
 
-        {{-- Col 3: Contact --}}
         <div class="footer-col">
             <h4>Hubungi Kami</h4>
             <ul class="footer-contact-list">
@@ -411,7 +394,6 @@
             </ul>
         </div>
 
-        {{-- Col 4: Map --}}
         <div class="footer-col">
             <h4>Lokasi</h4>
             <div class="map-wrap">
@@ -427,7 +409,6 @@
 
     </div>
 
-    {{-- Bottom bar --}}
     <div class="footer-bottom">
         <p class="footer-bottom-copy">
             © {{ date('Y') }} <strong>Sistem Monitoring Posyandu Paguyangan</strong>. All Rights Reserved.
@@ -436,5 +417,4 @@
             Dibuat dengan <span>♥</span> untuk masyarakat Paguyangan
         </div>
     </div>
-
 </footer>

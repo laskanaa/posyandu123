@@ -7,20 +7,25 @@
 
 @section('content')
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --teal-dark:  #0a3d38;
-            --teal:       #0f766e;
-            --teal-mid:   #14b8a6;
+            --teal-dark: #0a3d38;
+            --teal: #0f766e;
+            --teal-mid: #14b8a6;
             --teal-light: #ccfbf1;
-            --accent:     #f59e0b;
-            --bg:         #f0f7f6;
-            --sidebar-w:  260px;
+            --accent: #f59e0b;
+            --bg: #f0f7f6;
+            --sidebar-w: 260px;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             font-family: 'DM Sans', sans-serif;
@@ -28,32 +33,33 @@
             color: #0d1f1e;
         }
 
-        /* ─── LAYOUT ─────────────────────────────────────────────── */
         .dash-wrapper {
             display: flex;
             min-height: 100vh;
         }
 
-        /* ─── SIDEBAR ────────────────────────────────────────────── */
         .dash-sidebar {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: var(--sidebar-w);
             height: 100vh;
             background: var(--teal-dark);
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            transition: transform .4s cubic-bezier(.22,1,.36,1);
+            transition: transform .4s cubic-bezier(.22, 1, .36, 1);
             overflow: hidden;
         }
 
         .dash-sidebar::before {
             content: '';
             position: absolute;
-            top: -80px; left: -80px;
-            width: 260px; height: 260px;
-            background: radial-gradient(circle, rgba(20,184,166,.15), transparent 65%);
+            top: -80px;
+            left: -80px;
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(20, 184, 166, .15), transparent 65%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -61,9 +67,11 @@
         .dash-sidebar::after {
             content: '';
             position: absolute;
-            bottom: -60px; right: -60px;
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(245,158,11,.08), transparent 65%);
+            bottom: -60px;
+            right: -60px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(245, 158, 11, .08), transparent 65%);
             border-radius: 50%;
             pointer-events: none;
         }
@@ -73,23 +81,27 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid rgba(255,255,255,.07);
-            position: relative; z-index: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, .07);
+            position: relative;
+            z-index: 1;
             flex-shrink: 0;
         }
 
         .sidebar-brand-emblem {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--teal), var(--teal-mid));
             border-radius: 11px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 18px;
-            box-shadow: 0 4px 12px rgba(20,184,166,.3);
+            box-shadow: 0 4px 12px rgba(20, 184, 166, .3);
             flex-shrink: 0;
         }
 
         .sidebar-brand-name {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 15px;
             font-weight: 700;
             color: white;
@@ -107,16 +119,20 @@
             flex: 1;
             overflow-y: auto;
             padding: 16px 0;
-            position: relative; z-index: 1;
+            position: relative;
+            z-index: 1;
             scrollbar-width: none;
         }
 
-        .sidebar-nav::-webkit-scrollbar { display: none; }
+        .sidebar-nav::-webkit-scrollbar {
+            display: none;
+        }
 
         .sidebar-foot {
             padding: 16px 24px 24px;
-            border-top: 1px solid rgba(255,255,255,.07);
-            position: relative; z-index: 1;
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            position: relative;
+            z-index: 1;
         }
 
         .sidebar-foot-user {
@@ -126,10 +142,13 @@
         }
 
         .sidebar-avatar {
-            width: 36px; height: 36px;
-            background: rgba(20,184,166,.2);
+            width: 36px;
+            height: 36px;
+            background: rgba(20, 184, 166, .2);
             border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 16px;
         }
 
@@ -146,11 +165,15 @@
         }
 
         @media (max-width: 900px) {
-            .dash-sidebar { transform: translateX(-100%); }
-            .dash-sidebar.open { transform: translateX(0); }
+            .dash-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .dash-sidebar.open {
+                transform: translateX(0);
+            }
         }
 
-        /* ─── MAIN AREA ──────────────────────────────────────────── */
         .dash-main {
             margin-left: var(--sidebar-w);
             flex: 1;
@@ -161,17 +184,19 @@
         }
 
         @media (max-width: 900px) {
-            .dash-main { margin-left: 0; }
+            .dash-main {
+                margin-left: 0;
+            }
         }
 
-        /* ─── TOPBAR ─────────────────────────────────────────────── */
         .dash-topbar {
             position: sticky;
-            top: 0; z-index: 100;
-            background: rgba(240,247,246,.88);
+            top: 0;
+            z-index: 100;
+            background: rgba(240, 247, 246, .88);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(15,118,110,.08);
+            border-bottom: 1px solid rgba(15, 118, 110, .08);
             padding: 0 32px;
             height: 68px;
             display: flex;
@@ -187,7 +212,8 @@
         }
 
         .dash-hamburger {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             background: var(--teal-dark);
             border: none;
             border-radius: 10px;
@@ -201,10 +227,14 @@
             flex-shrink: 0;
         }
 
-        .dash-hamburger:hover { background: var(--teal); }
+        .dash-hamburger:hover {
+            background: var(--teal);
+        }
 
         @media (max-width: 900px) {
-            .dash-hamburger { display: flex; }
+            .dash-hamburger {
+                display: flex;
+            }
         }
 
         .topbar-breadcrumb {
@@ -213,7 +243,7 @@
         }
 
         .topbar-page {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 20px;
             font-weight: 700;
             color: var(--teal-dark);
@@ -244,15 +274,14 @@
             font-weight: 600;
             letter-spacing: .02em;
             transition: all .3s;
-            box-shadow: 0 4px 14px rgba(15,118,110,.25);
+            box-shadow: 0 4px 14px rgba(15, 118, 110, .25);
         }
 
         .btn-add:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(15,118,110,.35);
+            box-shadow: 0 8px 20px rgba(15, 118, 110, .35);
         }
 
-        /* ─── CONTENT ────────────────────────────────────────────── */
         .dash-content {
             padding: 32px;
             flex: 1;
@@ -275,25 +304,25 @@
 
         .dash-section-tag::before {
             content: '';
-            width: 5px; height: 5px;
+            width: 5px;
+            height: 5px;
             background: var(--teal);
             border-radius: 50%;
         }
 
         .dash-section-title {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 22px;
             font-weight: 700;
             color: var(--teal-dark);
             margin-bottom: 24px;
         }
 
-        /* ─── TABLE CARD ─────────────────────────────────────────── */
         .table-card {
             background: white;
             border-radius: 18px;
-            box-shadow: 0 2px 12px rgba(15,118,110,.07);
-            border: 1px solid rgba(15,118,110,.06);
+            box-shadow: 0 2px 12px rgba(15, 118, 110, .07);
+            border: 1px solid rgba(15, 118, 110, .06);
             overflow: hidden;
         }
 
@@ -316,16 +345,22 @@
             text-align: left;
         }
 
-        .table-card thead th:first-child { border-radius: 0; }
+        .table-card thead th:first-child {
+            border-radius: 0;
+        }
 
         .table-card tbody tr {
-            border-bottom: 1px solid rgba(15,118,110,.06);
+            border-bottom: 1px solid rgba(15, 118, 110, .06);
             transition: background .2s;
         }
 
-        .table-card tbody tr:last-child { border-bottom: none; }
+        .table-card tbody tr:last-child {
+            border-bottom: none;
+        }
 
-        .table-card tbody tr:hover { background: #f8fdfc; }
+        .table-card tbody tr:hover {
+            background: #f8fdfc;
+        }
 
         .table-card tbody td {
             padding: 14px 20px;
@@ -338,7 +373,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px; height: 28px;
+            width: 28px;
+            height: 28px;
             background: var(--teal-light);
             color: var(--teal);
             border-radius: 8px;
@@ -356,7 +392,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px; height: 36px;
+            width: 36px;
+            height: 36px;
             background: #fef3c7;
             color: #92400e;
             border-radius: 9px;
@@ -371,14 +408,15 @@
             color: white;
             border-color: #fbbf24;
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(251,191,36,.3);
+            box-shadow: 0 4px 10px rgba(251, 191, 36, .3);
         }
 
         .btn-delete {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px; height: 36px;
+            width: 36px;
+            height: 36px;
             background: #fee2e2;
             color: #9f1239;
             border-radius: 9px;
@@ -392,10 +430,9 @@
             color: white;
             border-color: #ef4444;
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(239,68,68,.3);
+            box-shadow: 0 4px 10px rgba(239, 68, 68, .3);
         }
 
-        /* Empty state */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -411,26 +448,31 @@
             font-size: 14px;
         }
 
-        /* ─── OVERLAY ────────────────────────────────────────────── */
         .dash-overlay {
             display: none;
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,.35);
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .35);
             z-index: 900;
             backdrop-filter: blur(2px);
         }
 
-        .dash-overlay.open { display: block; }
+        .dash-overlay.open {
+            display: block;
+        }
 
         @media (max-width: 640px) {
-            .dash-content { padding: 20px 16px; }
-            .dash-topbar  { padding: 0 16px; }
+            .dash-content {
+                padding: 20px 16px;
+            }
+
+            .dash-topbar {
+                padding: 0 16px;
+            }
         }
     </style>
 
     <div class="dash-wrapper">
-
-        {{-- Sidebar --}}
         <aside class="dash-sidebar" id="sidebar">
             <div class="sidebar-brand">
                 <div class="sidebar-brand-emblem">🌿</div>
@@ -455,10 +497,7 @@
 
         <div class="dash-overlay" id="overlay"></div>
 
-        {{-- Main --}}
         <div class="dash-main">
-
-            {{-- Topbar --}}
             <header class="dash-topbar">
                 <div class="topbar-left">
                     <button class="dash-hamburger" id="toggleSidebar">☰</button>
@@ -474,7 +513,6 @@
                 </div>
             </header>
 
-            {{-- Content --}}
             <div class="dash-content">
 
                 <div class="dash-section-tag">Manajemen Data</div>
@@ -496,22 +534,27 @@
                                     <td>{{ $pencegahan->deskripsi }}</td>
                                     <td>
                                         <div class="aksi-cell">
-                                            {{-- Edit --}}
-                                            <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit" title="Edit">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-                                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l2.999 3a.5.5 0 0 1 0 .708l-9.5 9.5a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l9.5-9.5zM11.207 2 14 4.793 13.207 5.586 10.414 2.793 11.207 2zM10.5 3.207 2 11.707V14h2.293l8.5-8.5-2.293-2.293z"/>
+                                            <a href="{{ route('kader.pencegahan.edit', $pencegahan->id) }}" class="btn-edit"
+                                                title="Edit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                                    fill="currentColor" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l2.999 3a.5.5 0 0 1 0 .708l-9.5 9.5a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l9.5-9.5zM11.207 2 14 4.793 13.207 5.586 10.414 2.793 11.207 2zM10.5 3.207 2 11.707V14h2.293l8.5-8.5-2.293-2.293z" />
                                                 </svg>
                                             </a>
 
-                                            {{-- Delete --}}
-                                            <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}" method="POST" style="display:inline"
+                                            <form action="{{ route('kader.pencegahan.destroy', $pencegahan->id) }}"
+                                                method="POST" style="display:inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn-delete" title="Hapus">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm4 0A.5.5 0 0 1 10 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z"/>
-                                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5l1-1h4l1 1h2.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z"/>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm4 0A.5.5 0 0 1 10 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z" />
+                                                        <path fill-rule="evenodd"
+                                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1 0-2H5l1-1h4l1 1h2.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118z" />
                                                     </svg>
                                                 </button>
                                             </form>
@@ -531,25 +574,24 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script>
-    (function () {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const toggle  = document.getElementById('toggleSidebar');
+        (function () {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const toggle = document.getElementById('toggleSidebar');
 
-        function openSidebar()  { sidebar.classList.add('open');    overlay.classList.add('open'); }
-        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('open'); }
+            function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('open'); }
+            function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('open'); }
 
-        toggle.addEventListener('click', function () {
-            sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
-        });
-        overlay.addEventListener('click', closeSidebar);
-    })();
+            toggle.addEventListener('click', function () {
+                sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+            });
+            overlay.addEventListener('click', closeSidebar);
+        })();
     </script>
 
 @endsection

@@ -25,7 +25,6 @@ class LayananController extends Controller
         return redirect()->route('kader.layanan.index')->with('success','Data berhasil ditambah');
     }
 
-    // ===================== EDIT =====================
     public function edit($id)
     {
         $layanan = Layanan::findOrFail($id);
@@ -39,7 +38,6 @@ class LayananController extends Controller
         return redirect()->route('kader.layanan.index')->with('success', 'Data berhasil diupdate');
     }
 
-    // ===================== DELETE =====================
     public function destroy($id)
     {
         Layanan::findOrFail($id)->delete();

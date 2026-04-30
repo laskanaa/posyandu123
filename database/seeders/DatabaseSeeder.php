@@ -10,7 +10,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 🔥 User Kader
         User::updateOrCreate(
             ['email' => 'kader@app.com'],
             [
@@ -20,13 +19,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 🔥 Seeder WHO (YANG BARU - LMS)
         $this->call([
             StandarWhoBBUSeeder::class,
             StandarWhoTBUSeeder::class,
         ]);
 
-        // 🔥 User Orang Tua
         User::updateOrCreate(
             ['email' => 'ortu@app.com'],
             [

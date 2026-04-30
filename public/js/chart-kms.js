@@ -7,9 +7,6 @@ function zScoreToValue(z, l, m, s) {
     return m * Math.pow(1 + l * s * z, 1 / l);
 }
 
-// ==============================
-// 🔥 MINIMAL KENAIKAN
-// ==============================
 function getMinimalKenaikan(type, umur) {
     if (type === 'bb') {
         if (umur === 1) return 0.8;
@@ -29,9 +26,6 @@ function getMinimalKenaikan(type, umur) {
     return 0;
 }
 
-// ==============================
-// 🔥 LABEL KURVA DI KANAN (FIX)
-// ==============================
 const lineLabelPlugin = {
     id: 'lineLabelPlugin',
     afterDatasetsDraw(chart) {
@@ -64,9 +58,6 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
 
     const ctx = document.getElementById(canvasId);
 
-    // ==============================
-    // 🔥 JUDUL
-    // ==============================
     const oldTitle = document.getElementById(canvasId + "_title");
     if (oldTitle) oldTitle.remove();
 
@@ -86,9 +77,6 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
 
     ctx.insertAdjacentElement('beforebegin', title);
 
-    // ==============================
-    // 🔥 DATA WHO
-    // ==============================
     const whoData = type === 'bb' ? window.whoBBU : window.whoTBU;
 
     const filtered = whoData
@@ -127,9 +115,6 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
 
     const labels = filtered.map(item => item.umur_bulan);
 
-    // ==============================
-    // 🔥 N/T
-    // ==============================
     let statusNT = new Array(dataBalita.length).fill('');
     for (let i = 0; i < dataBalita.length; i++) {
 
@@ -147,9 +132,6 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
         }
     }
 
-    // ==============================
-    // 🔥 CHART
-    // ==============================
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -225,9 +207,6 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
         plugins: [lineLabelPlugin]
     });
 
-    // ==============================
-    // 🔥 LEGEND (SUDAH DIUBAH SESUAI PERMINTAAN)
-    // ==============================
     let legend = document.createElement('div');
     legend.style.marginTop = "10px";
 
@@ -276,9 +255,6 @@ function renderKMSChart(canvasId, type, gender, penimbangans, tanggalLahir) {
 
     ctx.insertAdjacentElement('afterend', legend);
 
-    // ==============================
-    // 🔥 TABEL (HANYA BB)
-    // ==============================
     if (type === 'bb') {
 
         let umurCells = labels.map(l => `<td style="border:1px solid black; padding:4px;">${l}</td>`).join('');

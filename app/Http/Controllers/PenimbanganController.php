@@ -8,9 +8,6 @@ use App\Models\Balita;
 
 class PenimbanganController extends Controller
 {
-    // =========================
-    // STORE (FIX TOTAL)
-    // =========================
     public function store(Request $request)
     {
         $request->validate([
@@ -25,14 +22,12 @@ class PenimbanganController extends Controller
 
         $balita = Balita::findOrFail($request->balita_id);
 
-        // 🔥 LOGIKA TANGGAL
         if ($balita->penimbangans()->count() === 0) {
             $tanggal = $balita->tanggal_lahir;
         } else {
             $tanggal = $request->tanggal_penimbangan ?? now();
         }
 
-        // 🔥 SIMPAN DATA (JANGAN PAKAI request->all())
         Penimbangan::create([
             'balita_id'           => $balita->id,
             'tanggal_penimbangan' => $tanggal,
@@ -40,21 +35,19 @@ class PenimbanganController extends Controller
             'tinggi_badan'        => $request->tinggi_badan,
             'lila'                => $request->lila,
             'lika'                => $request->lika,
-            'pesan'               => $request->pesan, // 🔥 INI YANG BIKIN MUNCUL
+            'pesan'               => $request->pesan, 
         ]);
 
         return redirect()->back()->with('success', 'Penimbangan berhasil ditambahkan!');
     }
 
-public function edit($id)
-{
-    $penimbangan = Penimbangan::with('balita')->findOrFail($id);
+    public function edit($id)
+    {
+        $penimbangan = Penimbangan::with('balita')->findOrFail($id);
 
-    return view('kader.balita.editPenimbangan', compact('penimbangan'));
-}
-    // =========================
-    // UPDATE
-    // =========================
+        return view('kader.balita.editPenimbangan', compact('penimbangan'));
+    }
+    
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -74,7 +67,7 @@ public function edit($id)
             'tinggi_badan'        => $request->tinggi_badan,
             'lila'                => $request->lila,
             'lika'                => $request->lika,
-            'pesan'               => $request->pesan, // 🔥 UPDATE PESAN JUGA
+            'pesan'               => $request->pesan, 
         ]);
 
         return redirect()
@@ -82,9 +75,6 @@ public function edit($id)
     ->with('success', 'Data penimbangan berhasil diupdate');
     }
 
-    // =========================
-    // DELETE
-    // =========================
     public function destroy($id)
     {
         Penimbangan::destroy($id);

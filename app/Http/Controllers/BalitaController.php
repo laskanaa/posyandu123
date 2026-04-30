@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\DB;
 
 class BalitaController extends Controller
 {
-
-    // =========================
-    // INDEX
-    // =========================
     public function index(Request $request)
     {
         $search = $request->search;
@@ -36,24 +32,17 @@ class BalitaController extends Controller
         return view('kader.balita.index', compact('balitas'));
     }
 
-    // DASHBOARD ORANG TUA
     public function dashboard()
     {
         $balita = Balita::where('user_id', Auth::id())->first();
         return view('orangtua.dashboard', compact('balita'));
     }
 
-    // =========================
-    // CREATE
-    // =========================
     public function create()
     {
         return view('kader.balita.create');
     }
 
-    // =========================
-    // EDIT
-    // =========================
     public function edit($id)
     {
         $balita = Balita::findOrFail($id);
@@ -62,9 +51,6 @@ class BalitaController extends Controller
         return view('kader.balita.edit', compact('balita', 'penimbangan'));
     }
 
-    // =========================
-    // UPDATE
-    // =========================
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -105,9 +91,6 @@ class BalitaController extends Controller
                          ->with('success', 'Data berhasil diperbarui');
     }
 
-    // =========================
-    // STORE
-    // =========================
     public function store(Request $request)
     {
         $request->validate([
@@ -153,10 +136,6 @@ class BalitaController extends Controller
         return redirect()->route('balita.index')
                          ->with('success', 'Data balita berhasil ditambahkan');
     }
-
-    // =========================
-    // SHOW
-    // =========================
     public function show($id)
 {
     $balita = Balita::with([
@@ -166,11 +145,9 @@ class BalitaController extends Controller
         }
     ])->findOrFail($id);
 
-    // 🔥 AMBIL DATA WHO
     $whoBBU = DB::table('standar_who_bbu')->orderBy('umur_bulan')->get();
     $whoTBU = DB::table('standar_who_tbu')->orderBy('umur_bulan')->get();
 
-    // 🔥 AMBIL PENIMBANGAN TERAKHIR
     $penimbanganTerakhir = $balita->penimbangans->last();
 
     return view('kader.balita.show', compact(
@@ -180,9 +157,6 @@ class BalitaController extends Controller
         'penimbanganTerakhir'
     ));
 }
-    // =========================
-    // DELETE
-    // =========================
     public function destroy($id)
     {
         $balita = Balita::findOrFail($id);
@@ -196,10 +170,6 @@ class BalitaController extends Controller
         return redirect()->route('balita.index')
                          ->with('success','Data balita dihapus');
     }
-
-    // =========================
-    // DOWNLOAD PDF
-    // =========================
     public function download($id)
     {
         $balita = Balita::with([

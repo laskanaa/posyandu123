@@ -7,7 +7,6 @@
     --accent:     #f59e0b;
 }
 
-/* ─── HEADER ─────────────────────────────────────────────── */
 .site-header {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -15,12 +14,10 @@
     transition: all .4s cubic-bezier(.22,1,.36,1);
 }
 
-/* Transparent */
 .site-header.at-top {
     background: transparent;
 }
 
-/* Solid */
 .site-header.scrolled {
     background: rgba(10, 61, 56, 0.96);
     backdrop-filter: blur(16px);
@@ -28,7 +25,6 @@
     box-shadow: 0 4px 32px rgba(0,0,0,.18);
 }
 
-/* ─── CONTAINER ─────────────────────────────────────────── */
 .nav-container {
     max-width: 1240px;
     margin: auto;
@@ -39,7 +35,6 @@
     justify-content: space-between;
 }
 
-/* ─── LOGO ─────────────────────────────────────────────── */
 .logo-area {
     display: flex;
     align-items: center;
@@ -86,7 +81,6 @@
     text-transform: uppercase;
 }
 
-/* ─── NAV MENU ─────────────────────────────────────────── */
 .nav-menu {
     display: flex;
     align-items: center;
@@ -107,7 +101,6 @@
     background: rgba(255,255,255,.08);
 }
 
-/* ─── LOGIN ─────────────────────────────────────────────── */
 .nav-login {
     font-size: 13px;
     font-weight: 600;
@@ -119,7 +112,6 @@
     margin-left: 8px;
 }
 
-/* ─── HAMBURGER ─────────────────────────────────────────── */
 .nav-hamburger {
     display: none;
     width: 40px;
@@ -142,7 +134,6 @@
     transition: .3s;
 }
 
-/* animasi X */
 .nav-hamburger.open span:nth-child(1) {
     transform: translateY(6px) rotate(45deg);
 }
@@ -153,7 +144,6 @@
     transform: translateY(-6px) rotate(-45deg);
 }
 
-/* ─── DRAWER ───────────────────────────────────────────── */
 .nav-drawer {
     position: absolute;
     top: 72px;
@@ -186,7 +176,6 @@
     text-align: center;
 }
 
-/* ─── RESPONSIVE ───────────────────────────────────────── */
 @media (max-width: 900px) {
 
     .nav-container {
@@ -219,7 +208,6 @@
 
     <div class="nav-container">
 
-        {{-- Logo --}}
         <a href="{{ url('/') }}#home" class="logo-area">
             <div class="logo-emblem">🌿</div>
             <div class="logo-text">
@@ -228,7 +216,6 @@
             </div>
         </a>
 
-        {{-- Desktop nav --}}
         <nav class="nav-menu">
             <a href="{{ url('/') }}#tentang"    class="nav-link">Tentang</a>
             <a href="{{ url('/') }}#informasi"  class="nav-link">Informasi</a>
@@ -240,14 +227,12 @@
             </a>
         </nav>
 
-        {{-- Hamburger --}}
         <button class="nav-hamburger" id="hamburger" aria-label="Menu">
             <span></span><span></span><span></span>
         </button>
 
     </div>
 
-    {{-- Mobile drawer --}}
     <nav class="nav-drawer" id="navDrawer">
         <a href="{{ url('/') }}#tentang"    class="nav-link">Tentang</a>
         <a href="{{ url('/') }}#informasi"  class="nav-link">Informasi</a>
@@ -258,7 +243,6 @@
             <span class="nav-login-icon">🔑</span> Login
         </a>
     </nav>
-
 </header>
 
 <script>
@@ -267,7 +251,6 @@
     const hamburger = document.getElementById('hamburger');
     const drawer    = document.getElementById('navDrawer');
 
-    // Scroll: transparent ↔ solid
     function onScroll() {
         if (window.scrollY > 40) {
             header.classList.remove('at-top');
@@ -280,13 +263,11 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // Hamburger toggle
     hamburger.addEventListener('click', function () {
         const open = hamburger.classList.toggle('open');
         drawer.classList.toggle('open', open);
     });
 
-    // Close drawer on link click
     drawer.querySelectorAll('.nav-link, .nav-login').forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('open');
@@ -294,7 +275,6 @@
         });
     });
 
-    // Active link highlight on scroll
     const sections = ['tentang','informasi','layanan','pencegahan','galeri'];
     const links = document.querySelectorAll('.nav-link');
 

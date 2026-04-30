@@ -1,5 +1,4 @@
 <style>
-    /* ─── SIDEBAR NAV ITEMS ──────────────────────────────────── */
     .sidebar-nav-section {
         padding: 8px 16px 4px;
         font-size: 10px;
@@ -73,14 +72,12 @@
         flex: 1;
     }
 
-    /* Divider */
     .sidebar-divider {
         height: 1px;
         background: rgba(255, 255, 255, .07);
         margin: 10px 12px;
     }
 
-    /* Logout */
     .sidebar-logout-wrap {
         padding: 4px 12px 8px;
     }
@@ -122,7 +119,6 @@
     }
 </style>
 
-{{-- Section: Menu Utama --}}
 <div class="sidebar-nav-section">Menu Utama</div>
 
 <div class="sidebar-nav-item">

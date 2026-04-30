@@ -10,7 +10,6 @@ class StandarWhoBBUSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            // LAKI-LAKI (L) - 0 s/d 60 Bulan
             ['jenis_kelamin' => 'L', 'umur_bulan' => 0, 'l' => 0.3466, 'm' => 3.3464, 's' => 0.14602],
             ['jenis_kelamin' => 'L', 'umur_bulan' => 1, 'l' => 0.1623, 'm' => 4.4709, 's' => 0.13395],
             ['jenis_kelamin' => 'L', 'umur_bulan' => 2, 'l' => 0.0265, 'm' => 5.5605, 's' => 0.12411],
@@ -73,7 +72,7 @@ class StandarWhoBBUSeeder extends Seeder
             ['jenis_kelamin' => 'L', 'umur_bulan' => 59, 'l' => -0.0723, 'm' => 17.7651, 's' => 0.12976],
             ['jenis_kelamin' => 'L', 'umur_bulan' => 60, 'l' => -0.0682, 'm' => 17.9398, 's' => 0.13041],
 
-            // PEREMPUAN (P) - 0 s/d 60 Bulan
+            
             ['jenis_kelamin' => 'P', 'umur_bulan' => 0, 'l' => 0.4305, 'm' => 3.2322, 's' => 0.14171],
             ['jenis_kelamin' => 'P', 'umur_bulan' => 1, 'l' => 0.2312, 'm' => 4.1707, 's' => 0.1335],
             ['jenis_kelamin' => 'P', 'umur_bulan' => 2, 'l' => 0.0787, 'm' => 5.1274, 's' => 0.12666],

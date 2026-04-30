@@ -6,10 +6,7 @@
 @section('hideFooter', true)
 
 @section('content')
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -41,7 +38,6 @@
             min-height: 100vh;
         }
 
-        /* ─── SIDEBAR ─── */
         .dash-sidebar {
             position: fixed;
             top: 0;
@@ -93,7 +89,7 @@
         }
 
         .sidebar-brand-name {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 15px;
             font-weight: 700;
             color: white;
@@ -166,7 +162,6 @@
             }
         }
 
-        /* ─── MAIN ─── */
         .dash-main {
             margin-left: var(--sidebar-w);
             flex: 1;
@@ -181,7 +176,6 @@
             }
         }
 
-        /* ─── TOPBAR ─── */
         .dash-topbar {
             position: sticky;
             top: 0;
@@ -204,7 +198,7 @@
         }
 
         .topbar-page {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 20px;
             font-weight: 700;
             color: var(--teal-dark);
@@ -275,7 +269,6 @@
             box-shadow: 0 6px 16px rgba(15, 118, 110, .35);
         }
 
-        /* ─── CONTENT ─── */
         .dash-content {
             padding: 32px;
             flex: 1;
@@ -305,14 +298,13 @@
         }
 
         .dash-section-title {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 22px;
             font-weight: 700;
             color: var(--teal-dark);
             margin-bottom: 24px;
         }
 
-        /* ─── PANEL ─── */
         .panel {
             background: white;
             border-radius: 20px;
@@ -355,13 +347,12 @@
         }
 
         .panel-header-title {
-            font-family: 'Playfair Display', serif;
+            font-family: Helvetica, Arial, sans-serif;
             font-size: 15px;
             font-weight: 700;
             color: white;
         }
 
-        /* ─── DETAIL TABLE ─── */
         .detail-table {
             width: 100%;
             border-collapse: collapse;
@@ -406,7 +397,6 @@
             display: block;
         }
 
-        /* ─── ACTION BUTTONS ─── */
         .action-cell {
             display: flex;
             gap: 6px;
@@ -450,7 +440,6 @@
             transform: scale(1.1);
         }
 
-        /* Empty state */
         .empty-state {
             padding: 56px 24px;
             text-align: center;
@@ -467,7 +456,6 @@
             margin-bottom: 20px;
         }
 
-        /* ─── OVERLAY ─── */
         .dash-overlay {
             display: none;
             position: fixed;
@@ -481,7 +469,6 @@
             display: block;
         }
 
-        /* ─── RESPONSIVE ─── */
         @media (max-width: 640px) {
             .dash-content {
                 padding: 16px;
@@ -498,8 +485,6 @@
     </style>
 
     <div class="dash-wrapper">
-
-        {{-- SIDEBAR --}}
         <aside class="dash-sidebar" id="sidebar">
             <div class="sidebar-brand">
                 <div class="sidebar-brand-emblem">🌿</div>
@@ -522,10 +507,7 @@
 
         <div class="dash-overlay" id="overlay"></div>
 
-        {{-- MAIN --}}
         <div class="dash-main">
-
-            {{-- TOPBAR --}}
             <header class="dash-topbar">
                 <div class="topbar-left">
                     <button class="dash-hamburger" id="toggleSidebar">☰</button>
@@ -544,7 +526,6 @@
                 </div>
             </header>
 
-            {{-- CONTENT --}}
             <div class="dash-content">
 
                 <div class="dash-section-tag">Manajemen Konten</div>
@@ -603,7 +584,6 @@
                         </div>
                     @endif
                 </div>
-
             </div>
         </div>
     </div>
