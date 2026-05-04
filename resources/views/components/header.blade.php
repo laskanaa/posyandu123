@@ -212,7 +212,7 @@
             <div class="logo-emblem">🌿</div>
             <div class="logo-text">
                 <span class="logo-main">Pemantauan Stunting</span>
-                <span class="logo-sub">Posyandu Paguyangan</span>
+                <span class="logo-sub">Posyandu Puskesmas Paguyangan</span>
             </div>
         </a>
 

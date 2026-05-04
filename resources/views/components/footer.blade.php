@@ -341,7 +341,7 @@
                 <div class="footer-logo-circle">🌿</div>
                 <div>
                     <div class="footer-brand-name">Posyandu</div>
-                    <div class="footer-brand-sub">Paguyangan</div>
+                    <div class="footer-brand-sub">Puskesmas Paguyangan</div>
                 </div>
             </div>
             <p class="footer-tagline">
@@ -357,11 +357,6 @@
                 Posyandu (Pos Pelayanan Terpadu) merupakan layanan kesehatan masyarakat yang berfokus
                 pada pemantauan pertumbuhan balita, pencegahan stunting, serta peningkatan gizi anak dan ibu.
             </p>
-            <div class="footer-socials">
-                <a href="#" class="social-btn" title="Instagram">📷</a>
-                <a href="#" class="social-btn" title="Facebook">📘</a>
-                <a href="#" class="social-btn" title="WhatsApp">💬</a>
-            </div>
         </div>
 
         <div class="footer-col">
@@ -380,12 +375,8 @@
             <h4>Hubungi Kami</h4>
             <ul class="footer-contact-list">
                 <li>
-                    <div class="contact-icon">📧</div>
-                    <div>info@posyandu.id</div>
-                </li>
-                <li>
                     <div class="contact-icon">📞</div>
-                    <div>0812-3456-7890</div>
+                    <div>0289432010</div>
                 </li>
                 <li>
                     <div class="contact-icon">🕐</div>
@@ -406,15 +397,11 @@
                 🗺 Buka di Google Maps
             </a>
         </div>
-
     </div>
 
     <div class="footer-bottom">
         <p class="footer-bottom-copy">
-            © {{ date('Y') }} <strong>Sistem Monitoring Posyandu Paguyangan</strong>. All Rights Reserved.
+            © {{ date('Y') }} <strong>Sistem Monitoring Posyandu Puskesmas Paguyangan</strong>. All Rights Reserved.
         </p>
-        <div class="footer-bottom-badge">
-            Dibuat dengan <span>♥</span> untuk masyarakat Paguyangan
-        </div>
     </div>
 </footer>
