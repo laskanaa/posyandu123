@@ -423,11 +423,6 @@
             border-color: #ef4444;
         }
 
-        .hero-badge.warning {
-            background: #f59e0b;
-            border-color: #f59e0b;
-        }
-
         .hero-badge.success {
             background: #10b981;
             border-color: #10b981;
@@ -569,6 +564,7 @@
             color: #0d1f1e;
         }
 
+        /* ── STATUS BADGE ── */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -587,6 +583,7 @@
             flex-shrink: 0;
         }
 
+        /* Hijau — normal / lebih / tinggi */
         .status-normal {
             background: #dcfce7;
             color: #16a34a;
@@ -596,15 +593,7 @@
             background: #16a34a;
         }
 
-        .status-warning {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .status-warning::before {
-            background: #d97706;
-        }
-
+        /* Merah — kurang / stunting */
         .status-stunting {
             background: #fee2e2;
             color: #dc2626;
@@ -614,6 +603,7 @@
             background: #dc2626;
         }
 
+        /* Abu — belum ada data */
         .status-unknown {
             background: #f1f5f9;
             color: #7a9e9b;
@@ -621,15 +611,6 @@
 
         .status-unknown::before {
             background: #94a3b8;
-        }
-
-        .status-info {
-            background: #dbeafe;
-            color: #2563eb;
-        }
-
-        .status-info::before {
-            background: #2563eb;
         }
 
         .table-wrapper {
@@ -806,6 +787,10 @@
                 width: 100%;
             }
 
+            .dash-section-title {
+                font-size: 18px;
+            }
+
             .detail-table th {
                 width: 110px;
                 padding: 10px 14px;
@@ -813,10 +798,6 @@
 
             .detail-table td {
                 padding: 10px 14px;
-            }
-
-            .dash-section-title {
-                font-size: 18px;
             }
         }
 
@@ -850,41 +831,44 @@
     </style>
 
     @php
+        /**
+         * BB: normal / lebih / sangat lebih → hijau
+         *     kurang / sangat kurang        → merah
+         */
         function badgeClassBB(string $status): string
         {
             $s = strtolower(trim($status));
-            if (str_contains($s, 'sangat kurang') || str_contains($s, 'kurang')) {
-                return 'status-stunting';   
+            if (str_contains($s, 'kurang')) {
+                return 'status-stunting'; // merah
             }
-            if (str_contains($s, 'lebih')) {
-                return 'status-info';       
-            }
-            return 'status-normal';        
+            return 'status-normal'; // hijau (normal, lebih, sangat lebih)
         }
 
-
+        /**
+         * TB: normal / tinggi / sangat tinggi → hijau
+         *     pendek / sangat pendek / stunting → merah
+         */
         function badgeClassTB(string $status): string
         {
             $s = strtolower(trim($status));
-            if (str_contains($s, 'stunting')) {
-                return 'status-stunting';   
+            if (str_contains($s, 'pendek') || str_contains($s, 'stunting')) {
+                return 'status-stunting'; // merah
             }
-            if (str_contains($s, 'tinggi')) {
-                return 'status-info';       
-            }
-            return 'status-normal';     
+            return 'status-normal'; // hijau (normal, tinggi, sangat tinggi)
         }
 
+        /**
+         * Kesimpulan: ikut warna TB
+         *   stunting / pendek → merah
+         *   selainnya         → hijau
+         */
         function badgeClassKesimpulan(string $status): string
         {
             $s = strtolower(trim($status));
-            if (str_contains($s, 'stunting')) {
-                return 'status-stunting';
+            if (str_contains($s, 'stunting') || str_contains($s, 'pendek')) {
+                return 'status-stunting'; // merah
             }
-            if (str_contains($s, 'kurang')) {
-                return 'status-warning';
-            }
-            return 'status-normal';
+            return 'status-normal'; // hijau
         }
     @endphp
 
@@ -936,8 +920,8 @@
 
                 @php
                     $kesimpulan = $penimbanganTerakhir->hasil['kesimpulan'] ?? null;
-                    $isStunting = str_contains(strtolower($kesimpulan ?? ''), 'stunting');
-                    $isKurang = str_contains(strtolower($kesimpulan ?? ''), 'kurang');
+                    $isBuruk = str_contains(strtolower($kesimpulan ?? ''), 'stunting')
+                        || str_contains(strtolower($kesimpulan ?? ''), 'pendek');
                 @endphp
 
                 <div class="hero-card">
@@ -954,7 +938,7 @@
                     </div>
                     <div class="hero-right">
                         @if($kesimpulan)
-                            <span class="hero-badge {{ $isStunting ? 'danger' : ($isKurang ? 'warning' : 'success') }}">
+                            <span class="hero-badge {{ $isBuruk ? 'danger' : 'success' }}">
                                 {{ $kesimpulan }}
                             </span>
                         @endif
@@ -967,6 +951,7 @@
                     </div>
                 </div>
 
+                {{-- BIODATA --}}
                 <div class="panel">
                     <div class="panel-header ph-biodata">
                         <div class="panel-header-icon">📋</div>
@@ -1010,6 +995,7 @@
                     </table>
                 </div>
 
+                {{-- AKUN --}}
                 <div class="panel">
                     <div class="panel-header ph-akun">
                         <div class="panel-header-icon">🔑</div>
@@ -1027,6 +1013,7 @@
                     </table>
                 </div>
 
+                {{-- RIWAYAT --}}
                 <div class="panel">
                     <div class="panel-header ph-riwayat">
                         <div class="panel-header-icon">⚖️</div>
@@ -1132,6 +1119,7 @@
                     </div>
                 </div>
 
+                {{-- GRAFIK --}}
                 <div class="panel">
                     <div class="panel-header ph-grafik">
                         <div class="panel-header-icon">📈</div>

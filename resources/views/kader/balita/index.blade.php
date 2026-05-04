@@ -522,10 +522,6 @@
             white-space: nowrap;
         }
 
-        th:first-child {
-            border-radius: 0;
-        }
-
         tbody tr {
             border-bottom: 1px solid rgba(15, 118, 110, .06);
             transition: background .2s;
@@ -552,6 +548,7 @@
             font-size: 13px;
         }
 
+        /* ── STATUS BADGE — hanya 2 warna + abu ── */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -570,6 +567,7 @@
             flex-shrink: 0;
         }
 
+        /* Hijau */
         .status-normal {
             background: #dcfce7;
             color: #16a34a;
@@ -579,15 +577,7 @@
             background: #16a34a;
         }
 
-        .status-warning {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .status-warning::before {
-            background: #d97706;
-        }
-
+        /* Merah */
         .status-stunting {
             background: #fee2e2;
             color: #dc2626;
@@ -597,6 +587,7 @@
             background: #dc2626;
         }
 
+        /* Abu */
         .status-unknown {
             background: #f1f5f9;
             color: #7a9e9b;
@@ -714,21 +705,20 @@
         }
     </style>
 
-    {{-- ── Helper: warna badge berdasarkan teks kesimpulan ── --}}
+    {{-- ── Helper: warna badge kesimpulan ikut logika TB ── --}}
     @php
+        /**
+         * Kesimpulan: ikut warna TB — hanya 2 warna
+         *   stunting / pendek → merah
+         *   selainnya         → hijau
+         */
         function badgeClassKesimpulan(string $status): string
         {
             $s = strtolower(trim($status));
-            if (str_contains($s, 'stunting')) {
-                return 'status-stunting';   
+            if (str_contains($s, 'stunting') || str_contains($s, 'pendek')) {
+                return 'status-stunting'; // merah
             }
-            if (str_contains($s, 'kurang')) {
-                return 'status-warning';  
-            }
-            if (str_contains($s, 'lebih')) {
-                return 'status-warning';  
-            }
-            return 'status-normal';     
+            return 'status-normal'; // hijau
         }
     @endphp
 
@@ -790,7 +780,8 @@
                     @php
                         $stuntingCount = $balitas->filter(function ($b) {
                             $last = $b->penimbangans->last();
-                            return str_contains(strtolower($last->hasil['kesimpulan'] ?? ''), 'stunting');
+                            $kesimp = strtolower($last->hasil['kesimpulan'] ?? '');
+                            return str_contains($kesimp, 'stunting') || str_contains($kesimp, 'pendek');
                         })->count();
                     @endphp
 
@@ -812,7 +803,7 @@
                             <div class="stat-icon">⚠️</div>
                         </div>
                         <div class="stat-value">{{ $stuntingCount }}</div>
-                        <div class="stat-label">Terindikasi Stunting</div>
+                        <div class="stat-label">Terindikasi Stunting / Pendek</div>
                     </div>
 
                     <div class="stat-card">

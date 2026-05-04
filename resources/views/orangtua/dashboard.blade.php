@@ -611,40 +611,44 @@
     HELPER: CSS class badge berdasarkan nilai status
     ============================================================ --}}
     @php
+        /**
+         * BB: normal / lebih / sangat lebih → hijau
+         *     kurang / sangat kurang        → merah
+         */
         function badgeClassBB(string $status): string
         {
             $s = strtolower(trim($status));
-            if (str_contains($s, 'sangat kurang') || str_contains($s, 'kurang')) {
-                return 'status-stunting';   // merah
+            if (str_contains($s, 'kurang')) {
+                return 'status-stunting'; // merah
             }
-            if (str_contains($s, 'lebih')) {
-                return 'status-info';       // biru
-            }
-            return 'status-normal';         // hijau
+            return 'status-normal'; // hijau (normal, lebih, sangat lebih)
         }
 
+        /**
+         * TB: normal / tinggi / sangat tinggi → hijau
+         *     pendek / sangat pendek / stunting → merah
+         */
         function badgeClassTB(string $status): string
         {
             $s = strtolower(trim($status));
-            if (str_contains($s, 'stunting')) {
-                return 'status-stunting';   // merah
+            if (str_contains($s, 'pendek') || str_contains($s, 'stunting')) {
+                return 'status-stunting'; // merah
             }
-            if (str_contains($s, 'tinggi')) {
-                return 'status-info';       // biru
-            }
-            return 'status-normal';         // hijau
+            return 'status-normal'; // hijau (normal, tinggi, sangat tinggi)
         }
 
+        /**
+         * Kesimpulan: ikut warna TB
+         *   stunting / pendek → merah
+         *   selainnya         → hijau
+         */
         function badgeClassKesimpulan(string $status): string
         {
             $s = strtolower(trim($status));
-            if (str_contains($s, 'stunting')) {
-                return 'status-stunting';
+            if (str_contains($s, 'stunting') || str_contains($s, 'pendek')) {
+                return 'status-stunting'; // merah
             }
-            if (str_contains($s, 'kurang')) {
-                return 'status-warning';
-            }
-            return 'status-normal';
+            return 'status-normal'; // hijau
         }
     @endphp
 
@@ -674,8 +678,8 @@
 
                 @php
                     $kesimpulan = $penimbanganTerakhir->hasil['kesimpulan'] ?? null;
-                    $isStunting = str_contains(strtolower($kesimpulan ?? ''), 'stunting');
-                    $isKurang   = str_contains(strtolower($kesimpulan ?? ''), 'kurang');
+                    $isBuruk = str_contains(strtolower($kesimpulan ?? ''), 'stunting')
+                        || str_contains(strtolower($kesimpulan ?? ''), 'pendek');
                 @endphp
 
                 <div class="hero-card">
@@ -694,7 +698,7 @@
                     </div>
                     <div class="hero-right">
                         @if($kesimpulan)
-                            <span class="hero-badge {{ $isStunting ? 'danger' : ($isKurang ? 'warning' : 'success') }}">
+                            <span class="hero-badge {{ $isBuruk ? 'danger' : 'success' }}">
                                 {{ $kesimpulan }}
                             </span>
                         @endif
