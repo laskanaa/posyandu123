@@ -579,6 +579,15 @@
             background: #16a34a;
         }
 
+        .status-warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-warning::before {
+            background: #d97706;
+        }
+
         .status-stunting {
             background: #fee2e2;
             color: #dc2626;
@@ -704,6 +713,24 @@
             }
         }
     </style>
+
+    {{-- ── Helper: warna badge berdasarkan teks kesimpulan ── --}}
+    @php
+        function badgeClassKesimpulan(string $status): string
+        {
+            $s = strtolower(trim($status));
+            if (str_contains($s, 'stunting')) {
+                return 'status-stunting';   
+            }
+            if (str_contains($s, 'kurang')) {
+                return 'status-warning';  
+            }
+            if (str_contains($s, 'lebih')) {
+                return 'status-warning';  
+            }
+            return 'status-normal';     
+        }
+    @endphp
 
     <div class="dash-wrapper">
 
@@ -845,7 +872,6 @@
                                         $umurBulan = round(($tanggalLahir->diffInDays(now()) / 30) * 2) / 2;
                                         $last = $balita->penimbangans->last();
                                         $kesimpulan = $last->hasil['kesimpulan'] ?? null;
-                                        $isStunting = str_contains(strtolower($kesimpulan ?? ''), 'stunting');
                                     @endphp
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
@@ -855,7 +881,7 @@
                                         <td>{{ $balita->nama_ibu }}</td>
                                         <td>
                                             @if($kesimpulan)
-                                                <span class="status-badge {{ $isStunting ? 'status-stunting' : 'status-normal' }}">
+                                                <span class="status-badge {{ badgeClassKesimpulan($kesimpulan) }}">
                                                     {{ $kesimpulan }}
                                                 </span>
                                             @else

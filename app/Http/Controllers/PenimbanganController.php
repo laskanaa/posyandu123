@@ -17,7 +17,7 @@ class PenimbanganController extends Controller
             'tinggi_badan'        => 'required|numeric|min:0',
             'lila'                => 'nullable|numeric|min:0',
             'lika'                => 'nullable|numeric|min:0',
-            'pesan'               => 'nullable|string', // 🔥 WAJIB
+            'pesan'               => 'nullable|string', 
         ]);
 
         $balita = Balita::findOrFail($request->balita_id);

@@ -233,6 +233,11 @@
             border-color: #ef4444;
         }
 
+        .hero-badge.warning {
+            background: #f59e0b;
+            border-color: #f59e0b;
+        }
+
         .hero-badge.success {
             background: #10b981;
             border-color: #10b981;
@@ -381,6 +386,15 @@
             background: #16a34a;
         }
 
+        .status-warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-warning::before {
+            background: #d97706;
+        }
+
         .status-stunting {
             background: #fee2e2;
             color: #dc2626;
@@ -397,6 +411,15 @@
 
         .status-unknown::before {
             background: #94a3b8;
+        }
+
+        .status-info {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-info::before {
+            background: #2563eb;
         }
 
         .scroll-hint {
@@ -584,6 +607,47 @@
         }
     </style>
 
+    {{-- ============================================================
+    HELPER: CSS class badge berdasarkan nilai status
+    ============================================================ --}}
+    @php
+        function badgeClassBB(string $status): string
+        {
+            $s = strtolower(trim($status));
+            if (str_contains($s, 'sangat kurang') || str_contains($s, 'kurang')) {
+                return 'status-stunting';   // merah
+            }
+            if (str_contains($s, 'lebih')) {
+                return 'status-info';       // biru
+            }
+            return 'status-normal';         // hijau
+        }
+
+        function badgeClassTB(string $status): string
+        {
+            $s = strtolower(trim($status));
+            if (str_contains($s, 'stunting')) {
+                return 'status-stunting';   // merah
+            }
+            if (str_contains($s, 'tinggi')) {
+                return 'status-info';       // biru
+            }
+            return 'status-normal';         // hijau
+        }
+
+        function badgeClassKesimpulan(string $status): string
+        {
+            $s = strtolower(trim($status));
+            if (str_contains($s, 'stunting')) {
+                return 'status-stunting';
+            }
+            if (str_contains($s, 'kurang')) {
+                return 'status-warning';
+            }
+            return 'status-normal';
+        }
+    @endphp
+
     <div class="dash-wrapper">
         <div class="dash-main">
             <header class="dash-topbar">
@@ -611,6 +675,7 @@
                 @php
                     $kesimpulan = $penimbanganTerakhir->hasil['kesimpulan'] ?? null;
                     $isStunting = str_contains(strtolower($kesimpulan ?? ''), 'stunting');
+                    $isKurang   = str_contains(strtolower($kesimpulan ?? ''), 'kurang');
                 @endphp
 
                 <div class="hero-card">
@@ -629,13 +694,14 @@
                     </div>
                     <div class="hero-right">
                         @if($kesimpulan)
-                            <span class="hero-badge {{ $isStunting ? 'danger' : 'success' }}">
+                            <span class="hero-badge {{ $isStunting ? 'danger' : ($isKurang ? 'warning' : 'success') }}">
                                 {{ $kesimpulan }}
                             </span>
                         @endif
                     </div>
                 </div>
 
+                {{-- ── BIODATA ── --}}
                 <div class="panel">
                     <div class="panel-header ph-biodata">
                         <div class="panel-header-icon">📋</div>
@@ -667,7 +733,7 @@
                             <th>Status Terakhir</th>
                             <td>
                                 @if($kesimpulan)
-                                    <span class="status-badge {{ $isStunting ? 'status-stunting' : 'status-normal' }}">
+                                    <span class="status-badge {{ badgeClassKesimpulan($kesimpulan) }}">
                                         {{ $kesimpulan }}
                                     </span>
                                 @else
@@ -678,6 +744,7 @@
                     </table>
                 </div>
 
+                {{-- ── AKUN ORANG TUA ── --}}
                 <div class="panel">
                     <div class="panel-header ph-akun">
                         <div class="panel-header-icon">🔑</div>
@@ -695,6 +762,7 @@
                     </table>
                 </div>
 
+                {{-- ── RIWAYAT PENIMBANGAN ── --}}
                 <div class="panel">
                     <div class="panel-header ph-riwayat">
                         <div class="panel-header-icon">⚖️</div>
@@ -721,11 +789,14 @@
                             <tbody>
                                 @forelse($balita->penimbangans as $p)
                                     @php
-                                        $tglLahir = \Carbon\Carbon::parse($balita->tanggal_lahir);
+                                        $tglLahir  = \Carbon\Carbon::parse($balita->tanggal_lahir);
                                         $tglTimbang = \Carbon\Carbon::parse($p->tanggal_penimbangan);
                                         $umurBulan = floor($tglLahir->floatDiffInMonths($tglTimbang));
-                                        $kesimp = $p->hasil['kesimpulan'] ?? null;
-                                        $stunt = str_contains(strtolower($kesimp ?? ''), 'stunting');
+
+                                        $hasil    = $p->hasil ?? [];
+                                        $kesimp   = $hasil['kesimpulan'] ?? null;
+                                        $statusBB = $hasil['status_bb'] ?? null;
+                                        $statusTB = $hasil['status_tb'] ?? null;
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
@@ -733,33 +804,36 @@
                                         <td><strong>{{ $umurBulan }}</strong> bln</td>
                                         <td>{{ $p->berat_badan }}</td>
                                         <td>
-                                            @if(isset($p->hasil['status_bb']))
-                                                <span class="status-badge {{ $stunt ? 'status-stunting' : 'status-normal' }}"
+                                            @if($statusBB)
+                                                <span class="status-badge {{ badgeClassBB($statusBB) }}"
                                                     style="font-size:11px;padding:3px 9px;">
-                                                    {{ $p->hasil['status_bb'] }}
+                                                    {{ $statusBB }}
                                                 </span>
-                                            @else -
+                                            @else
+                                                -
                                             @endif
                                         </td>
                                         <td>{{ $p->tinggi_badan }}</td>
                                         <td>
-                                            @if(isset($p->hasil['status_tb']))
-                                                <span class="status-badge {{ $stunt ? 'status-stunting' : 'status-normal' }}"
+                                            @if($statusTB)
+                                                <span class="status-badge {{ badgeClassTB($statusTB) }}"
                                                     style="font-size:11px;padding:3px 9px;">
-                                                    {{ $p->hasil['status_tb'] }}
+                                                    {{ $statusTB }}
                                                 </span>
-                                            @else -
+                                            @else
+                                                -
                                             @endif
                                         </td>
                                         <td>{{ $p->lila ?? '-' }}</td>
                                         <td>{{ $p->lika ?? '-' }}</td>
                                         <td>
                                             @if($kesimp)
-                                                <span class="status-badge {{ $stunt ? 'status-stunting' : 'status-normal' }}"
+                                                <span class="status-badge {{ badgeClassKesimpulan($kesimp) }}"
                                                     style="font-size:11px;padding:3px 9px;">
                                                     {{ $kesimp }}
                                                 </span>
-                                            @else -
+                                            @else
+                                                -
                                             @endif
                                         </td>
                                         <td class="col-pesan">{{ $p->pesan ?? '-' }}</td>
@@ -774,6 +848,7 @@
                     </div>
                 </div>
 
+                {{-- ── GRAFIK KMS ── --}}
                 <div class="panel">
                     <div class="panel-header ph-grafik">
                         <div class="panel-header-icon">📈</div>

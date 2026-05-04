@@ -198,17 +198,19 @@
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(15, 118, 110, .08);
             padding: 0 32px;
-            height: 68px;
+            min-height: 68px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .topbar-left {
             display: flex;
             align-items: center;
             gap: 16px;
+            min-width: 0;
         }
 
         .dash-hamburger {
@@ -243,11 +245,17 @@
             font-weight: 700;
             color: var(--teal-dark);
             line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .topbar-sub {
             font-size: 13px;
             color: #7a9e9b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .btn-add {
@@ -264,6 +272,8 @@
             letter-spacing: .02em;
             transition: all .3s;
             box-shadow: 0 4px 14px rgba(15, 118, 110, .25);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .btn-add:hover {
@@ -441,7 +451,21 @@
             }
 
             .dash-topbar {
-                padding: 0 16px;
+                padding: 8px 16px;
+                gap: 8px;
+            }
+
+            .topbar-page {
+                font-size: 16px;
+            }
+
+            .topbar-sub {
+                font-size: 11px;
+            }
+
+            .btn-add {
+                font-size: 12px;
+                padding: 8px 14px;
             }
         }
     </style>

@@ -190,6 +190,7 @@
             }
         }
 
+        /* ── TOPBAR ── */
         .dash-topbar {
             position: sticky;
             top: 0;
@@ -210,6 +211,7 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            min-width: 0;
         }
 
         .dash-hamburger {
@@ -241,6 +243,7 @@
         .topbar-breadcrumb {
             display: flex;
             flex-direction: column;
+            min-width: 0;
         }
 
         .topbar-page {
@@ -249,13 +252,65 @@
             font-weight: 700;
             color: var(--teal-dark);
             line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .topbar-sub {
             font-size: 13px;
             color: #7a9e9b;
+            white-space: nowrap;
         }
 
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+            color: white;
+            padding: 9px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(13, 79, 77, .25);
+            transition: all .3s cubic-bezier(.22, 1, .36, 1);
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 79, 77, .35);
+        }
+
+        .btn-add .btn-add-label {
+            display: inline;
+        }
+
+        @media (max-width: 480px) {
+            .dash-topbar {
+                padding: 0 16px;
+            }
+
+            .topbar-sub {
+                display: none;
+            }
+
+            .btn-add {
+                padding: 8px 13px;
+                font-size: 13px;
+            }
+        }
+
+        /* ── CONTENT ── */
         .dash-content {
             padding: 32px;
             flex: 1;
@@ -284,40 +339,12 @@
             border-radius: 50%;
         }
 
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
         .dash-section-title {
             font-family: Helvetica, Arial, sans-serif;
             font-size: 22px;
             font-weight: 700;
             color: var(--teal-dark);
-        }
-
-        .btn-add {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            background: linear-gradient(135deg, var(--teal-dark), var(--teal));
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(13, 79, 77, .25);
-            transition: all .3s cubic-bezier(.22, 1, .36, 1);
-        }
-
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(13, 79, 77, .35);
+            margin-bottom: 24px;
         }
 
         .card-table {
@@ -423,10 +450,6 @@
             .dash-content {
                 padding: 20px 16px;
             }
-
-            .dash-topbar {
-                padding: 0 16px;
-            }
         }
     </style>
 
@@ -464,16 +487,18 @@
                         <span class="topbar-sub">Kelola foto galeri posyandu</span>
                     </div>
                 </div>
+                <div class="topbar-right">
+                    <a href="{{ route('kader.galeri.create') }}" class="btn-add">
+                        <span>+</span>
+                        <span class="btn-add-label">Tambah Gambar</span>
+                    </a>
+                </div>
             </header>
 
             <div class="dash-content">
                 <div class="dash-section-tag">Galeri</div>
-                <div class="section-header">
-                    <h2 class="dash-section-title">Foto Galeri</h2>
-                    <a href="{{ route('kader.galeri.create') }}" class="btn-add">
-                        + Tambah Gambar
-                    </a>
-                </div>
+                <h2 class="dash-section-title">Foto Galeri</h2>
+
                 <div class="card-table">
                     <table>
                         <thead>
@@ -507,7 +532,6 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>

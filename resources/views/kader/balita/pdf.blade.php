@@ -78,6 +78,7 @@
                 <th>TB</th>
                 <th>LILA</th>
                 <th>LIKA</th>
+                <th>Kesimpulan</th>
             </tr>
         </thead>
         <tbody>
@@ -86,7 +87,7 @@
                 @php
                     $umur = round(
                         \Carbon\Carbon::parse($balita->tanggal_lahir)
-                        ->diffInDays(\Carbon\Carbon::parse($p->tanggal_penimbangan)) / 30
+                            ->diffInDays(\Carbon\Carbon::parse($p->tanggal_penimbangan)) / 30
                     );
                 @endphp
 
@@ -98,9 +99,21 @@
                     <td>{{ $p->tinggi_badan }}</td>
                     <td>{{ $p->lila }}</td>
                     <td>{{ $p->lika }}</td>
+                    <td>{{ $p->hasil['kesimpulan'] ?? '-' }}</td> 
                 </tr>
             @endforeach
         </tbody>
+    </table>
+
+    <br><br>
+
+    <table style="width: 100%; border: none;">
+        <tr>
+            <td style="border: none; text-align: right;">
+                Dicetak pada:
+                {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}
+            </td>
+        </tr>
     </table>
 
 </body>
